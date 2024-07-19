@@ -59,12 +59,11 @@ class ProvinceController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $this->authorize('manage-account-code');
+        // $this->authorize('manage-account-code');
+      
         $Province = $this->provinces->create($request->all());
         if($Province){
-            return response()->json(['status' => 'ok',
-                'Province' => $Province,
-                'message' => 'Account Code is successfully added.'], 200);
+            return redirect()->route('province.index')->with('success', 'Province added  successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be added.'], 422);
@@ -126,13 +125,10 @@ class ProvinceController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('manage-account-code');
+        // $this->authorize('manage-account-code');
         $flag = $this->provinces->destroy($id);
         if($flag){
-            return response()->json([
-                'type'=>'success',
-                'message'=>'Account Code is successfully deleted.',
-            ], 200);
+            return redirect()->route('province.index')->with('success', 'Province is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',

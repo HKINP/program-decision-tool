@@ -1,5 +1,12 @@
 <x-app-layout>
-    <x-table-listing :title="'District'" :headers="['S.N', 'Province','District', 'Actions']" :addRoute="route('province.create')">
+    <x-table-listing 
+    :title="'District'" 
+    :headers="['S.N', 'Province','District', 'Actions']" 
+    :useAddModal="false" 
+    :name="'province'" 
+    :addRoute="route('district.create')"
+    
+    >
         @forelse ($districts as $index => $district)
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>

@@ -1,11 +1,11 @@
 <!-- resources/views/provinces/index.blade.php -->
 
 <x-app-layout>
-    <x-table 
+    <x-table-listing
     :headers="['S.N', 'Province', 'Actions']" 
     :title="'Province'" 
     :useAddModal="true" 
-    :name="province" 
+    :name="'province'" 
     :addRoute="route('province.store')">
     
         @forelse ($provinces as $index => $province)
@@ -35,5 +35,5 @@
             </td>
         </tr>
         @endforelse
-    </x-table>
+    </x-table-listing>
 </x-app-layout>

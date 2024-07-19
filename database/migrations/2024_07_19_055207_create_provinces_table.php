@@ -11,8 +11,12 @@ class CreateProvincesTable extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->increments('id');
             $table->string('province');
+            $table->integer('updated_by')->unsigned()->default(null);
             $table->softDeletes(); 
             $table->timestamps();
+
+            $table->foreign('updated_by')->references('id')->on('users');
+
         });
     }
 

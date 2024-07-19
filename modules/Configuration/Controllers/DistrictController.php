@@ -5,6 +5,7 @@ namespace Modules\Configuration\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\DistrictRepository;
+use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Requests\District\StoreRequest;
 use Modules\Configuration\Requests\District\UpdateRequest;
 
@@ -16,14 +17,17 @@ class DistrictController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts;
+    protected $districts,$provinces;
     
 
     public function __construct(
-        DistrictRepository $districts
+        DistrictRepository $districts,
+        ProvinceRepository $provinces
+
     )
     {
         $this->districts = $districts;
+        $this->provinces=$provinces;
     }
     
     /**
@@ -49,7 +53,14 @@ class DistrictController extends Controller
      */
     public function create()
     {
-
+        $provinces=$this->provinces->all()->map(function($province) {
+            return [
+                'value' => $province->id,
+                'label' => $province->province,
+            ];
+        });
+        return view('Configuration::District.create')
+        ->withProvinces($provinces);
     }
 
     /**
@@ -61,12 +72,10 @@ class DistrictController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $this->authorize('manage-account-code');
+        // $this->authorize('manage-account-code');
         $district = $this->districts->create($request->all());
         if($district){
-            return response()->json(['status' => 'ok',
-                'District' => $District,
-                'message' => 'Account Code is successfully added.'], 200);
+            return redirect()->route('district.index')->with('success', 'Added District successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be added.'], 422);
@@ -81,7 +90,7 @@ class DistrictController extends Controller
     public function show($id)
     {
         $District = $this->districts->find($id);
-        return response()->json(['status'=>'ok','District'=>$District], 200);
+        return response()->json(['status'=>'ok','district'=>$district], 200);
     }
 
     /**
@@ -131,10 +140,7 @@ class DistrictController extends Controller
         // $this->authorize('manage-account-code');
         $flag = $this->districts->destroy($id);
         if($flag){
-            return response()->json([
-                'type'=>'success',
-                'message'=>'District is successfully deleted.',
-            ], 200);
+            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',

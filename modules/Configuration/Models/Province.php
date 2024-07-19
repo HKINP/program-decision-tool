@@ -24,7 +24,7 @@ class Province extends Model
      *
      * @var array
      */
-    protected $fillable = ['Province'];
+    protected $fillable = ['province'];
 
     /**
      * The attributes excluded from the model's JSON form.

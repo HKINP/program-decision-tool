@@ -11,17 +11,21 @@ class TableListing extends Component
     public $title;
     public $headers;
     public $addRoute;
+    public $name;
+    public $useAddModal;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($title, $headers, $addRoute)
+    public function __construct($title, $headers, $addRoute,$name,$useAddModal)
     {
         $this->title = $title;
         $this->headers = $headers;
         $this->addRoute = $addRoute;
+        $this->name = $name;
+        $this->useAddModal = $useAddModal;
     }
 
     /**

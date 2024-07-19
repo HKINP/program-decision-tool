@@ -10,4 +10,9 @@ class DistrictRepository extends Repository
     {
         $this->model = $district;
     }
+
+    public function getProvinces(){
+
+        return $this->model->getProvinces();
+    }
 }

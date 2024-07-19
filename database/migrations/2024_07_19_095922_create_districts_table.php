@@ -15,10 +15,12 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('province_id')->unsigned();
             $table->string('district');
+            $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();
 
             $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
