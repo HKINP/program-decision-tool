@@ -9,7 +9,7 @@
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Dashboard</h1>
             </div>
 
-            <!-- Right: Actions -->
+            <!-- Right: Actions -->a
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
                 <!-- Filter button -->
