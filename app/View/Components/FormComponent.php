@@ -9,12 +9,17 @@ use Illuminate\View\Component;
 class FormComponent extends Component
 {
        
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
+    public $action;
+    public $method;
+    public $fields;
+    public $values;
+
+    public function __construct($action, $method = 'POST', $fields = [], $values = [])
     {
-       //
+        $this->action = $action;
+        $this->method = $method;
+        $this->fields = $fields;
+        $this->values = $values;
     }
 
     /**

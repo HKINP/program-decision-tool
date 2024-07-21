@@ -4,30 +4,30 @@ namespace Modules\Configuration\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\Configuration\Repositories\DistrictRepository;
-use Modules\Configuration\Repositories\ProvinceRepository;
-use Modules\Configuration\Requests\District\StoreRequest;
-use Modules\Configuration\Requests\District\UpdateRequest;
+use Modules\Configuration\Repositories\TargetGroupRepository;
+use Modules\Configuration\Repositories\ThematicAreaRepository;
+use Modules\Configuration\Requests\ThematicArea\StoreRequest;
+use Modules\Configuration\Requests\ThematicArea\UpdateRequest;
 
-class DistrictController extends Controller
+class ThematicAreaController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @param  DistrictRepository $districts
+     * @param  ThematicAreaRepository $thematicareas
      * @return void
      */
-    protected $districts,$provinces;
+    protected $thematicareas,$targetgroups;
     
 
     public function __construct(
-        DistrictRepository $districts,
-        ProvinceRepository $provinces
+        ThematicAreaRepository $thematicareas,
+        TargetGroupRepository $targetgroups,
 
     )
     {
-        $this->districts = $districts;
-        $this->provinces=$provinces;
+        $this->thematicareas= $thematicareas;
+        $this->targetgroups=$targetgroups;
     }
     
     /**
@@ -39,11 +39,11 @@ class DistrictController extends Controller
     public function index()
     {
         
-       $districts=$this->districts->with(['province'])->orderby('district', 'asc')->get();
+       $thematicareas=$this->thematicareas->with(['targetGroup'])->orderby('thematic_area', 'asc')->get();
     
         // $this->authorize('manage-account-code');
-             return view('Configuration::District.index')
-            ->withdistricts($districts);
+             return view('Configuration::ThematicArea.index')
+            ->withThematicareas($thematicareas);
     }
 
     /**
@@ -53,12 +53,13 @@ class DistrictController extends Controller
      */
     public function create()
     {
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
-            return [$province->id => $province->province];
+        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroup) {
+            return [$targetgroup->id => $targetgroup->target_group];
         })->toArray();
+     
 
-        return view('Configuration::District.create')
-        ->withProvinces($provinces);
+        return view('Configuration::ThematicArea.create')
+        ->withTargetGroups($targetgroups);
     }
 
     /**
@@ -71,9 +72,9 @@ class DistrictController extends Controller
     public function store(StoreRequest $request)
     {
         // $this->authorize('manage-account-code');
-        $district = $this->districts->create($request->all());
+        $district = $this->thematicareas->create($request->all());
         if($district){
-            return redirect()->route('district.index')->with('success', 'Added District successfully!');
+            return redirect()->route('thematicarea.index')->with('success', 'Added Thematic Area successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be added.'], 422);
@@ -87,8 +88,8 @@ class DistrictController extends Controller
      */
     public function show($id)
     {
-        $District = $this->districts->find($id);
-        return response()->json(['status'=>'ok','district'=>$district], 200);
+        $thematicarea = $this->thematicareas->find($id);
+        return response()->json(['status'=>'ok','thematicarea'=>$thematicarea], 200);
     }
 
     /**
@@ -101,12 +102,13 @@ class DistrictController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
-            return [$province->id => $province->province];
+        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroup) {
+            return [$targetgroup->id => $targetgroup->target_group];
         })->toArray();
-        return view('Configuration::District.edit')
-            ->withDistrict($this->districts->find($id))
-            ->withProvinces($provinces);
+      
+        return view('Configuration::ThematicArea.edit')
+            ->withThematicArea($this->thematicareas->find($id))
+            ->withTargetGroups($targetgroups);
     }
 
     /**
@@ -122,10 +124,10 @@ class DistrictController extends Controller
         // $this->authorize('manage-account-code');
      
         
-        $District = $this->districts->update($id, $request->except('id'));
+        $thematicareas = $this->thematicareas->update($id, $request->except('id'));
        
-        if($District){
-            return redirect()->route('district.index')->with('success', 'District Updated successfully!');
+        if($thematicareas){
+            return redirect()->route('thematicarea.index')->with('success', 'Thematic Area Updated successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be updated.'], 422);
@@ -141,9 +143,9 @@ class DistrictController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->districts->destroy($id);
+        $flag = $this->thematicareas->destroy($id);
         if($flag){
-            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
+            return redirect()->route('thematicarea.index')->with('success', 'Thematic Area is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',

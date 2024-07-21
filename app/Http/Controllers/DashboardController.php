@@ -9,9 +9,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
+            return view('pages/dashboard/dashboard');
+    }
+    public function documentation()
+    {
         $dataFeed = new DataFeed();
 
-        return view('pages/dashboard/dashboard', compact('dataFeed'));
+        return view('pages/dashboard/documentation');
     }
 
     /**
