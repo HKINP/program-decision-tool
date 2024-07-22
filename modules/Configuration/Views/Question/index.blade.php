@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-table-listing 
-    :title="'question'" 
+    :title="'Questions'" 
     :headers="['S.N', 'Question','Stages', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 

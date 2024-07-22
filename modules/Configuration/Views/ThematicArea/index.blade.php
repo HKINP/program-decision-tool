@@ -2,7 +2,7 @@
     <x-table-listing 
     :title="'Thematic Areas'" 
     :headers="['S.N', 'Target Groups','Thematic Areas', 'Actions']" 
-    :useAddModal="true" 
+    :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('thematicarea.create')"
     

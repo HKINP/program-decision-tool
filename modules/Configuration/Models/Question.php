@@ -24,7 +24,13 @@ class Question extends Model
      *
      * @var array
      */
-    protected $fillable = ['question'];
+    protected $fillable = [
+        'question',
+        'stage_id',
+        'thematic_area_id',
+        'tag_id',
+        'target_group_id'
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -35,7 +41,20 @@ class Question extends Model
 
     public function stages()
     {
-        return $this->belongsToMany(Stages::class, 'question_stage');
+        return $this->belongsTo(Stages::class);
     }
+    public function thematic_area()
+    {
+        return $this->belongsTo(ThematicArea::class);
+    }
+    public function tags()
+    {
+        return $this->belongsTo(Tags::class);
+    }
+    public function targetGroup()
+    {
+        return $this->belongsTo(TargetGroup::class);
+    }
+
     
 }

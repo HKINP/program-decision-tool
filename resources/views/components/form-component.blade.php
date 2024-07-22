@@ -3,6 +3,16 @@
     @if (!in_array(strtoupper($method), ['GET', 'POST']))
         {{ method_field('PUT') }}
     @endif
+    {{-- display validation error message --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
     <div class="flex flex-wrap -mx-2">
         @foreach ($fields as $field)
@@ -54,7 +64,8 @@
                     </div>
                     @elseif ($field['type'] === 'select')
                     <select id="{{ $field['name'] }}" name="{{ $field['name'] }}{{ isset($field['multiple']) && $field['multiple'] ? '[]' : '' }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ $field['required'] ? 'required' : '' }} {{ isset($field['multiple']) && $field['multiple'] ? 'multiple' : '' }}>
-                        @foreach ($field['options'] as $value => $label)
+                      <option value="">Select {{ $field['label'] }}</option> 
+                    @foreach ($field['options'] as $value => $label)
                             <option value="{{ $value }}" {{ is_array(old($field['name'], $values[$field['name']] ?? [])) && in_array($value, old($field['name'], $values[$field['name']] ?? [])) ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\StagesRepository;
+use Modules\Configuration\Repositories\TagsRepository;
+use Modules\Configuration\Repositories\TargetGroupRepository;
+use Modules\Configuration\Repositories\ThematicAreaRepository;
 use Modules\Configuration\Requests\Question\StoreRequest;
 use Modules\Configuration\Requests\Question\UpdateRequest;
 
@@ -17,16 +20,22 @@ class QuestionController extends Controller
      * @param  QuestionRepository $questions
      * @return void
      */
-    protected $questions,$stages;
+    protected $questions,$stages,$tags,$targetgroups,$thematicareas;
     
 
     public function __construct(
         QuestionRepository $questions,
-        StagesRepository $stages
+        StagesRepository $stages,
+        TagsRepository $tags,
+        ThematicAreaRepository $thematicareas,
+        TargetGroupRepository $targetgroups
     )
     {
         $this->questions = $questions;
         $this->stages = $stages;
+        $this->tags = $tags;
+        $this->targetgroups = $targetgroups;
+        $this->thematicareas = $thematicareas;
     }
     
     /**
@@ -39,8 +48,14 @@ class QuestionController extends Controller
     {
         
         // $this->authorize('manage-account-code');
+
+        $questions=$this->questions->with(['stages','thematic_area','tags','targetGroup'])->orderby('question', 'asc')->get();
+        
+        // return response()->json(['status'=>'Good',
+        //     'data'=>$questions], 200);
+
              return view('Configuration::Question.index')
-            ->withQuestions($this->questions->orderby('question', 'asc')->get());
+            ->withQuestions($questions);
     }
 
     /**
@@ -50,11 +65,30 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $questions=$this->stages->all()->mapWithKeys(function($stages) {
-            return [$stages->id => $stages->stages];
-        })->toArray();;
+        
+        // dd($this->stages->all());
+        $stages=$this->stages->all()->mapWithKeys(function($stage) {
+            return [$stage->id => $stage->stages];
+        })->toArray();
+     
+
+        $tags=$this->tags->all()->mapWithKeys(function($tags) {
+            return [$tags->id => $tags->tags];
+        })->toArray();
+
+        $thematicareas=$this->thematicareas->all()->mapWithKeys(function($thematicareas) {
+            return [$thematicareas->id => $thematicareas->thematic_area];
+        })->toArray();
+
+        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroups) {
+            return [$targetgroups->id => $targetgroups->target_group];
+        })->toArray();
+        
         return view('Configuration::Question.create')
-        ->withStages($questions);
+        ->withTags($tags)
+        ->withThematicareas($thematicareas)
+        ->withStages($stages)
+        ->withTargetgroups($targetgroups);
     }
 
     /**
@@ -67,8 +101,9 @@ class QuestionController extends Controller
     public function store(StoreRequest $request)
     {
         // $this->authorize('manage-account-code');
-      
+        
         $questions = $this->questions->create($request->all());
+        
         if($questions){
             return redirect()->route('question.index')->with('success', 'Question added  successfully!');
         }

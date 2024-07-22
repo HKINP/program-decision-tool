@@ -5,6 +5,7 @@ use Modules\Configuration\Controllers\DistrictController;
 use Modules\Configuration\Controllers\ProvinceController;
 use Modules\Configuration\Controllers\QuestionController;
 use Modules\Configuration\Controllers\StagesController;
+use Modules\Configuration\Controllers\TagsController;
 use Modules\Configuration\Controllers\targetgroupController;
 use Modules\Configuration\Controllers\ThematicAreaController;
 
@@ -71,8 +72,9 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::delete('stages/{thematicarea}', [StagesController::class, 'destroy'])->name('stages.destroy');
     Route::get('stages/{thematicarea}/view', [StagesController::class, 'view'])->name('stages.view');
     // });
+
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-    Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
+    Route::get('questions', [QuestionController::class, 'index'])->name('question.index');
     Route::get('questions/create', [QuestionController::class, 'create'])->name('question.create');
     Route::post('questions', [QuestionController::class, 'store'])->name('question.store');
     Route::get('questions/{question}/edit', [QuestionController::class, 'edit'])->name('question.edit');
@@ -81,6 +83,16 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('questions/{question}/view', [QuestionController::class, 'view'])->name('question.view');
     // });
 
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('tags', [TagsController::class, 'index'])->name('tags.index');
+        Route::get('tags/create', [TagsController::class, 'create'])->name('tags.create');
+        Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
+        Route::get('tags/{tags}/edit', [TagsController::class, 'edit'])->name('tags.edit');
+        Route::put('tags/{tags}', [TagsController::class, 'update'])->name('tags.update');
+        Route::delete('tags/{tags}', [TagsController::class, 'destroy'])->name('tags.destroy');
+        Route::get('tags/{tags}/view', [TagsController::class, 'view'])->name('tags.view');
+        // });
+    
 
 
 

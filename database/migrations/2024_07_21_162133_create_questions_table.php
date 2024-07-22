@@ -14,10 +14,18 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('question');
-            $table->integer('updated_by')->unsigned()->default(null);
+            $table->integer('stage_id')->unsigned();
+            $table->integer('thematic_area_id')->unsigned()->nullable();
+            $table->integer('tag_id')->unsigned()->nullable();
+            $table->integer('target_group_id')->unsigned()->nullable();
+            $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();
 
+            $table->foreign('stage_id')->references('id')->on('stages');
+            $table->foreign('thematic_area_id')->references('id')->on('thematic_areas');
+            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('target_group_id')->references('id')->on('target_groups');
             $table->foreign('updated_by')->references('id')->on('users');
         });
     }
