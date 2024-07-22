@@ -49,8 +49,9 @@ class QuestionController extends Controller
         
         // $this->authorize('manage-account-code');
 
-        $questions=$this->questions->with(['stages','thematic_area','tags','targetGroup'])->orderby('question', 'asc')->get();
-        
+        $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
+        ->orderBy('question', 'asc')
+        ->get();
         // return response()->json(['status'=>'Good',
         //     'data'=>$questions], 200);
 
@@ -133,8 +134,29 @@ class QuestionController extends Controller
     public function edit($id)
     {
       
+        // dd($this->stages->all());
+        $stages=$this->stages->all()->mapWithKeys(function($stage) {
+            return [$stage->id => $stage->stages];
+        })->toArray();
+     
+
+        $tags=$this->tags->all()->mapWithKeys(function($tags) {
+            return [$tags->id => $tags->tags];
+        })->toArray();
+
+        $thematicareas=$this->thematicareas->all()->mapWithKeys(function($thematicareas) {
+            return [$thematicareas->id => $thematicareas->thematic_area];
+        })->toArray();
+
+        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroups) {
+            return [$targetgroups->id => $targetgroups->target_group];
+        })->toArray();
         return view('Configuration::Question.edit')
-            ->withQuestion($this->questions->find($id));
+            ->withQuestion($this->questions->find($id))
+            ->withTags($tags)
+            ->withThematicareas($thematicareas)
+            ->withStages($stages)
+            ->withTargetgroups($targetgroups);
     }
 
     /**
@@ -147,14 +169,14 @@ class QuestionController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $questions = $this->questions->update($request->get('id'), $request->except('id'));
-        if($questions){
-            return response()->json(['status' => 'ok',
-                'Province' => $questions,
-                'message' => 'Question is successfully updated.'], 200);
-        }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be updated.'], 422);
+        
+        $questions = $this->questions->update($id, $request->except('id'));
+        if($questions){            
+                return redirect()->route('question.index')->with('success', 'Question Updated successfully!');
+            }
+            return response()->json(['status'=>'error',
+                'message'=>'Account Code can not be updated.'], 422);
+        
     }
 
     /**

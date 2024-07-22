@@ -3,12 +3,12 @@
 namespace Modules\Configuration\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Stages extends Model
+class Platforms extends Model
 {
     use ModelEventLogger, UpdatedBy,SoftDeletes;
     
@@ -17,14 +17,14 @@ class Stages extends Model
      *
      * @var string
      */
-    protected $table = 'stages';
+    protected $table = 'platforms';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['stages'];
+    protected $fillable = ['stage_id', 'platforms'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -33,6 +33,9 @@ class Stages extends Model
      */
     protected $hidden = [];
 
-   
+    public function stages()
+    {
+        return $this->belongsTo(Stages::class, 'stage_id');
+    }
    
 }

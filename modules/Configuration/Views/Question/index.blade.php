@@ -1,21 +1,32 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Questions'" 
-    :headers="['S.N', 'Question','Stages', 'Actions']" 
+    :headers="['S.N','Stages','Tags','Thematic Area','Targeted Groups', 'Question', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('question.create')"
     
     >
         @forelse ($questions as $index => $question)
+
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->question }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $question->stage->stages }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900"></div>
+                <div class="text-sm leading-5 text-gray-900">{{ $question->tag->tags ?? 'NA' }}</div>
             </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $question->thematicArea->thematic_area ?? 'NA' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $question->targetGroup->target_group ?? 'NA' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $question->question }}</div>
+            </td>
+           
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
                     <a href="{{ route('question.view', $question->id) }}" class="text-blue-500 hover:text-blue-700">

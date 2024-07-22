@@ -4,30 +4,30 @@ namespace Modules\Configuration\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\Configuration\Repositories\DistrictRepository;
-use Modules\Configuration\Repositories\ProvinceRepository;
-use Modules\Configuration\Requests\District\StoreRequest;
-use Modules\Configuration\Requests\District\UpdateRequest;
+use Modules\Configuration\Repositories\PlatformsRepository;
+use Modules\Configuration\Repositories\StagesRepository;
+use Modules\Configuration\Requests\Platforms\StoreRequest;
+use Modules\Configuration\Requests\Platforms\UpdateRequest;
 
-class DistrictController extends Controller
+class PlatformsController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @param  DistrictRepository $districts
+     * @param  PlatformsRepository $districts
      * @return void
      */
-    protected $districts,$provinces;
+    protected $platforms,$stages;
     
 
     public function __construct(
-        DistrictRepository $districts,
-        ProvinceRepository $provinces
+        PlatformsRepository $platforms,
+        StagesRepository $stages
 
     )
     {
-        $this->districts = $districts;
-        $this->provinces=$provinces;
+        $this->stages = $stages;
+        $this->platforms=$platforms;
     }
     
     /**
@@ -39,11 +39,11 @@ class DistrictController extends Controller
     public function index()
     {
         
-       $districts=$this->districts->with(['province'])->orderby('district', 'asc')->get();
+       $districts=$this->platforms->with(['stages'])->orderby('platforms', 'asc')->get();
     
         // $this->authorize('manage-account-code');
-             return view('Configuration::District.index')
-            ->withdistricts($districts);
+             return view('Configuration::Platforms.index')
+            ->withplatforms($districts);
     }
 
     /**
@@ -53,12 +53,10 @@ class DistrictController extends Controller
      */
     public function create()
     {
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
-            return [$province->id => $province->province];
-        })->toArray();
-
-        return view('Configuration::District.create')
-        ->withProvinces($provinces);
+        
+        $stages = $this->stages->all()->pluck('stages', 'id')->toArray();
+        return view('Configuration::Platforms.create')
+        ->withstages($stages);
     }
 
     /**
@@ -71,12 +69,12 @@ class DistrictController extends Controller
     public function store(StoreRequest $request)
     {
         // $this->authorize('manage-account-code');
-        $district = $this->districts->create($request->all());
-        if($district){
-            return redirect()->route('district.index')->with('success', 'Added District successfully!');
+        $platform = $this->platforms->create($request->all());
+        if($platform){
+            return redirect()->route('platform.index')->with('success', 'Added platforms successfully!');
         }
         return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be added.'], 422);
+            'message'=>'Platforms can not be added.'], 422);
     }
 
     /**
@@ -87,8 +85,8 @@ class DistrictController extends Controller
      */
     public function show($id)
     {
-        $District = $this->districts->find($id);
-        return response()->json(['status'=>'ok','district'=>$district], 200);
+        $platforms = $this->platforms->find($id);
+        return response()->json(['status'=>'ok','platforms'=>$platforms], 200);
     }
 
     /**
@@ -101,13 +99,10 @@ class DistrictController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
-            return [$province->id => $province->province];
-        })->toArray();
-        
-        return view('Configuration::District.edit')
-            ->withDistrict($this->districts->find($id))
-            ->withProvinces($provinces);
+        $stages = $this->stages->all()->pluck('stages', 'id')->toArray();
+        return view('Configuration::Platforms.edit')
+            ->withPlatforms($this->platforms->find($id))
+            ->withStages($stages);
     }
 
     /**
@@ -123,13 +118,13 @@ class DistrictController extends Controller
         // $this->authorize('manage-account-code');
      
         
-        $District = $this->districts->update($id, $request->except('id'));
+        $District = $this->platforms->update($id, $request->except('id'));
        
         if($District){
-            return redirect()->route('district.index')->with('success', 'District Updated successfully!');
+            return redirect()->route('platform.index')->with('success', 'Platform Updated successfully!');
         }
         return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be updated.'], 422);
+            'message'=>'Platform can not be updated.'], 422);
     }
 
     /**
@@ -142,13 +137,13 @@ class DistrictController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->districts->destroy($id);
+        $flag = $this->platforms->destroy($id);
         if($flag){
-            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
+            return redirect()->route('platform.index')->with('success', 'Platform is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',
-            'message'=>'District can not deleted.',
+            'message'=>'Platform can not deleted.',
         ], 422);
     }
 }

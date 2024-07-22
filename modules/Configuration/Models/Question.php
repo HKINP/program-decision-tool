@@ -38,22 +38,24 @@ class Question extends Model
      * @var array
      */
     protected $hidden = [];
+    public function stage()
+    {
+        return $this->belongsTo(Stages::class, 'stage_id');
+    }
 
-    public function stages()
+    public function thematicArea()
     {
-        return $this->belongsTo(Stages::class);
+        return $this->belongsTo(ThematicArea::class, 'thematic_area_id');
     }
-    public function thematic_area()
+
+    public function tag()
     {
-        return $this->belongsTo(ThematicArea::class);
+        return $this->belongsTo(Tags::class, 'tag_id');
     }
-    public function tags()
-    {
-        return $this->belongsTo(Tags::class);
-    }
+
     public function targetGroup()
     {
-        return $this->belongsTo(TargetGroup::class);
+        return $this->belongsTo(TargetGroup::class, 'target_group_id');
     }
 
     

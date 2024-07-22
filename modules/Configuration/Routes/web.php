@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Configuration\Controllers\DistrictController;
+use Modules\Configuration\Controllers\PlatformsController;
 use Modules\Configuration\Controllers\ProvinceController;
 use Modules\Configuration\Controllers\QuestionController;
 use Modules\Configuration\Controllers\StagesController;
@@ -91,6 +92,16 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::put('tags/{tags}', [TagsController::class, 'update'])->name('tags.update');
         Route::delete('tags/{tags}', [TagsController::class, 'destroy'])->name('tags.destroy');
         Route::get('tags/{tags}/view', [TagsController::class, 'view'])->name('tags.view');
+        // });
+    
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('platforms', [PlatformsController::class, 'index'])->name('platform.index');
+        Route::get('platforms/create', [PlatformsController::class, 'create'])->name('platform.create');
+        Route::post('platforms', [PlatformsController::class, 'store'])->name('platform.store');
+        Route::get('platforms/{tags}/edit', [PlatformsController::class, 'edit'])->name('platform.edit');
+        Route::put('platforms/{tags}', [PlatformsController::class, 'update'])->name('platform.update');
+        Route::delete('platforms/{tags}', [PlatformsController::class, 'destroy'])->name('platform.destroy');
+        Route::get('platforms/{tags}/view', [PlatformsController::class, 'view'])->name('platform.view');
         // });
     
 
