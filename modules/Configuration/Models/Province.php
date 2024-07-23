@@ -33,5 +33,9 @@ class Province extends Model
      */
     protected $hidden = [];
 
+    public function districts()
+    {
+        return $this->hasMany(District::class);
+    }
    
 }

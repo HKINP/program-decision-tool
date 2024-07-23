@@ -4,12 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DataFeed;
+use Modules\Configuration\Repositories\ProvinceRepository;
+use Modules\Configuration\Repositories\StagesRepository;
 
 class DashboardController extends Controller
 {
+
+    protected $provinces, $stages;
+
+
+    public function __construct(
+
+        ProvinceRepository $provinces,
+        StagesRepository $stages
+
+    ) {
+        $this->provinces = $provinces;
+        $this->stages = $stages;
+    }
+
     public function index()
     {
-            return view('pages/dashboard/dashboard');
+        return view('pages/dashboard/dashboard');
     }
     public function documentation()
     {
@@ -17,6 +33,25 @@ class DashboardController extends Controller
 
         return view('pages/dashboard/documentation');
     }
+    public function dataentry(Request $request)
+    {
+
+        if ($request->has('did')) {
+            $did = $request->query('did');
+            $stages = $this->stages->get();
+            return view('pages/dashboard/toolscreate')
+                ->withStages($stages)
+                ->withDistrictID($did);
+        } else {
+            $provinces = $this->provinces->with(['districts'])->get();
+            // $this->authorize('manage-account-code');
+            return view('pages/dashboard/dataentry')
+                ->withProvinces($provinces);
+        }
+    }
+
+
+
 
     /**
      * Displays the analytics screen

@@ -13,11 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::prefix('api/v1/privilege')->namespace('Modules\Privilege\Controllers\Api')->group(function(){
+// Route::prefix('api/v1/privilege')->namespace('Modules\Privilege\Controllers\Api')->group(function(){
 
-    Route::post('validate/email', 'UserController@validateEmail');
-    Route::post('check/exist/email', 'UserController@checkExist');
-    Route::post('search/user', 'UserController@search');
-    Route::post('role-based-search/user', 'UserController@roleBasedSearch');
-    Route::get('user/{user}', 'UserController@show');
-});
+//     Route::post('validate/email', 'UserController@validateEmail');
+//     Route::post('check/exist/email', 'UserController@checkExist');
+//     Route::post('search/user', 'UserController@search');
+//     Route::post('role-based-search/user', 'UserController@roleBasedSearch');
+//     Route::get('user/{user}', 'UserController@show');
+// });

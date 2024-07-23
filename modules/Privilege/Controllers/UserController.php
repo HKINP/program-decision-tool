@@ -17,7 +17,7 @@ use Modules\Configuration\Repositories\OfficeRepository;
 use Modules\Configuration\Repositories\AwardCodeRepository;
 use Modules\Configuration\Repositories\BudgetCodeRepository;
 
-use Modules\Configuration\Repositories\DepartmentRepository;
+// use Modules\Configuration\Repositories\DepartmentRepository;
 // use Modules\Configuration\Repositories\AccountCodeRepository;
 use Modules\Configuration\Repositories\MonitoringCodeRepository;
 
@@ -63,7 +63,7 @@ class UserController extends Controller
         UserRepository $users
     )
     {
-        $this->offices = $offices;
+        // $this->offices = $offices;
         $this->roles = $roles;
         $this->users = $users;
     }
@@ -193,15 +193,15 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Privilege::User.add')
-            ->withAccountCodes($this->accountCodes->where('is_active', '=', 1)->get())
-            ->withAwardCodes($this->awardCodes->where('is_active', '=', 1)->get())
-            ->withBudgetCodes($this->budgetCodes->where('is_active', '=', 1)->get())
-            ->withDepartments($this->departments->select(['department_name', 'id'])->get())
-            ->withMonitoringCodes($this->monitoringCodes->where('is_active', '=', 1)->get())
-            ->withRoles($this->roles->get())
-            ->withOffices($this->offices->where('is_active', '=', 1)->get())
-            ;
+        // return view('Privilege::User.add')
+        //     ->withAccountCodes($this->accountCodes->where('is_active', '=', 1)->get())
+        //     ->withAwardCodes($this->awardCodes->where('is_active', '=', 1)->get())
+        //     ->withBudgetCodes($this->budgetCodes->where('is_active', '=', 1)->get())
+        //     ->withDepartments($this->departments->select(['department_name', 'id'])->get())
+        //     ->withMonitoringCodes($this->monitoringCodes->where('is_active', '=', 1)->get())
+        //     ->withRoles($this->roles->get())
+        //     ->withOffices($this->offices->where('is_active', '=', 1)->get())
+        //     ;
     }
 
     /**
@@ -212,16 +212,16 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $data = $request->except(['password', 'confirm_password']);
-        $data['password'] = bcrypt($request->password);
-        $user = $this->users->create($data);
-        if($user) {
-            return redirect()->route('user.index')
-                ->withSuccessMessage('User is successfully added.');
-        } else {
-            return redirect()->back()->withInput()
-                ->withWarningMessage('User can not be added.');
-        }
+        // $data = $request->except(['password', 'confirm_password']);
+        // $data['password'] = bcrypt($request->password);
+        // $user = $this->users->create($data);
+        // if($user) {
+        //     return redirect()->route('user.index')
+        //         ->withSuccessMessage('User is successfully added.');
+        // } else {
+        //     return redirect()->back()->withInput()
+        //         ->withWarningMessage('User can not be added.');
+        // }
     }
 
     /**
@@ -243,44 +243,44 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->users->where('support_staff', '=', 0)->find($id);
+        // $user = $this->users->where('support_staff', '=', 0)->find($id);
 
-        $award_ids = $user->awardCodes->pluck('id')->toArray();
+        // $award_ids = $user->awardCodes->pluck('id')->toArray();
 
-        $awardCodes = $this->awardCodes->whereIn('id',$award_ids)->with('budgetCodes','monitoringCodes')->get();
+        // $awardCodes = $this->awardCodes->whereIn('id',$award_ids)->with('budgetCodes','monitoringCodes')->get();
 
-        $budget_ids = [];
-        $monitoring_ids = [];
+        // $budget_ids = [];
+        // $monitoring_ids = [];
 
-        foreach ($awardCodes as $key => $awardCode) {
-            $budgets = $awardCode->budgetCodes->pluck('id')->toArray();
-            $monitorings = $awardCode->monitoringCodes->pluck('id')->toArray();
+        // foreach ($awardCodes as $key => $awardCode) {
+        //     $budgets = $awardCode->budgetCodes->pluck('id')->toArray();
+        //     $monitorings = $awardCode->monitoringCodes->pluck('id')->toArray();
 
-            $budget_ids = array_merge($budgets,$budget_ids);
-            $monitoring_ids = array_merge($monitorings,$monitoring_ids);
+        //     $budget_ids = array_merge($budgets,$budget_ids);
+        //     $monitoring_ids = array_merge($monitorings,$monitoring_ids);
 
-        }
+        // }
 
-        $budget_ids = array_unique($budget_ids);
-        $monitoring_ids = array_unique($monitoring_ids);
+        // $budget_ids = array_unique($budget_ids);
+        // $monitoring_ids = array_unique($monitoring_ids);
 
-        $budgetCodes = $this->budgetCodes->whereIn('id',$budget_ids)->get();
-        $monitoringCodes = $this->monitoringCodes->whereIn('id',$monitoring_ids)->get();
+        // $budgetCodes = $this->budgetCodes->whereIn('id',$budget_ids)->get();
+        // $monitoringCodes = $this->monitoringCodes->whereIn('id',$monitoring_ids)->get();
 
-        if($user){
-            return view('Privilege::User.edit')
-                ->withAccountCodes($this->accountCodes->where('is_active', '=', 1)->get())
-                ->withAwardCodes($this->awardCodes->where('is_active', '=', 1)->get())
-                ->withBudgetCodes($budgetCodes)
-                ->withDepartments($this->departments->select(['department_name', 'id'])->get())
-                ->withMonitoringCodes($monitoringCodes)
-                ->withRoles($this->roles->get())
-                ->withOffices($this->offices->where('is_active', '=', 1)->get())
-                ->withUser($user)
-                ->withUserRoles($user->roles ? $user->roles->pluck('id')->toArray() : [])
-                ;
-        }
-        return response()->view('denied');
+        // if($user){
+        //     return view('Privilege::User.edit')
+        //         ->withAccountCodes($this->accountCodes->where('is_active', '=', 1)->get())
+        //         ->withAwardCodes($this->awardCodes->where('is_active', '=', 1)->get())
+        //         ->withBudgetCodes($budgetCodes)
+        //         ->withDepartments($this->departments->select(['department_name', 'id'])->get())
+        //         ->withMonitoringCodes($monitoringCodes)
+        //         ->withRoles($this->roles->get())
+        //         ->withOffices($this->offices->where('is_active', '=', 1)->get())
+        //         ->withUser($user)
+        //         ->withUserRoles($user->roles ? $user->roles->pluck('id')->toArray() : [])
+        //         ;
+        // }
+        // return response()->view('denied');
     }
 
     /**
@@ -292,14 +292,14 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $user = $this->users->update($id, $request->except('username'));
-        if($user) {
-            return redirect()->route('user.index')
-                ->withSuccessMessage('User is successfully updated.');
-        } else {
-            return redirect()->back()->withInput()
-                ->withWarningMessage('User can not be updated.');
-        }
+        // $user = $this->users->update($id, $request->except('username'));
+        // if($user) {
+        //     return redirect()->route('user.index')
+        //         ->withSuccessMessage('User is successfully updated.');
+        // } else {
+        //     return redirect()->back()->withInput()
+        //         ->withWarningMessage('User can not be updated.');
+        // }
     }
 
     /**
@@ -321,12 +321,12 @@ class UserController extends Controller
      */
     public function changeStatus(Request $request, $id)
     {
-        $user = $this->users->changeStatus($id);
-        $message = ($user->is_active == 1) ? "User is activated successfully.": "User is deactivated successfully.";
-        if($user->support_staff == 1){
-            $message = ($user->is_active == 1) ? "Support staff is activated successfully.": "Support staff is deactivated successfully.";
-        }
-        return response()->json(['status'=>'ok','user'=>$user, 'message'=>$message], 200); 
+        // $user = $this->users->changeStatus($id);
+        // $message = ($user->is_active == 1) ? "User is activated successfully.": "User is deactivated successfully.";
+        // if($user->support_staff == 1){
+        //     $message = ($user->is_active == 1) ? "Support staff is activated successfully.": "Support staff is deactivated successfully.";
+        // }
+        // return response()->json(['status'=>'ok','user'=>$user, 'message'=>$message], 200); 
     }
     
 }

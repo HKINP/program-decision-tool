@@ -23,7 +23,7 @@
                         'type' => 'select',
                         'required' => true,
                         'width' => 12,
-                        'options' => $provinces,
+                        'options' => $provinces, // Assumes $provinces is an array of options for the select field
                     ],
                     [
                         'name' => 'district',
@@ -32,8 +32,146 @@
                         'required' => true,
                         'width' => 6,
                     ],
-                    
-                    
+                    [
+                        'name' => 'adolescent_girls',
+                        'label' => 'No. of Adolescent Girls',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'children_under_5',
+                        'label' => 'No. of Children Under 5',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'hospitals',
+                        'label' => 'No. of Hospitals',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'hps',
+                        'label' => 'No. of HPs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'otcs',
+                        'label' => 'No. of Of OTCs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'phccs',
+                        'label' => 'No. of PHCCs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'pregnant_women',
+                        'label' => 'No. of Pregnant Women',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'wra',
+                        'label' => 'No. of Women of Reproductive Age',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'chus',
+                        'label' => 'No. of CHUs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'fchvs',
+                        'label' => 'No. of FCHVs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'uhcs',
+                        'label' => 'No. of UHCs',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'akc',
+                        'label' => 'No. of AKC',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'vhlc',
+                        'label' => 'No. of VHLC',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'children_0_to_23_months',
+                        'label' => 'No. of Children 0 to 23 Months',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'epi_clinics',
+                        'label' => 'No. of EPI Clinics',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'hmg',
+                        'label' => 'No. of HMG',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'low_equity_quintile_municipalities',
+                        'label' => 'No. of Low Equity Quintile Municipalities',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'birthing_centers',
+                        'label' => 'No. of Birthing Centers',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'schools',
+                        'label' => 'No. of Schools',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
+                    [
+                        'name' => 'orc',
+                        'label' => 'No. of ORC',
+                        'type' => 'number',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 6,
+                    ],
                 ]" />
             </div>
         </div>

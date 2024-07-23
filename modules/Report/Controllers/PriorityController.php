@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
-use Modules\Configuration\Requests\District\StoreRequest;
-use Modules\Configuration\Requests\District\UpdateRequest;
+use Modules\Configuration\Repositories\QuestionRepository;
+use Modules\Report\Repositories\PriorityRepository;
+use Modules\Report\Requests\Priority\StoreRequest;
+use Modules\Report\Requests\Priority\UpdateRequest;
 
-class PrioritiesController extends Controller
+class PriorityController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -17,17 +19,22 @@ class PrioritiesController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts,$provinces;
+    protected $districts,$provinces,$priorities,$questions;
     
 
     public function __construct(
+
         DistrictRepository $districts,
-        ProvinceRepository $provinces
+        ProvinceRepository $provinces,
+        PriorityRepository $priorities,
+        QuestionRepository $questions,
 
     )
     {
         $this->districts = $districts;
         $this->provinces=$provinces;
+        $this->priorities=$priorities;
+        $this->questions=$questions;
     }
     
     /**
@@ -36,14 +43,25 @@ class PrioritiesController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1){
+            $did = $request->query('did');
+            $stageId=$request->query('stageId');
+            $districtprofile=$this->districts->with(['province'])->find($did);
+            $questions=$this->questions->with(['stage', 'thematicArea','tag','targetGroup'])->where('stage_id','=',$stageId)->get();
+           // Organize questions by target group and thematic area
         
-       $districts=$this->districts->with(['province'])->orderby('district', 'asc')->get();
-    
-        // $this->authorize('manage-account-code');
-             return view('Report::Priorities.index')
-            ->withdistricts($districts);
+        // return response()->json(['status'=>'error','message'=>$questionsByTargetGroup], 422);
+            return view('Report::Priorities.create')
+            ->withDistrictprofile($districtprofile)
+            ->withQuestions($questions)
+            ->withPriorities($this->priorities->all()->toArray());
+        }
+        else{
+
+            return redirect()->route('district.index')->with('failed', 'Unable to submit priority!');
+        } 
     }
 
     /**
@@ -75,8 +93,7 @@ class PrioritiesController extends Controller
         if($district){
             return redirect()->route('district.index')->with('success', 'Added District successfully!');
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be added.'], 422);
+        return response()->json(['status'=>'error','message'=>'Account Code can not be added.'], 422);
     }
 
     /**

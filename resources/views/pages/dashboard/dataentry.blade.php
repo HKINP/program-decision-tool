@@ -1,7 +1,8 @@
+
 <!-- resources/views/provinces/create.blade.php -->
 
 <x-app-layout>
-    <div class="w-[98%] mx-auto my-4 rounded-lg divide-solid divide-y h-max">
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <div class="flex items-center gap-2 text-2xl p-4">
             <div class="border p-2 rounded-full ml-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0"
                     viewBox="0 0 1024 1024" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
@@ -12,44 +13,37 @@
             <p class="font-semibold text-[24px]">Settings</p>
         </div>
         <div id="provinces-container">
-            @foreach ($provinces as $index => $province)
-                <div class="province border bg-white border-[#D8DAE5] rounded-lg divide-y divide-solid mb-4">
-                    <div class="flex justify-between items-center cursor-pointer province-header"
-                        data-index="{{ $index }}">
-                        <div class="flex gap-2 p-4 items-center">
-                            <p
-                                class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">
-                                {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</p>
-                            <p class="font-semibold text-md text-blue-600">{{ $province->province }}</p>
-                        </div>
-                        <span class="text-4xl arrow-icon">
-                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
-                                height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 14L8 10H16L12 14Z"></path>
-                            </svg>
-                        </span>
+            @foreach($provinces as $index => $province)
+            <div class="province border bg-white border-[#D8DAE5] rounded-lg divide-y divide-solid mb-4">
+                <div class="flex justify-between items-center cursor-pointer province-header" data-index="{{ $index }}">
+                    <div class="flex gap-2 p-4 items-center">
+                        <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">
+                            {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</p>
+                        <p class="font-semibold text-md text-blue-600">{{ $province->province }}</p>
                     </div>
-                    <div class="province-content grid grid-cols-6 gap-4 p-4">
-                        <div class="col-span-6 mb-4">
-                            <input type="text" class="search-district form-input w-full p-2 border rounded-lg"
-                                placeholder="Search district...">
-                        </div>
-                        @foreach ($province->districts as $district)
-                            <a
-                                href=" <a href="{{ route('dataentry.create', ['did' => $district->id, 'stageId' => 0]) }}" 
-                            
-                            class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
-                            <p class="text-center mt-2 text-sm font-semibold">{{ $district->district }}</p>
-                            </a>
-                        @endforeach
-
-                    </div>
+                    <span class="text-4xl arrow-icon">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 14L8 10H16L12 14Z"></path>
+                        </svg>
+                    </span>
                 </div>
+                <div class="province-content grid grid-cols-6 gap-4 p-4">
+                    <div class="col-span-6 mb-4">
+                        <input type="text" class="search-district form-input w-full p-2 border rounded-lg" placeholder="Search district...">
+                    </div>
+                    @foreach($province->districts as $district)
+                    <a href="{{ route('dataentry.create', ['did' => $district->id]) }}" class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 cursor-pointer ease-in-out duration-300">
+                        <p class="text-center mt-2 text-sm font-semibold">{{ $district->district }}</p>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
             @endforeach
         </div>
     </div>
 
-
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             // Collapse functionality
@@ -92,3 +86,4 @@
         }
     </style>
 </x-app-layout>
+

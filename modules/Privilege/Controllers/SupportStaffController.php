@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\AccountCodeRepository;
 use Modules\Configuration\Repositories\AwardCodeRepository;
 use Modules\Configuration\Repositories\BudgetCodeRepository;
-use Modules\Configuration\Repositories\DepartmentRepository;
+// use Modules\Configuration\Repositories\DepartmentRepository;
 use Modules\Configuration\Repositories\MonitoringCodeRepository;
 use Modules\Configuration\Repositories\OfficeRepository;
 use Modules\Privilege\Repositories\RoleRepository;

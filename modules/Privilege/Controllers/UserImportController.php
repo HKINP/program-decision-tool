@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Excel;
 
-use Modules\Configuration\Repositories\DepartmentRepository;
+// use Modules\Configuration\Repositories\DepartmentRepository;
 use Modules\Configuration\Repositories\OfficeRepository;
 use Modules\Privilege\Repositories\RoleRepository;
 use Modules\Privilege\Repositories\UserRepository;
@@ -22,15 +22,15 @@ class UserImportController extends Controller
      * @param UserRepository $users
      */
     public function __construct(
-        DepartmentRepository $departments,
-        OfficeRepository $offices,
+        // DepartmentRepository $departments,
+        // OfficeRepository $offices,
         RoleRepository $roles,
         UserRepository $users
     ){
-        $this->departments = $departments;
-        $this->offices = $offices;
-        $this->roles = $roles;
-        $this->users = $users;
+        // $this->departments = $departments;
+        // $this->offices = $offices;
+        // $this->roles = $roles;
+        // $this->users = $users;
     }
 
     /**
