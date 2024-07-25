@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
+use Modules\Configuration\Repositories\TargetGroupRepository;
 use Modules\Report\Repositories\PriorityRepository;
 use Modules\Report\Requests\Priority\StoreRequest;
 use Modules\Report\Requests\Priority\UpdateRequest;
@@ -19,7 +20,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts,$provinces,$priorities,$questions;
+    protected $districts,$provinces,$priorities,$questions,$thematicgroups;
     
 
     public function __construct(
@@ -28,6 +29,7 @@ class PriorityController extends Controller
         ProvinceRepository $provinces,
         PriorityRepository $priorities,
         QuestionRepository $questions,
+        TargetGroupRepository $targetgroups,
 
     )
     {
@@ -35,6 +37,7 @@ class PriorityController extends Controller
         $this->provinces=$provinces;
         $this->priorities=$priorities;
         $this->questions=$questions;
+        $this->targetgroups=$targetgroups;
     }
     
     /**
@@ -49,6 +52,9 @@ class PriorityController extends Controller
             $did = $request->query('did');
             $stageId=$request->query('stageId');
             $districtprofile=$this->districts->with(['province'])->find($did);
+            $priorities=$this->priorities->with(['thematicArea','targetGroup'])->get();
+            $targetgroups=$this->targetgroups->get();
+            // dd($priorities);
             $questions=$this->questions->with(['stage', 'thematicArea','tag','targetGroup'])->where('stage_id','=',$stageId)->get();
            // Organize questions by target group and thematic area
         
@@ -56,7 +62,8 @@ class PriorityController extends Controller
             return view('Report::Priorities.create')
             ->withDistrictprofile($districtprofile)
             ->withQuestions($questions)
-            ->withPriorities($this->priorities->all()->toArray());
+            ->withTargetgroups($targetgroups)
+            ->withPriorities($priorities);
         }
         else{
 
@@ -88,6 +95,7 @@ class PriorityController extends Controller
      */
     public function store(StoreRequest $request)
     {
+      
         // $this->authorize('manage-account-code');
         $district = $this->districts->create($request->all());
         if($district){

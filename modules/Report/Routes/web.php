@@ -14,10 +14,6 @@ use Modules\Report\Controllers\PriorityController;
 |
 */
 
-Route::middleware(['web', 'auth', 'logger'])->group(function () {
-        
+Route::middleware(['web', 'auth', 'logger'])->group(function () {        
         Route::resource('priority', PriorityController::class);
-        
-    
-
 });

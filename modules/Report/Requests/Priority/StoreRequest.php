@@ -20,7 +20,6 @@ class StoreRequest extends FormRequest
             'thematic_area_id' => 'required|integer',
             'question_id' => 'required|integer',
             'priority' => 'required|integer',
-            'updated_by' => 'required|integer',
         ];
     }
 }
