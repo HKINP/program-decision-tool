@@ -97,11 +97,11 @@ class PriorityController extends Controller
     {
       
         // $this->authorize('manage-account-code');
-        $district = $this->districts->create($request->all());
-        if($district){
-            return redirect()->route('district.index')->with('success', 'Added District successfully!');
+        $priorities = $this->priorities->create($request->all());
+        if($priorities){
+            return response()->json(['status'=>'error','message'=>'Priorities Added Succesfully !!'], 200);
         }
-        return response()->json(['status'=>'error','message'=>'Account Code can not be added.'], 422);
+        return response()->json(['status'=>'error','message'=>'Priorities not be added.'], 422);
     }
 
     /**

@@ -161,7 +161,7 @@
                 </div>
                 <form id="priorityForm" action="{{ route('priority.store') }}" method="POST">
                     @csrf
-                    <input type="number" name="province_id" vlaue="{{ $districtprofile->province->id }}" hidden>
+                    <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
                     <input type="number" name="district_id" value="{{ $districtprofile->id }}"  hidden>
                     
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -282,7 +282,8 @@
                 success: function(response) {
                     // Handle success (e.g., close modal, update UI)
                     $('#myModal').addClass('hidden');
-                    alert('Priority added successfully!');
+                    alert(response.message);
+                    location.reload();
                 },
                 error: function(xhr) {
                     // Handle error
