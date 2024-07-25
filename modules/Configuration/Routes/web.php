@@ -9,6 +9,7 @@ use Modules\Configuration\Controllers\StagesController;
 use Modules\Configuration\Controllers\TagsController;
 use Modules\Configuration\Controllers\targetgroupController;
 use Modules\Configuration\Controllers\ThematicAreaController;
+use Modules\Configuration\Controllers\ThresholdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +105,15 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::get('platforms/{tags}/view', [PlatformsController::class, 'view'])->name('platform.view');
         // });
     
+       // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('threshold/question/{questionId}', [ThresholdController::class, 'getThresholdbyQuestionId'])->name('threshold.questionid');
+        Route::get('threshold/create', [ThresholdController::class, 'create'])->name('threshold.create');
+        Route::post('threshold', [ThresholdController::class, 'store'])->name('threshold.store');
+        Route::get('threshold/{tags}/edit', [ThresholdController::class, 'edit'])->name('threshold.edit');
+        Route::put('threshold/{tags}', [ThresholdController::class, 'update'])->name('threshold.update');
+        Route::delete('threshold/{tags}', [ThresholdController::class, 'destroy'])->name('threshold.destroy');
+        Route::get('threshold/{tags}/view', [ThresholdController::class, 'view'])->name('threshold.view');
+        // });
 
 
 

@@ -57,6 +57,10 @@ class Question extends Model
     {
         return $this->belongsTo(TargetGroup::class, 'target_group_id');
     }
+    public function thresholds()
+    {
+        return $this->hasMany(Threshold::class);
+    }
 
     
 }
