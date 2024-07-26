@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('platforms', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('stage_id')->unsigned();
+            $table->integer('parent_id')->unsigned()->nullable();
             $table->string('platforms');
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();
 
-            $table->foreign('stage_id')->references('id')->on('stages')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('platforms');
             $table->foreign('updated_by')->references('id')->on('users');
         });
     }

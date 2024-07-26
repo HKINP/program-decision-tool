@@ -39,11 +39,9 @@ class PlatformsController extends Controller
     public function index()
     {
         
-       $districts=$this->platforms->with(['stages'])->orderby('platforms', 'asc')->get();
-    
-        // $this->authorize('manage-account-code');
+       $platforms=$this->platforms->with(['parents'])->orderby('id', 'asc')->where('id','!=',1)->get();
              return view('Configuration::Platforms.index')
-            ->withplatforms($districts);
+            ->withplatforms($platforms);
     }
 
     /**
@@ -54,9 +52,9 @@ class PlatformsController extends Controller
     public function create()
     {
         
-        $stages = $this->stages->all()->pluck('stages', 'id')->toArray();
+        $platforms = $this->platforms->all()->pluck('platforms', 'id')->toArray();
         return view('Configuration::Platforms.create')
-        ->withstages($stages);
+        ->withPlatforms($platforms);
     }
 
     /**

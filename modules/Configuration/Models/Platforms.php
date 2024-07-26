@@ -24,7 +24,7 @@ class Platforms extends Model
      *
      * @var array
      */
-    protected $fillable = ['stage_id', 'platforms'];
+    protected $fillable = ['parent_id', 'platforms'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -33,9 +33,9 @@ class Platforms extends Model
      */
     protected $hidden = [];
 
-    public function stages()
+    public function parents()
     {
-        return $this->belongsTo(Stages::class, 'stage_id');
+        return $this->belongsTo(Platforms::class, 'parent_id');
     }
    
 }

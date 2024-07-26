@@ -18,35 +18,35 @@
                         'label' => 'Minimum Value',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 12,
+                        'width' => 'w-1/3',
                          ],
                     [
                         'name' => 'max_value',
                         'label' => 'Maximum Value',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'w-1/3',
                     ],
                     [
                         'name' => 'color',
                         'label' => 'Color Name',
-                        'type' => 'text',
+                        'type' => 'color',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'w-1/3',
                     ],
                     [
                         'name' => 'recommendation',
                         'label' => 'Recommendation Value',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'w-full',
                     ],
                     [
                         'name' => 'question_id',
                         'label' => 'Question Value',
                         'type' => 'invisible',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'full',
                     ],
                 
                     [
@@ -54,12 +54,12 @@
                         'label' => 'stage Value',
                         'type' => 'invisible',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 100,
                     ],
                    
                 ]" />
             </div>
         </div>
-    </div>
+         </div>
 
 </x-app-layout>

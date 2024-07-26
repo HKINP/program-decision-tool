@@ -29,7 +29,7 @@
            
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
-                    <a href="{{ route('platform.questionid', $question->id) }}" class="text-blue-500 hover:text-blue-700">
+                    <a href="{{ route('threshold.questionid', $question->id) }}" class="text-blue-500 hover:text-blue-700">
                         <i class="fas fa-bar-chart"></i>
                     </a>
                     <a href="{{ route('question.view', $question->id) }}" class="text-blue-500 hover:text-blue-700">

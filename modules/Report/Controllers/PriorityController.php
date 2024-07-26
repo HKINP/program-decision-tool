@@ -52,7 +52,7 @@ class PriorityController extends Controller
             $did = $request->query('did');
             $stageId=$request->query('stageId');
             $districtprofile=$this->districts->with(['province'])->find($did);
-            $priorities=$this->priorities->with(['thematicArea','targetGroup'])->get();
+            $priorities=$this->priorities->with(['thematicArea','targetGroup'])->where('district_id','=',$did)->get();
             $targetgroups=$this->targetgroups->get();
             // dd($priorities);
             $questions=$this->questions->with(['stage', 'thematicArea','tag','targetGroup'])->where('stage_id','=',$stageId)->get();

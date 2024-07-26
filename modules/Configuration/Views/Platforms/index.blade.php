@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-table-listing 
-    :title="'IR Mapping Platforms'" 
-    :headers="['S.N', 'Stages','platform', 'Actions']" 
+    :title="'Mapping Platforms'" 
+    :headers="['S.N', 'Parent Platform','Platform Name', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('platform.create')"
@@ -12,7 +12,7 @@
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $platform->stages->stages }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $platform->parents->platforms ?? '' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $platform->platforms }}</div>
