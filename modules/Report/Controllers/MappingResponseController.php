@@ -11,7 +11,7 @@ use Modules\Report\Repositories\PriorityRepository;
 use Modules\Report\Requests\MappingPlatforms\StoreRequest;
 use Modules\Report\Requests\MappingPlatforms\UpdateRequest;
 
-class MappingPlatformsController extends Controller
+class MappingResponseController extends Controller
 {
     /**
      * Create a new controller instance.

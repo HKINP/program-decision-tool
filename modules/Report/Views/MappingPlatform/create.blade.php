@@ -7,9 +7,10 @@
                         <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
                         </path>
                     </svg></div>
-                <p class="font-semibold text-[24px]">Step1. Prioritize Behaviors</p>
+                <p class="font-semibold text-[24px]">Step2. Map Platforms & Channels</p>
             </div>           
         </div>
+
         <div class="flex gap-4">
             <!-- Province Section -->
             <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
@@ -41,18 +42,12 @@
             </div>
 
             <div class="space-y-2 text-xs italic">
-                <p>1) Use the menu below to design community-level activities. To support women and caregivers to adopt
-                    the selected behaviors, consider what barriers they would need to overcome. These barriers may be
-                    individual (e.g., knowledge, self-confidence, time, cost) or social (family support, cultural
-                    practices, gender norms), or structural (health system, food system). We will address health system
-                    barriers under IR 2 and food system barriers under IR 3.</p>
-                <p class="mb-2">2) For each platform/program determine what you would need to do: conduct IPC,
-                    organize community events (e.g., street theater), refer or link with another program e.g., social
-                    protection. Complete the who and how columns to determine further who needs to be involved and how.
-                    Then describe your activity in as much detail as possible. Once you have completed identifying
-                    activities for everyone in the district, consider how it might change for underserved populations.
-                    Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7
-                    for this IR.</p>
+                <p>Please start by completing the data below using the information in the district profile sheet. Then
+                    answer the questions below to help determine which platforms/programs, actors, and channels to
+                    use/mobilize as you design activities to address the selected behaviors. The suggestions column will
+                    offer ideas for what you might consider in your design but is not meant to be restrictive. Answer
+                    the questions for your district generally, and then consider how the responses might change for
+                    underserved groups.</p>
             </div>
         </div>
 
@@ -128,18 +123,18 @@
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
                         <tr>
-                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Target Group</th>
-                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Thematic area</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Platforms</th>
                             <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">#</th>
-                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Questions (based on MSNP III
-                                indicators)</th>
-                            <th colspan="2" class="bg-gray-500 text-white text-xs p-2">Responses (%)</th>
-                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Priority for Y1</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Questions</th>
+                            <th colspan="2" class="bg-gray-500 text-white text-xs p-2">All</th>
+                            <th colspan="2" class="bg-gray-500 text-white text-xs p-2">Underserved</th>
                             <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Actions</th>
                         </tr>
                         <tr>
-                            <th class="bg-gray-500 text-white text-xs p-2 w-20">All</th>
-                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Underserved</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Value</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Suggestions</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Value</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Suggestions</th>
                         </tr>
                     </thead>
                     <tbody class="rounded-lg" id="priority-table-body">
@@ -151,10 +146,7 @@
                                     <span
                                         class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{{ $priority->targetGroup->target_group }}</span>
                                 </td>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    <span
-                                        class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">{{ $priority->thematicArea->thematic_area }}</span>
-                                </td>
+                               
                                 <td class="border text-sm border-gray-200 p-2">{{ $index++ }}</td>
                                 <td class="border text-sm border-gray-200 p-2">{{ $priority->question->question }}
                                 </td>
@@ -162,17 +154,21 @@
                                     data-response="{{ $priority->response_all }}">
                                     {{ $priority->response_all }}
                                 </td>
+                                <td class="border text-sm border-gray-200 p-2 text-center">
+                                    {{ $priority->priority }}
+                                </td>
                                 <td class="border text-sm {{ $priority->color_underserved }} border-gray-200 p-2 text-center"
                                     data-response="{{ $priority->response_underserved }}">
                                     {{ $priority->response_underserved }}
                                 </td>
+                                
                                 <td class="border text-sm border-gray-200 p-2 text-center">
                                     {{ $priority->priority }}
                                 </td>
                                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                                     <div class="flex space-x-4">
-                                        <a onclick="showEditModal({{ $priority->id}},'{{ route('priority.update', $priority->id) }}')" href="#"
-                                            class="text-yellow-500 hover:text-yellow-700">
+                                        <a onclick="showEditModal({{ $priority->id }},'{{ route('priority.update', $priority->id) }}')"
+                                            href="#" class="text-yellow-500 hover:text-yellow-700">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="button" class="text-red-500 hover:text-red-700"
@@ -277,7 +273,7 @@
                     @csrf
                     @method('PUT')
                     <div class="mt-4">
-                           <div class="mb-4">
+                        <div class="mb-4">
                             <label for="target-group" class="block text-sm font-medium text-gray-700">Target
                                 Group</label>
                             <select name="target_group_id" required id="target-group"
@@ -342,7 +338,7 @@
 
 
     <script>
-        function showEditModal(id,editRoute) {
+        function showEditModal(id, editRoute) {
             document.getElementById('edit-form').action = editRoute;
             $.ajax({
                 url: '/priority/' + id, // Replace with your route
@@ -429,10 +425,10 @@
                 let targetGroupId = $(this).val();
                 let thematicAreaSelect, questionSelect;
 
-                if ($(this).hasClass('add-context')) {                    
+                if ($(this).hasClass('add-context')) {
                     thematicAreaSelect = $(this).closest('tr').find('.thematic-area');
                     questionSelect = $(this).closest('tr').find('.question');
-                } else if ($(this).hasClass('edit-context')) {                 
+                } else if ($(this).hasClass('edit-context')) {
                     thematicAreaSelect = $('#thematic-area');
                     questionSelect = $('#question');
                 }
@@ -469,16 +465,16 @@
                 let thematicAreaId = $(this).val();
                 let questionSelect;
 
-                if ($(this).hasClass('add-context')) {                    
+                if ($(this).hasClass('add-context')) {
                     questionSelect = $(this).closest('tr').find('.question');
-                } else if ($(this).hasClass('edit-context')) {                   
+                } else if ($(this).hasClass('edit-context')) {
                     questionSelect = $('#question');
                 }
 
                 if (thematicAreaId) {
                     $.ajax({
                         url: '/api/priorities/questions/' +
-                        thematicAreaId, // Replace with your route
+                            thematicAreaId, // Replace with your route
                         method: 'GET',
                         success: function(data) {
                             questionSelect.html('<option value="">Select Question</option>')

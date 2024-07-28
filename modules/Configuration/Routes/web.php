@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Configuration\Controllers\ActionsController;
+use Modules\Configuration\Controllers\ActorsController;
 use Modules\Configuration\Controllers\DistrictController;
 use Modules\Configuration\Controllers\PlatformsController;
 use Modules\Configuration\Controllers\ProvinceController;
@@ -99,11 +101,33 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::get('platforms', [PlatformsController::class, 'index'])->name('platform.index');
         Route::get('platforms/create', [PlatformsController::class, 'create'])->name('platform.create');
         Route::post('platforms', [PlatformsController::class, 'store'])->name('platform.store');
-        Route::get('platforms/{tags}/edit', [PlatformsController::class, ''])->name('platform.edit');
+        Route::get('platforms/{tags}/edit', [PlatformsController::class, 'edit'])->name('platform.edit');
         Route::put('platforms/{tags}', [PlatformsController::class, 'update'])->name('platform.update');
         Route::delete('platforms/{tags}', [PlatformsController::class, 'destroy'])->name('platform.destroy');
         Route::get('platforms/{tags}/view', [PlatformsController::class, 'view'])->name('platform.view');
         // });
+
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('actors', [ActorsController::class, 'index'])->name('actors.index');
+        Route::get('actors/create', [ActorsController::class, 'create'])->name('actors.create');
+        Route::post('actors', [ActorsController::class, 'store'])->name('actors.store');
+        Route::get('actors/{actors}/edit', [ActorsController::class, 'edit'])->name('actors.edit');
+        Route::put('actors/{actors}', [ActorsController::class, 'update'])->name('actors.update');
+        Route::delete('actors/{actors}', [ActorsController::class, 'destroy'])->name('actors.destroy');
+        Route::get('actors/{actors}/view', [ActorsController::class, 'view'])->name('actors.view');
+        // });
+
+        
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('actions', [ActionsController::class, 'index'])->name('actions.index');
+        Route::get('actions/create', [ActionsController::class, 'create'])->name('actions.create');
+        Route::post('actions', [ActionsController::class, 'store'])->name('actions.store');
+        Route::get('actions/{actors}/edit', [ActionsController::class, 'edit'])->name('actions.edit');
+        Route::put('actions/{actors}', [ActionsController::class, 'update'])->name('actions.update');
+        Route::delete('actions/{actors}', [ActionsController::class, 'destroy'])->name('actions.destroy');
+        Route::get('actions/{actors}/view', [ActionsController::class, 'view'])->name('actions.view');
+        // });
+    
     
        // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
         Route::get('threshold/question/{questionId}', [ThresholdController::class, 'getThresholdbyQuestionId'])->name('threshold.questionid');
@@ -114,7 +138,7 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::delete('threshold/{tags}', [ThresholdController::class, 'destroy'])->name('threshold.destroy');
         Route::get('threshold/{threshold}/view', [ThresholdController::class, 'view'])->name('threshold.view');
         // });
-
+      
 
 
 

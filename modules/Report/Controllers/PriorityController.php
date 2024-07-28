@@ -85,8 +85,47 @@ class PriorityController extends Controller
                 ->withQuestions($questions)
                 ->withTargetgroups($targetgroups)
                 ->withPriorities($priorities);
-        } else {
-            return redirect()->route('district.index')->with('failed', 'Unable to submit priority!');
+        } elseif($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
+
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');
+
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province'])->find($did);
+
+            // Fetch priorities with associated relationships
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+                ->where('district_id', '=', $did)
+                ->get();
+
+            // Fetch target groups
+            $targetgroups = $this->targetgroups->get();
+
+            // Fetch questions
+            $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
+                ->where('stage_id', '=', $stageId)
+                ->get();
+
+            // Attach colors and recommendations to priorities
+            foreach ($priorities as $priority) {
+                $questionId = $priority->question_id;
+                $responseAll = $priority->response_all;
+                $responseUnderserved = $priority->response_underserved;
+
+                $priority->color_all = $this->questions->getColor($questionId, $responseAll);
+                $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
+                
+            }
+
+            // Return the view with additional data
+            return view('Report::MappingPlatform.create')
+                ->withDistrictprofile($districtprofile)
+                ->withQuestions($questions)
+                ->withTargetgroups($targetgroups)
+                ->withPriorities($priorities);
+             
+
+           
         }
     }
     
