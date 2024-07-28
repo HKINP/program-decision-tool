@@ -26,12 +26,16 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'question_id' => 'required|exists:questions,id',
-            'stage_id' => 'required|exists:stages,id',
-            'min_value' => 'nullable|integer|min:0',
-            'max_value' => 'nullable|integer|min:0|gt:min_value',
-            'color' => 'required|string|max:7',
-            'threshold_text' => 'required|string|max:255',
+            'stage_id' => 'required|integer',
+            'question_id' => 'required|integer',
+            'min_value' => 'required|array',
+            'min_value.*' => 'numeric', // Validation rule for each element in the min_value array
+            'max_value' => 'required|array',
+            'max_value.*' => 'numeric', // Validation rule for each element in the max_value array
+            'color' => 'required|array',
+            'color.*' => 'string', // Validation rule for each element in the color array
+            'recommendation' => 'required|array',
+            'recommendation.*' => 'string', // Validation rule for each element in the recommendation array
         ];
     }
 }

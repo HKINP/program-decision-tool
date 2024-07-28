@@ -25,13 +25,12 @@ class UpdateRequest extends FormRequest
      */
     public function rules(Request $request)
     {
+       
         return [
-            'question_id' => 'required|exists:questions,id',
-            'stage_id' => 'required|exists:stages,id',
-            'min_value' => 'nullable|integer|min:0',
-            'max_value' => 'nullable|integer|min:0|gt:min_value',
-            'color' => 'required|string|max:7',
-            'threshold_text' => 'required|string|max:255',
+            'min_value' => 'required',
+            'max_value' => 'required',
+            'color' => 'required',
+            'recommendation' => 'required',
         ];
     }
 }

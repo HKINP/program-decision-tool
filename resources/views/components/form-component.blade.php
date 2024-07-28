@@ -30,7 +30,7 @@
 
             @elseif ($field['type'] === 'checkbox')
             @elseif ($field['type'] === 'invisible')
-            <input type="text" id="{{ $field['name'] }}" name="{{ $field['name'] }}" value="{{ old($field['name'], $values->{$field['name']} ?? '') }}" style="display:none" placeholder="{{ $field['placeholder'] ?? '' }}" {{ $field['required'] ? 'required' : '' }} />
+            <input type="text" id="{{ $field['name'] }}" class="invisible" name="{{ $field['name'] }}" value="{{ old($field['name'], $values->{$field['name']} ?? '') }}" hidden placeholder="{{ $field['placeholder'] ?? '' }}" {{ $field['required'] ? 'required' : '' }} />
             @elseif ($field['type'] === 'checkbox')
             <div class="flex items-start mb-6">
                 <div class="flex items-center h-5">

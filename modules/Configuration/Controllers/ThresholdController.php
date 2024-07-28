@@ -4,144 +4,182 @@ namespace Modules\Configuration\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\ThresholdRepository;
 use Modules\Configuration\Requests\Threshold\StoreRequest;
 use Modules\Configuration\Requests\Threshold\UpdateRequest;
 
 class ThresholdController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @param  DistrictRepository $districts
-     * @return void
-     */
-    protected $threshold;
-    
+    protected $threshold, $questions;
 
     public function __construct(
         ThresholdRepository $threshold,
-
-    )
-    {
+        QuestionRepository $questions
+    ) {
         $this->threshold = $threshold;
+        $this->questions = $questions;
     }
-    
+
     /**
-     * Display a listing of the account codes.
+     * Display a listing of the thresholds by question ID.
      *
+     * @param  int $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getThresholdbyQuestionId($id)
     {
-        
-       $threshold=$this->threshold->where('question_id',"=",$id)->orderby('id', 'asc')->get();
-    
-        // $this->authorize('manage-account-code');
-             return view('Configuration::Threshold.index')
-            ->withThreshold($threshold);
+        try {
+            $threshold = $this->threshold->with(['stage', 'question'])
+                ->where('question_id', $id)
+                ->orderBy('id', 'asc')
+                ->get();
+                
+            $question = $this->questions->find($id);
+
+            if (!$question) {
+                return response()->json(['status' => 'error', 'message' => 'Question not found.'], 404);
+            }
+
+            $stage_id = $question->stage_id;
+            
+            return view('Configuration::Threshold.index')
+                ->withStageId($stage_id)
+                ->withQuestionId($id)
+                ->withThreshold($threshold);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
-     * Show the form for creating a new account head.
+     * Show the form for creating a new threshold.
      *
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-       
         return view('Configuration::Threshold.create');
     }
 
     /**
-     * Store a newly created category in storage.
+     * Store a newly created threshold in storage.
      *
-     * @param  \Modules\Configuration\Requests\District\StoreRequest $request
+     * @param  \Modules\Configuration\Requests\Threshold\StoreRequest $request
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(StoreRequest $request)
     {
-        // $this->authorize('manage-account-code');
-        $district = $this->districts->create($request->all());
-        if($district){
-            return redirect()->route('district.index')->with('success', 'Added District successfully!');
+        try {
+            $data = $request->all();
+            $max_value = $data['max_value'];
+            $min_value = $data['min_value'];
+            $color = $data['color'];
+            $recommendation = $data['recommendation'];
+
+            for ($i = 0; $i < count($min_value); $i++) {
+                $inputs = [
+                    'min_value' => $min_value[$i],
+                    'max_value' => $max_value[$i],
+                    'question_id' => $data['question_id'],
+                    'stage_id' => $data['stage_id'],
+                    'recommendation' => $recommendation[$i],
+                    'color' => $color[$i],
+                ];
+
+                $this->threshold->create($inputs);
+            }
+
+            return redirect()->back()->with('success', 'Threshold Value has been successfully saved.');
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be added.'], 422);
     }
 
     /**
-     * Display the specified account head.
+     * Display the specified threshold.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function view($id)
     {
-        $District = $this->districts->find($id);
-        return response()->json(['status'=>'ok','district'=>$district], 200);
+        try {
+            $threshold = $this->threshold->find($id);
+            
+            if (!$threshold) {
+                return response()->json(['status' => 'error', 'message' => 'Threshold not found.'], 404);
+            }
+
+            return response()->json($threshold);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
-     * Show the form for editing the specified account head.
+     * Show the form for editing the specified threshold.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit($id)
     {
-        // $this->authorize('manage-account-code');
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
-            return [$province->id => $province->province];
-        })->toArray();
-        
-        return view('Configuration::District.edit')
-            ->withDistrict($this->districts->find($id))
-            ->withProvinces($provinces);
+        try {
+            $threshold = $this->threshold->find($id);
+            
+            if (!$threshold) {
+                return response()->json(['status' => 'error', 'message' => 'Threshold not found.'], 404);
+            }
+
+            return view('Configuration::Threshold.edit')
+                ->withThreshold($threshold);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
-     * Update the specified account head in storage.
+     * Update the specified threshold in storage.
      *
-     * @param  \Modules\Configuration\Requests\District\UpdateRequest $request
+     * @param  \Modules\Configuration\Requests\Threshold\UpdateRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(UpdateRequest $request, $id)
     {
-        // $this->authorize('manage-account-code');
-     
-        
-        $District = $this->districts->update($id, $request->except('id'));
-       
-        if($District){
-            return redirect()->route('district.index')->with('success', 'District Updated successfully!');
+        try {
+            $updated = $this->threshold->update($id, $request->except('id'));
+            
+            if ($updated) {
+                return redirect()->back()->with('success', 'Threshold Value is updated successfully.');
+            }
+            
+            return response()->json(['status' => 'error', 'message' => 'Threshold Value cannot be updated.'], 422);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be updated.'], 422);
     }
 
     /**
-     * Remove the specified account head from storage.
+     * Remove the specified threshold from storage.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
-        // $this->authorize('manage-account-code');
-        $flag = $this->districts->destroy($id);
-        if($flag){
-            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
+        try {
+            $deleted = $this->threshold->destroy($id);
+            
+            if ($deleted) {
+                return redirect()->back()->with('success', 'Threshold Value is successfully deleted.');
+            }
+            
+            return response()->json(['status' => 'error', 'message' => 'Threshold Value cannot be deleted.'], 422);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-        return response()->json([
-            'type'=>'error',
-            'message'=>'District can not deleted.',
-        ], 422);
     }
 }

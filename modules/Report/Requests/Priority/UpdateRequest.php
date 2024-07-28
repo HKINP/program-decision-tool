@@ -13,14 +13,16 @@ class UpdateRequest extends FormRequest
 
     public function rules()
     {
+       
+      
         return [
-            'province_id' => 'required|integer',
-            'district_id' => 'required|integer',
-            'target_group_id' => 'required|integer',
-            'thematic_area_id' => 'required|integer',
-            'question_id' => 'required|integer',
-            'priority' => 'required|integer',
-            'updated_by' => 'required|integer',
+            'target_group_id' => 'required',
+            'thematic_area_id' => 'required',
+            'question_id' => 'required',
+            'response_all' => 'required',
+            'response_underserved' => 'required',
+            'priority' => 'required',
         ];
     }
+   
 }

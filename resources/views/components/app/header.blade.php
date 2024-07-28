@@ -4,7 +4,8 @@
 
             <!-- Header: Left side -->
             <div class="flex">
-                
+                <h1 class="text-base font-semibold">USAID Integrated Nutrition District Program Design Decision Tool
+                </h1>
                 <!-- Hamburger button -->
                 <button
                     class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 lg:hidden"

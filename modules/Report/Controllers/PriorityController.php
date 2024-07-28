@@ -48,28 +48,48 @@ class PriorityController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1){
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
-            $stageId=$request->query('stageId');
-            $districtprofile=$this->districts->with(['province'])->find($did);
-            $priorities=$this->priorities->with(['thematicArea','targetGroup'])->where('district_id','=',$did)->get();
-            $targetgroups=$this->targetgroups->get();
-            // dd($priorities);
-            $questions=$this->questions->with(['stage', 'thematicArea','tag','targetGroup'])->where('stage_id','=',$stageId)->get();
-           // Organize questions by target group and thematic area
-        
-        // return response()->json(['status'=>'error','message'=>$questionsByTargetGroup], 422);
-            return view('Report::Priorities.create')
-            ->withDistrictprofile($districtprofile)
-            ->withQuestions($questions)
-            ->withTargetgroups($targetgroups)
-            ->withPriorities($priorities);
-        }
-        else{
+            $stageId = $request->query('stageId');
 
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province'])->find($did);
+
+            // Fetch priorities with associated relationships
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+                ->where('district_id', '=', $did)
+                ->get();
+
+            // Fetch target groups
+            $targetgroups = $this->targetgroups->get();
+
+            // Fetch questions
+            $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
+                ->where('stage_id', '=', $stageId)
+                ->get();
+
+            // Attach colors and recommendations to priorities
+            foreach ($priorities as $priority) {
+                $questionId = $priority->question_id;
+                $responseAll = $priority->response_all;
+                $responseUnderserved = $priority->response_underserved;
+
+                $priority->color_all = $this->questions->getColor($questionId, $responseAll);
+                $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
+                
+            }
+
+            // Return the view with additional data
+            return view('Report::Priorities.create')
+                ->withDistrictprofile($districtprofile)
+                ->withQuestions($questions)
+                ->withTargetgroups($targetgroups)
+                ->withPriorities($priorities);
+        } else {
             return redirect()->route('district.index')->with('failed', 'Unable to submit priority!');
-        } 
+        }
     }
+    
 
     /**
      * Show the form for creating a new account head.
@@ -95,13 +115,31 @@ class PriorityController extends Controller
      */
     public function store(StoreRequest $request)
     {
-      
-        // $this->authorize('manage-account-code');
-        $priorities = $this->priorities->create($request->all());
-        if($priorities){
-            return response()->json(['status'=>'error','message'=>'Priorities Added Succesfully !!'], 200);
+        $data = $request->all();
+
+        $targetGroups = $data['target_group_id'];
+        $thematicAreas = $data['thematic_area_id'];
+        $questions = $data['question_id'];
+        $responsesAll = $data['response_all'];
+        $responsesUnderserved = $data['response_underserved'];
+        $priorities = $data['priority'];
+    
+        for ($i = 0; $i < count($targetGroups); $i++) {
+            $inputs = [
+                'province_id' => $data['province_id'],
+                'district_id' => $data['district_id'],
+                'target_group_id' => $targetGroups[$i],
+                'thematic_area_id' => $thematicAreas[$i],
+                'question_id' => $questions[$i],
+                'response_all' => $responsesAll[$i],
+                'response_underserved' => $responsesUnderserved[$i],
+                'priority' => $priorities[$i],
+            ];
+    
+            $this->priorities->create($inputs);
         }
-        return response()->json(['status'=>'error','message'=>'Priorities not be added.'], 422);
+    
+        return redirect()->back()->with('success', 'Priorities has been successfully saved.');
     }
 
     /**
@@ -112,8 +150,9 @@ class PriorityController extends Controller
      */
     public function show($id)
     {
-        $District = $this->districts->find($id);
-        return response()->json(['status'=>'ok','district'=>$district], 200);
+      
+        $priorities = $this->priorities->find($id);
+        return response()->json($priorities);
     }
 
     /**
@@ -145,16 +184,14 @@ class PriorityController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        // $this->authorize('manage-account-code');
      
-        
-        $District = $this->districts->update($id, $request->except('id'));
+        $priorities = $this->priorities->update($id, $request->except('id'));
        
-        if($District){
-            return redirect()->route('district.index')->with('success', 'District Updated successfully!');
+        if($priorities){
+            return redirect()->back()->with('success', 'Priorities Updated successfully!');
         }
         return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be updated.'], 422);
+            'message'=>'Priorities can not be updated.'], 422);
     }
 
     /**
@@ -167,9 +204,9 @@ class PriorityController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->districts->destroy($id);
+        $flag = $this->priorities->destroy($id);
         if($flag){
-            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
+            return redirect()->back()->with('success', 'Priorities has been deleted.');
         }
         return response()->json([
             'type'=>'error',
