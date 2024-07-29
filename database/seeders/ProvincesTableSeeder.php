@@ -15,13 +15,13 @@ class ProvincesTableSeeder extends Seeder
     public function run()
     {
         DB::table('provinces')->insert([
-            ['province' => 'Koshi Pradesh'],
-            ['province' => 'Madhesh Pradesh'],
-            ['province' => 'Bagmati Pradesh'],
-            ['province' => 'Gandaki Pradesh'],
-            ['province' => 'Lumbini Pradesh'],
-            ['province' => 'Karnali Pradesh'],
-            ['province' => 'Sudur Paschhim Pradesh'],
+            ['province' => 'Koshi Pradesh', 'updated_by' => 1],
+            ['province' => 'Madhesh Pradesh', 'updated_by' => 1],
+            ['province' => 'Bagmati Pradesh', 'updated_by' => 1],
+            ['province' => 'Gandaki Pradesh', 'updated_by' => 1],
+            ['province' => 'Lumbini Pradesh', 'updated_by' => 1],
+            ['province' => 'Karnali Pradesh', 'updated_by' => 1],
+            ['province' => 'Sudur Paschhim Pradesh', 'updated_by' => 1],
         ]);
     }
 }
