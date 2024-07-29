@@ -50,7 +50,7 @@ class Question extends Model
 
     public function tag()
     {
-        return $this->belongsToMany(Tags::class, 'tag_id');
+        return $this->belongsTo(Tags::class, 'tag_id');
     }
 
     public function targetGroup()

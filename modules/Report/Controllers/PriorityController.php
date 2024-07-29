@@ -87,7 +87,11 @@ class PriorityController extends Controller
                 ->withQuestions($questions)
                 ->withTargetgroups($targetgroups)
                 ->withPriorities($priorities);
-        } elseif($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
+        } 
+        elseif($request->has('did') && $request->input('did') != '' && 
+        $request->has('stageId') && $request->input('stageId') == 2)
+        {
+            
 
             $did = $request->query('did');
             $stageId = $request->query('stageId');
@@ -107,11 +111,10 @@ class PriorityController extends Controller
             $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
                 ->where('stage_id', '=', $stageId)
                 ->get();
-                $tagIds = $questions->pluck('tags.id')->flatten()->unique();
-                dd($tagIds);
-
-                $tags=$this->tags->whereIn('id', $tagIds)->get();
-                dd($tags);
+            
+            $tagIds = $questions->pluck('tags.id')->flatten()->unique();
+            dd($tagIds);            
+            $tags=$this->tags->whereIn('id', $tagIds)->get();
 
 
             // Attach colors and recommendations to priorities

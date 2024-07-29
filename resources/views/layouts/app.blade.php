@@ -31,8 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 
-<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
-    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'false' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400" :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'false' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
     <script>
         if (localStorage.getItem('sidebar-expanded') == 'true') {
@@ -48,14 +47,17 @@
         <x-app.sidebar :variant="$attributes['sidebarVariant']" />
 
         <!-- Content area -->
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden @if ($attributes['background']) {{ $attributes['background'] }} @endif"
-            x-ref="contentarea">
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden @if ($attributes['background']) {{ $attributes['background'] }} @endif" x-ref="contentarea">
 
             <x-app.header :variant="$attributes['headerVariant']" />
             <!-- Success message display -->
             <x-success-message :message="session('success')" />
+            <x-validation-errors class="mt-4" />
             <main class="grow">
-                {{ $slot }}
+                <div class="container mx-auto py-4">
+                    <!-- Error Alert Section -->
+                    
+                    {{ $slot }}
             </main>
 
         </div>
