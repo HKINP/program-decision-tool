@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
+use Modules\Configuration\Repositories\TagsRepository;
 use Modules\Configuration\Repositories\TargetGroupRepository;
 use Modules\Report\Repositories\PriorityRepository;
 use Modules\Report\Requests\Priority\StoreRequest;
@@ -20,7 +21,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts,$provinces,$priorities,$questions,$thematicgroups;
+    protected $districts,$provinces,$priorities,$questions,$thematicgroups,$tags;
     
 
     public function __construct(
@@ -30,6 +31,7 @@ class PriorityController extends Controller
         PriorityRepository $priorities,
         QuestionRepository $questions,
         TargetGroupRepository $targetgroups,
+        TagsRepository $tags,
 
     )
     {
@@ -105,6 +107,12 @@ class PriorityController extends Controller
             $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
                 ->where('stage_id', '=', $stageId)
                 ->get();
+                $tagIds = $questions->pluck('tags.id')->flatten()->unique();
+                dd($tagIds);
+
+                $tags=$this->tags->whereIn('id', $tagIds)->get();
+                dd($tags);
+
 
             // Attach colors and recommendations to priorities
             foreach ($priorities as $priority) {
