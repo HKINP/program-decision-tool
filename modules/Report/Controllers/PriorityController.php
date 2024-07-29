@@ -21,8 +21,8 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts,$provinces,$priorities,$questions,$thematicgroups,$tags;
-    
+    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags;
+
 
     public function __construct(
 
@@ -33,15 +33,14 @@ class PriorityController extends Controller
         TargetGroupRepository $targetgroups,
         TagsRepository $tags,
 
-    )
-    {
+    ) {
         $this->districts = $districts;
-        $this->provinces=$provinces;
-        $this->priorities=$priorities;
-        $this->questions=$questions;
-        $this->targetgroups=$targetgroups;
+        $this->provinces = $provinces;
+        $this->priorities = $priorities;
+        $this->questions = $questions;
+        $this->targetgroups = $targetgroups;
     }
-    
+
     /**
      * Display a listing of the account codes.
      *
@@ -78,7 +77,6 @@ class PriorityController extends Controller
 
                 $priority->color_all = $this->questions->getColor($questionId, $responseAll);
                 $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
-                
             }
 
             // Return the view with additional data
@@ -87,11 +85,11 @@ class PriorityController extends Controller
                 ->withQuestions($questions)
                 ->withTargetgroups($targetgroups)
                 ->withPriorities($priorities);
-        } 
-        elseif($request->has('did') && $request->input('did') != '' && 
-        $request->has('stageId') && $request->input('stageId') == 2)
-        {
-            
+        } elseif (
+            $request->has('did') && $request->input('did') != '' &&
+            $request->has('stageId') && $request->input('stageId') == 2
+        ) {
+
 
             $did = $request->query('did');
             $stageId = $request->query('stageId');
@@ -111,11 +109,14 @@ class PriorityController extends Controller
             $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
                 ->where('stage_id', '=', $stageId)
                 ->get();
-            
-            $tagIds = $questions->pluck('tags.id')->flatten()->unique();
-            dd($tagIds);            
-            $tags=$this->tags->whereIn('id', $tagIds)->get();
 
+            // Ensure $tagIds is a collection of unique tag IDs
+            $tagIds = $questions->pluck('tag.id')->unique()->toArray();
+           
+            
+            // Retrieve tags that match the extracted IDs
+            $tags = $this->tags->whereIn('id', [3,4])->get();
+            dd($tags);
 
             // Attach colors and recommendations to priorities
             foreach ($priorities as $priority) {
@@ -125,7 +126,6 @@ class PriorityController extends Controller
 
                 $priority->color_all = $this->questions->getColor($questionId, $responseAll);
                 $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
-                
             }
 
             // Return the view with additional data
@@ -134,12 +134,9 @@ class PriorityController extends Controller
                 ->withQuestions($questions)
                 ->withTargetgroups($targetgroups)
                 ->withPriorities($priorities);
-             
-
-           
         }
     }
-    
+
 
     /**
      * Show the form for creating a new account head.
@@ -148,12 +145,12 @@ class PriorityController extends Controller
      */
     public function create()
     {
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
+        $provinces = $this->provinces->all()->mapWithKeys(function ($province) {
             return [$province->id => $province->province];
         })->toArray();
 
         return view('Configuration::District.create')
-        ->withProvinces($provinces);
+            ->withProvinces($provinces);
     }
 
     /**
@@ -173,7 +170,7 @@ class PriorityController extends Controller
         $responsesAll = $data['response_all'];
         $responsesUnderserved = $data['response_underserved'];
         $priorities = $data['priority'];
-    
+
         for ($i = 0; $i < count($targetGroups); $i++) {
             $inputs = [
                 'province_id' => $data['province_id'],
@@ -185,10 +182,10 @@ class PriorityController extends Controller
                 'response_underserved' => $responsesUnderserved[$i],
                 'priority' => $priorities[$i],
             ];
-    
+
             $this->priorities->create($inputs);
         }
-    
+
         return redirect()->back()->with('success', 'Priorities has been successfully saved.');
     }
 
@@ -200,7 +197,7 @@ class PriorityController extends Controller
      */
     public function show($id)
     {
-      
+
         $priorities = $this->priorities->find($id);
         return response()->json($priorities);
     }
@@ -215,10 +212,10 @@ class PriorityController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $provinces=$this->provinces->all()->mapWithKeys(function($province) {
+        $provinces = $this->provinces->all()->mapWithKeys(function ($province) {
             return [$province->id => $province->province];
         })->toArray();
-        
+
         return view('Configuration::District.edit')
             ->withDistrict($this->districts->find($id))
             ->withProvinces($provinces);
@@ -234,14 +231,16 @@ class PriorityController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-     
+
         $priorities = $this->priorities->update($id, $request->except('id'));
-       
-        if($priorities){
+
+        if ($priorities) {
             return redirect()->back()->with('success', 'Priorities Updated successfully!');
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Priorities can not be updated.'], 422);
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Priorities can not be updated.'
+        ], 422);
     }
 
     /**
@@ -255,12 +254,12 @@ class PriorityController extends Controller
     {
         // $this->authorize('manage-account-code');
         $flag = $this->priorities->destroy($id);
-        if($flag){
+        if ($flag) {
             return redirect()->back()->with('success', 'Priorities has been deleted.');
         }
         return response()->json([
-            'type'=>'error',
-            'message'=>'District can not deleted.',
+            'type' => 'error',
+            'message' => 'District can not deleted.',
         ], 422);
     }
 }

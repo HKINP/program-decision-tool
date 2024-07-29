@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -28,7 +29,25 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <style>
+    /* Ensure select2 styling works with Tailwind CSS */
+    .select2-container--default .select2-selection--multiple {
+      border-radius: 0.375rem;
+      border: 1px solid #e5e7eb;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+      background-color: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+      color: #9ca3af;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+      color: #4b5563;
+    }
+  </style>
 </head>
 
 <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400" :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'false' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
