@@ -115,8 +115,8 @@ class PriorityController extends Controller
            
             
             // Retrieve tags that match the extracted IDs
-            $tags = $this->tags->whereIn('id', [3,4])->get();
-            dd($tags);
+           
+            dd($tagIds);
 
             // Attach colors and recommendations to priorities
             foreach ($priorities as $priority) {
