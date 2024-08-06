@@ -33,5 +33,8 @@ class TargetGroup extends Model
      */
     protected $hidden = [];
 
-   
+    public function thematicAreas()
+    {
+        return $this->belongsToMany(ThematicArea::class, 'thematic_area_target_group');
+    }
 }

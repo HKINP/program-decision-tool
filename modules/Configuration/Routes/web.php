@@ -4,8 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Modules\Configuration\Controllers\ActionsController;
 use Modules\Configuration\Controllers\ActorsController;
 use Modules\Configuration\Controllers\DistrictController;
+use Modules\Configuration\Controllers\DistrictProfileController;
+use Modules\Configuration\Controllers\IndicatorsController;
 use Modules\Configuration\Controllers\PlatformsController;
 use Modules\Configuration\Controllers\ProvinceController;
+use Modules\Configuration\Controllers\ProvinceProfileController;
 use Modules\Configuration\Controllers\QuestionController;
 use Modules\Configuration\Controllers\StagesController;
 use Modules\Configuration\Controllers\TagsController;
@@ -88,58 +91,84 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     // });
 
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-        Route::get('tags', [TagsController::class, 'index'])->name('tags.index');
-        Route::get('tags/create', [TagsController::class, 'create'])->name('tags.create');
-        Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
-        Route::get('tags/{tags}/edit', [TagsController::class, 'edit'])->name('tags.edit');
-        Route::put('tags/{tags}', [TagsController::class, 'update'])->name('tags.update');
-        Route::delete('tags/{tags}', [TagsController::class, 'destroy'])->name('tags.destroy');
-        Route::get('tags/{tags}/view', [TagsController::class, 'view'])->name('tags.view');
-        // });
-    
-    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-        Route::get('platforms', [PlatformsController::class, 'index'])->name('platform.index');
-        Route::get('platforms/create', [PlatformsController::class, 'create'])->name('platform.create');
-        Route::post('platforms', [PlatformsController::class, 'store'])->name('platform.store');
-        Route::get('platforms/{tags}/edit', [PlatformsController::class, 'edit'])->name('platform.edit');
-        Route::put('platforms/{tags}', [PlatformsController::class, 'update'])->name('platform.update');
-        Route::delete('platforms/{tags}', [PlatformsController::class, 'destroy'])->name('platform.destroy');
-        Route::get('platforms/{tags}/view', [PlatformsController::class, 'view'])->name('platform.view');
-        // });
+    Route::get('tags', [TagsController::class, 'index'])->name('tags.index');
+    Route::get('tags/create', [TagsController::class, 'create'])->name('tags.create');
+    Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
+    Route::get('tags/{tags}/edit', [TagsController::class, 'edit'])->name('tags.edit');
+    Route::put('tags/{tags}', [TagsController::class, 'update'])->name('tags.update');
+    Route::delete('tags/{tags}', [TagsController::class, 'destroy'])->name('tags.destroy');
+    Route::get('tags/{tags}/view', [TagsController::class, 'view'])->name('tags.view');
+    // });
 
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-        Route::get('actors', [ActorsController::class, 'index'])->name('actors.index');
-        Route::get('actors/create', [ActorsController::class, 'create'])->name('actors.create');
-        Route::post('actors', [ActorsController::class, 'store'])->name('actors.store');
-        Route::get('actors/{actors}/edit', [ActorsController::class, 'edit'])->name('actors.edit');
-        Route::put('actors/{actors}', [ActorsController::class, 'update'])->name('actors.update');
-        Route::delete('actors/{actors}', [ActorsController::class, 'destroy'])->name('actors.destroy');
-        Route::get('actors/{actors}/view', [ActorsController::class, 'view'])->name('actors.view');
-        // });
+    Route::get('platforms', [PlatformsController::class, 'index'])->name('platform.index');
+    Route::get('platforms/create', [PlatformsController::class, 'create'])->name('platform.create');
+    Route::post('platforms', [PlatformsController::class, 'store'])->name('platform.store');
+    Route::get('platforms/{tags}/edit', [PlatformsController::class, 'edit'])->name('platform.edit');
+    Route::put('platforms/{tags}', [PlatformsController::class, 'update'])->name('platform.update');
+    Route::delete('platforms/{tags}', [PlatformsController::class, 'destroy'])->name('platform.destroy');
+    Route::get('platforms/{tags}/view', [PlatformsController::class, 'view'])->name('platform.view');
+    // });
 
-        
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-        Route::get('actions', [ActionsController::class, 'index'])->name('actions.index');
-        Route::get('actions/create', [ActionsController::class, 'create'])->name('actions.create');
-        Route::post('actions', [ActionsController::class, 'store'])->name('actions.store');
-        Route::get('actions/{actors}/edit', [ActionsController::class, 'edit'])->name('actions.edit');
-        Route::put('actions/{actors}', [ActionsController::class, 'update'])->name('actions.update');
-        Route::delete('actions/{actors}', [ActionsController::class, 'destroy'])->name('actions.destroy');
-        Route::get('actions/{actors}/view', [ActionsController::class, 'view'])->name('actions.view');
-        // });
-    
-    
-       // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-        Route::get('threshold/question/{questionId}', [ThresholdController::class, 'getThresholdbyQuestionId'])->name('threshold.questionid');
-        Route::get('threshold/create', [ThresholdController::class, 'create'])->name('threshold.create');
-        Route::post('threshold', [ThresholdController::class, 'store'])->name('threshold.store');
-        Route::get('threshold/{tags}/edit', [ThresholdController::class, 'edit'])->name('threshold.edit');
-        Route::put('threshold/{tags}', [ThresholdController::class, 'update'])->name('threshold.update');
-        Route::delete('threshold/{tags}', [ThresholdController::class, 'destroy'])->name('threshold.destroy');
-        Route::get('threshold/{threshold}/view', [ThresholdController::class, 'view'])->name('threshold.view');
-        // });
-      
+    Route::get('actors', [ActorsController::class, 'index'])->name('actors.index');
+    Route::get('actors/create', [ActorsController::class, 'create'])->name('actors.create');
+    Route::post('actors', [ActorsController::class, 'store'])->name('actors.store');
+    Route::get('actors/{actors}/edit', [ActorsController::class, 'edit'])->name('actors.edit');
+    Route::put('actors/{actors}', [ActorsController::class, 'update'])->name('actors.update');
+    Route::delete('actors/{actors}', [ActorsController::class, 'destroy'])->name('actors.destroy');
+    Route::get('actors/{actors}/view', [ActorsController::class, 'view'])->name('actors.view');
+    // });
 
 
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+    Route::get('actions', [ActionsController::class, 'index'])->name('actions.index');
+    Route::get('actions/create', [ActionsController::class, 'create'])->name('actions.create');
+    Route::post('actions', [ActionsController::class, 'store'])->name('actions.store');
+    Route::get('actions/{actors}/edit', [ActionsController::class, 'edit'])->name('actions.edit');
+    Route::put('actions/{actors}', [ActionsController::class, 'update'])->name('actions.update');
+    Route::delete('actions/{actors}', [ActionsController::class, 'destroy'])->name('actions.destroy');
+    Route::get('actions/{actors}/view', [ActionsController::class, 'view'])->name('actions.view');
+    // });
+
+
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+    Route::get('threshold/question/{questionId}', [ThresholdController::class, 'getThresholdbyQuestionId'])->name('threshold.questionid');
+    Route::get('threshold/create', [ThresholdController::class, 'create'])->name('threshold.create');
+    Route::post('threshold', [ThresholdController::class, 'store'])->name('threshold.store');
+    Route::get('threshold/{tags}/edit', [ThresholdController::class, 'edit'])->name('threshold.edit');
+    Route::put('threshold/{tags}', [ThresholdController::class, 'update'])->name('threshold.update');
+    Route::delete('threshold/{tags}', [ThresholdController::class, 'destroy'])->name('threshold.destroy');
+    Route::get('threshold/{threshold}/view', [ThresholdController::class, 'view'])->name('threshold.view');
+    // });
+
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+    Route::get('indicators', [IndicatorsController::class, 'index'])->name('indicators.index');
+    Route::get('indicators/create', [IndicatorsController::class, 'create'])->name('indicators.create');
+    Route::post('indicators', [IndicatorsController::class, 'store'])->name('indicators.store');
+    Route::get('indicators/{indicators}/edit', [IndicatorsController::class, 'edit'])->name('indicators.edit');
+    Route::put('indicators/{indicators}', [IndicatorsController::class, 'update'])->name('indicators.update');
+    Route::delete('indicators/{indicators}', [IndicatorsController::class, 'destroy'])->name('indicators.destroy');
+    Route::get('indicators/{indicators}/view', [IndicatorsController::class, 'view'])->name('indicators.view');
+    // });
+
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+    Route::get('provinceprofile', [ProvinceProfileController::class, 'index'])->name('provinceprofile.index');
+    Route::get('provinceprofile/create', [ProvinceprofileController::class, 'create'])->name('provinceprofile.create');
+    Route::post('provinceprofile', [ProvinceprofileController::class, 'store'])->name('provinceprofile.store');
+    Route::get('provinceprofile/{provinceprofile}/edit', [ProvinceprofileController::class, 'edit'])->name('provinceprofile.edit');
+    Route::put('provinceprofile/{provinceprofile}', [ProvinceprofileController::class, 'update'])->name('provinceprofile.update');
+    Route::delete('provinceprofile/{provinceprofile}', [ProvinceprofileController::class, 'destroy'])->name('provinceprofile.destroy');
+    Route::get('provinceprofile/{provinceprofile}/view', [ProvinceprofileController::class, 'view'])->name('provinceprofile.view');
+    // });
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+    Route::get('districtprofile', [DistrictProfileController::class, 'index'])->name('districtprofile.index');
+    Route::get('districtprofile/create', [DistrictprofileController::class, 'create'])->name('districtprofile.create');
+    Route::post('districtprofile', [DistrictprofileController::class, 'store'])->name('districtprofile.store');
+    Route::get('districtprofile/{districtprofile}/edit', [DistrictprofileController::class, 'edit'])->name('districtprofile.edit');
+    Route::put('districtprofile/{districtprofile}', [DistrictprofileController::class, 'update'])->name('districtprofile.update');
+    Route::delete('districtprofile/{districtprofile}', [DistrictprofileController::class, 'destroy'])->name('districtprofile.destroy');
+    Route::get('districtprofile/{districtprofile}/view', [DistrictprofileController::class, 'view'])->name('districtprofile.view');
+    // });
 
 });

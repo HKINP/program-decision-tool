@@ -24,7 +24,7 @@ class ThematicArea extends Model
      *
      * @var array
      */
-    protected $fillable = ['target_group_id', 'thematic_area'];
+    protected $fillable = ['thematic_area'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -33,9 +33,9 @@ class ThematicArea extends Model
      */
     protected $hidden = [];
 
-    public function targetGroup()
-{
-    return $this->belongsTo(TargetGroup::class, 'target_group_id');
-}
+    public function targetGroups()
+    {
+        return $this->belongsToMany(TargetGroup::class, 'thematic_area_target_group');
+    }
    
 }
