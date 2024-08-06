@@ -5,38 +5,31 @@ namespace Modules\Configuration\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\IndicatorsRepository;
-use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\StagesRepository;
-use Modules\Configuration\Repositories\TagsRepository;
-use Modules\Configuration\Repositories\TargetGroupRepository;
 use Modules\Configuration\Repositories\ThematicAreaRepository;
-use Modules\Configuration\Requests\Question\StoreRequest;
-use Modules\Configuration\Requests\Question\UpdateRequest;
+use Modules\Configuration\Requests\Indicators\StoreRequest;
+use Modules\Configuration\Requests\Indicators\UpdateRequest;
 
-class QuestionController extends Controller
+class IndicatorsController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @param  QuestionRepository $questions
+     * @param  IndicatorsRepository $indicators
      * @return void
      */
-    protected $questions,$stages,$indicators,$targetgroups,$thematicareas;
+    protected $stages,$thematicareas,$indicators;
     
 
     public function __construct(
-        QuestionRepository $questions,
         StagesRepository $stages,
         ThematicAreaRepository $thematicareas,
-        TargetGroupRepository $targetgroups,
         IndicatorsRepository $indicators,
     )
     {
-        $this->questions = $questions;
         $this->stages = $stages;
-        $this->indicators = $indicators;
-        $this->targetgroups = $targetgroups;
         $this->thematicareas = $thematicareas;
+        $this->indicators=$indicators;
     }
     
     /**
@@ -50,14 +43,14 @@ class QuestionController extends Controller
         
         // $this->authorize('manage-account-code');
 
-        $questions = $this->questions->with(['thematicArea', 'indicator', 'targetGroup'])
-        ->orderBy('question', 'asc')
+        $indicators = $this->indicators->with(['stage', 'thematicArea'])
+        ->orderBy('stage_id', 'asc')
         ->get();
         // return response()->json(['status'=>'Good',
-        //     'data'=>$questions], 200);
+        //     'data'=>$indicators], 200);
 
-             return view('Configuration::Question.index')
-            ->withQuestions($questions);
+             return view('Configuration::Indicators.index')
+            ->withIndicators($indicators);
     }
 
     /**
@@ -68,22 +61,20 @@ class QuestionController extends Controller
     public function create()
     {
         
-        $indicators=$this->indicators->all()->mapWithKeys(function($indicator) {
-            return [$indicator->id => $indicator->indicator_name];
+        // dd($this->stages->all());
+        $stages=$this->stages->all()->mapWithKeys(function($stage) {
+            return [$stage->id => $stage->stages];
         })->toArray();
+     
 
         $thematicareas=$this->thematicareas->all()->mapWithKeys(function($thematicareas) {
             return [$thematicareas->id => $thematicareas->thematic_area];
         })->toArray();
 
-        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroups) {
-            return [$targetgroups->id => $targetgroups->target_group];
-        })->toArray();
         
-        return view('Configuration::Question.create')
-        ->withIndicators($indicators)
+        return view('Configuration::Indicators.create')
         ->withThematicareas($thematicareas)
-        ->withTargetgroups($targetgroups);
+        ->withStages($stages);
     }
 
     /**
@@ -97,10 +88,10 @@ class QuestionController extends Controller
     {
         // $this->authorize('manage-account-code');
         
-        $questions = $this->questions->create($request->all());
+        $indicators = $this->indicators->create($request->all());
         
-        if($questions){
-            return redirect()->route('question.index')->with('success', 'Question added  successfully!');
+        if($indicators){
+            return redirect()->route('indicators.index')->with('success', 'Indicator added  successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be added.'], 422);
@@ -114,8 +105,8 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $questions = $this->questions->find($id);
-        return response()->json(['status'=>'ok','question'=>$questions], 200);
+        $indicators = $this->indicators->find($id);
+        return response()->json(['status'=>'ok','indicators'=>$indicators], 200);
     }
 
     /**
@@ -128,29 +119,20 @@ class QuestionController extends Controller
     public function edit($id)
     {
       
-        // dd($this->stages->all());
+        
         $stages=$this->stages->all()->mapWithKeys(function($stage) {
             return [$stage->id => $stage->stages];
-        })->toArray();
-     
-
-        $indicators=$this->indicators->all()->mapWithKeys(function($indicator) {
-            return [$indicator->id => $indicator->indicator_name];
         })->toArray();
 
         $thematicareas=$this->thematicareas->all()->mapWithKeys(function($thematicareas) {
             return [$thematicareas->id => $thematicareas->thematic_area];
         })->toArray();
 
-        $targetgroups=$this->targetgroups->all()->mapWithKeys(function($targetgroups) {
-            return [$targetgroups->id => $targetgroups->target_group];
-        })->toArray();
-        return view('Configuration::Question.edit')
-            ->withQuestion($this->questions->find($id))
-            ->withIndicators($indicators)
+       
+        return view('Configuration::Indicators.edit')
+            ->withIndicators($this->indicators->find($id))
             ->withThematicareas($thematicareas)
-            ->withStages($stages)
-            ->withTargetgroups($targetgroups);
+            ->withStages($stages);
     }
 
     /**
@@ -164,9 +146,9 @@ class QuestionController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         
-        $questions = $this->questions->update($id, $request->except('id'));
-        if($questions){            
-                return redirect()->route('question.index')->with('success', 'Question Updated successfully!');
+        $indicators = $this->indicators->update($id, $request->except('id'));
+        if($indicators){            
+                return redirect()->route('indicators.index')->with('success', 'Indicators Updated successfully!');
             }
             return response()->json(['status'=>'error',
                 'message'=>'Account Code can not be updated.'], 422);
@@ -183,13 +165,11 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->questions->destroy($id);
+       
+        $flag = $this->indicators->destroy($id);
         if($flag){
-            return redirect()->route('question.index')->with('success', 'Question is successfully deleted.');
+            return redirect()->route('indicators.index')->with('success', 'Indicators is successfully deleted.');
         }
-        return response()->json([
-            'type'=>'error',
-            'message'=>'Account Code can not deleted.',
-        ], 422);
+       
     }
 }

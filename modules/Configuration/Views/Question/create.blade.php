@@ -12,20 +12,14 @@
         <div class="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
             <div class="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b px-6 py-6 bg-white border-gray-200">
                 <x-form-component :action="route('question.store')" :method="'POST'" :fields="[
-                  [
-                      'name' => 'question',
-                      'label' => 'Question Name',
-                      'type' => 'text',
-                      'required' => true,
-                      'width' => 'w-1/2',
-                  ],
-                [
-                    'name' => 'stage_id',
-                    'label' => 'Stage',
+                 
+                 [
+                    'name' => 'target_group_id',
+                    'label' => 'Target Group',
                     'type' => 'select',
-                    'required' => true,
+                    'required' => false,
                     'width' => 'w-1/2',
-                    'options' => $stages,
+                    'options' => $targetgroups,
                     'multiple' => false,
                 ],
                 [
@@ -33,33 +27,56 @@
                     'label' => 'Thematic Area',
                     'type' => 'select',
                     'required' => false,
-                    'width' => 'w-1/3',
+                    'width' => 'w-1/2',
                     'options' => $thematicareas,
                     'multiple' => false,
                 ],
+               
                 [
-                    'name' => 'target_group_id',
-                    'label' => 'Target Group',
+                    'name' => 'indicator_id',
+                    'label' => 'Indicator',
                     'type' => 'select',
                     'required' => false,
-                    'width' => 'w-1/3',
-                    'options' => $targetgroups,
+                    'width' => 'w-1/2',
+                    'options' => $indicators,
                     'multiple' => false,
                 ],
-                [
-                    'name' => 'tag_id',
-                    'label' => 'Tags',
-                    'type' => 'select',
-                    'required' => false,
-                    'width' => 'w-1/3',
-                    'options' => $tags,
-                    'multiple' => false,
-                ],
-                    
+                 [
+                      'name' => 'question',
+                      'label' => 'Question Name',
+                      'type' => 'text',
+                      'required' => true,
+                      'width' => 'w-1/2'
+                  ],
                     
                 ]" />
             </div>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function() {
+            $('#target_group_id').change(function() {
+                var targetGroupId = $(this).val();
+                if (targetGroupId) {
+                    $.ajax({
+                        url: '/api/thematicarea/' + targetGroupId,
+                        type: 'GET',
+                        data: {
+                            target_group_id: targetGroupId
+                        },
+                        success: function(data) {
+                            $('#thematic_area_id').empty();
+                            $('#thematic_area_id').append('<option value="">Please select an option</option>');
+                            $.each(data, function(index, thematicArea) {
+                                $('#thematic_area_id').append('<option value="' + thematicArea.id + '">' + thematicArea.thematic_area + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#thematic_area_id').empty();
+                    $('#thematic_area_id').append('<option value="">Please select an option</option>');
+                }
+            });
+        });
+    </script>
 </x-app-layout>

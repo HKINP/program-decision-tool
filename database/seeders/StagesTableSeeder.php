@@ -15,15 +15,13 @@ class StagesTableSeeder extends Seeder
     public function run()
     {
         DB::table('stages')->insert([
-            ['updated_by' => 1, 'stages' => 'Step 1. Prioritize Behaviors'],
-            ['updated_by' => 1, 'stages' => 'Step 2. Map Platforms, Actors, and Channels'],
-            ['updated_by' => 1, 'stages' => 'Step 3. Plan SBC Activities (IR 1)'],
-            ['updated_by' => 1, 'stages' => 'Step 4. Map Health and Nutrition Services'],
-            ['updated_by' => 1, 'stages' => 'Step 5. Plan Health System Activities (IR 2)'],
-            ['updated_by' => 1, 'stages' => 'Step 6. Identify Food System Needs'],
-            ['updated_by' => 1, 'stages' => 'Step 7. Plan Food Systems Activities (IR 3)'],
-            ['updated_by' => 1, 'stages' => 'Step 8. Plan Governance Activities (IR 4)'],
-            ['updated_by' => 1, 'stages' => 'Step 9. Compiled Workplan'],
+            ['updated_by' => 1, 'stages' => 'Step 1. District Context'],
+            ['updated_by' => 1, 'stages' => 'Step 2. Prioritize Indicators for Year 1'],
+            ['updated_by' => 1, 'stages' => 'Step 3. SBC Activities'],
+            ['updated_by' => 1, 'stages' => 'Step 4. Health and Nutrition Service Activities'],
+            ['updated_by' => 1, 'stages' => 'Step 5. Food Systems Activities'],
+            ['updated_by' => 1, 'stages' => 'Step 6. Enabling Environment Activities'],
+            ['updated_by' => 1, 'stages' => 'Step 7. Compiled Workplan'],
         ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-namespace Modules\Configuration\Requests\ThematicArea;
+namespace Modules\Configuration\Requests\Province\Profile;
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
@@ -25,8 +26,12 @@ class UpdateRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'thematic_area' => 'required|string|max:255',
-            'target_group_id.*' => 'exists:target_groups,id', // Validate each target_group_id
+            'province_id' => 'required|exists:provinces,id|integer',
+            'indicator_id' => 'required|exists:indicators,id|integer',
+            'all_value' => 'required|string',
+            'rural_value' => 'required|string',
+            'source' => 'required|string',
+            
         ];
     }
 }

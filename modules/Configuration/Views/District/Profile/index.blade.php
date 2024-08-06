@@ -1,42 +1,37 @@
 <x-app-layout>
     <x-table-listing 
-    :title="'Questions'" 
-    :headers="['S.N','Thematic Area','Targeted Groups', 'Question','Indicator', 'Actions']" 
+    :title="'District Profile'" 
+    :headers="['S.N', 'District','Indicator', 'Source', 'Total', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
-    :addRoute="route('question.create')"
+    :addRoute="route('districtprofile.create')"
     
     >
-        @forelse ($questions as $index => $question)
-
+        @forelse ($profile as $index => $profile)
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
-            
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->thematicArea->thematic_area }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $profile->district->district }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->targetGroup->target_group  }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $profile->indicator->indicator_name }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->question }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $profile->source}}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->indicator->indicator_name }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $profile->all_value}}</div>
             </td>
            
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
-                    <!-- <a href="{{ route('threshold.questionid', $question->id) }}" class="text-blue-500 hover:text-blue-700">
-                        <i class="fas fa-bar-chart"></i>
-                    </a> -->
-                    <a href="{{ route('question.view', $question->id) }}" class="text-blue-500 hover:text-blue-700">
+                    <a href="{{ route('districtprofile.view', $profile->id) }}" class="text-blue-500 hover:text-blue-700">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('question.edit', $question->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                    <a href="{{ route('districtprofile.edit', $profile->id) }}" class="text-yellow-500 hover:text-yellow-700">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('question.destroy', $question->id) }}')">
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('districtprofile.destroy', $profile->id) }}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>

@@ -29,7 +29,7 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     <style>
     /* Ensure select2 styling works with Tailwind CSS */
     .select2-container--default .select2-selection--multiple {
@@ -71,7 +71,7 @@
             <x-app.header :variant="$attributes['headerVariant']" />
             <!-- Success message display -->
             <x-success-message :message="session('success')" />
-            <x-validation-errors class="mt-4" />
+            <x-validation-errors class="mt-4 mx-8" />
             <main class="grow">
                 <div class="container mx-auto py-4">
                     <!-- Error Alert Section -->

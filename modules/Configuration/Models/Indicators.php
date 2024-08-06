@@ -8,7 +8,7 @@ use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Question extends Model
+class Indicators extends Model
 {
     use ModelEventLogger, UpdatedBy,SoftDeletes;
     
@@ -17,7 +17,7 @@ class Question extends Model
      *
      * @var string
      */
-    protected $table = 'questions';
+    protected $table = 'indicators';
 
     /**
      * The attributes that are mass assignable.
@@ -25,10 +25,9 @@ class Question extends Model
      * @var array
      */
     protected $fillable = [
-        'question',
+        'stage_id',
         'thematic_area_id',
-        'indicator_id',
-        'target_group_id'
+        'indicator_name',
     ];
 
     /**
@@ -37,28 +36,26 @@ class Question extends Model
      * @var array
      */
     protected $hidden = [];
-    
+
+    public function stage()
+    {
+        return $this->belongsTo(Stages::class, 'stage_id');
+    }
 
     public function thematicArea()
     {
         return $this->belongsTo(ThematicArea::class, 'thematic_area_id');
-    }
-
-    public function indicator()
-    {
-        return $this->belongsTo(Indicators::class, 'indicator_id');
-    }
-
-    public function targetGroup()
-    {
-        return $this->belongsTo(TargetGroup::class, 'target_group_id');
-    }
-    public function thresholds()
-    {
-        return $this->hasMany(Threshold::class);
-    }
-
+    }    
     
+    public function districtProfiles()
+    {
+        return $this->hasMany(DistrictProfile::class);
+    }
+
+    public function provinceProfiles()
+    {
+        return $this->hasMany(ProvinceProfile::class);
+    }
 
     
 }

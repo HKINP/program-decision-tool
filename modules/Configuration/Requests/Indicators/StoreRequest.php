@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Configuration\Requests\Question;
+namespace Modules\Configuration\Requests\Indicators;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,13 +25,11 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-      
         return [
-            'question' => 'required|string|max:255',
-            'thematic_area_id' => 'nullable|exists:thematic_areas,id',
-            'indicator_id' => 'nullable|exists:tags,id',
-            'target_group_id' => 'nullable|exists:target_groups,id',
-            'updated_by' => 'nullable|exists:users,id',
+            'indicator_name' => 'required|string|max:255',
+            'thematic_area_id' => 'required',
+            'stage_id' => 'nullable|exists:stages,id',
         ];
     }
+    
 }

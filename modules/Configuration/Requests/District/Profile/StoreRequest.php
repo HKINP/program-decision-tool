@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Configuration\Requests\Question;
+namespace Modules\Configuration\Requests\District\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,13 +25,12 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
+            return [
+                'district_id' => 'required|exists:districts,id|integer',
+                'indicator_id' => 'required|exists:indicators,id|integer',
+                'all_value' => 'required|string',
+                'source' => 'required|string',
+            ];
       
-        return [
-            'question' => 'required|string|max:255',
-            'thematic_area_id' => 'nullable|exists:thematic_areas,id',
-            'indicator_id' => 'nullable|exists:tags,id',
-            'target_group_id' => 'nullable|exists:target_groups,id',
-            'updated_by' => 'nullable|exists:users,id',
-        ];
     }
 }

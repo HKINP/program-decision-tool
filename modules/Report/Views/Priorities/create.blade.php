@@ -366,6 +366,7 @@
         function closeModal() {
             document.getElementById('edit-modal').classList.add('hidden');
         }
+        
         $(document).ready(function() {
 
             let rowIndex = {{ count($priorities) + 1 }};

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('thematic_areas', function (Blueprint $table) {
+        Schema::create('thematic_area_target_group', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('thematic_area');
-            $table->integer('updated_by')->unsigned();
-            $table->softDeletes(); 
+            $table->integer('thematic_area_id')->constrained('thematic_areas')->onDelete('cascade');
+            $table->integer('target_group_id')->constrained('target_groups')->onDelete('cascade'); 
+            $table->softDeletes();
             $table->timestamps();
 
-           $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('thematic_areas');
+        Schema::dropIfExists('thematic_area_target_group');
     }
 };

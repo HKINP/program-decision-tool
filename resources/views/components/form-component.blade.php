@@ -6,7 +6,7 @@
 
     <div class="flex flex-wrap -mx-2">
         @foreach ($fields as $field)
-      
+
         <div class="{{ $field['width'] }} {{ $field['type'] !== 'invisible' ? 'px-2 mb-6' : '' }}">
             @if ($field['type'] !== 'invisible')
             <label for="{{ $field['name'] }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $field['label'] }}</label>
@@ -27,8 +27,6 @@
             <input type="number" id="{{ $field['name'] }}" name="{{ $field['name'] }}" value="{{ old($field['name'], $values->{$field['name']} ?? '') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="{{ $field['placeholder'] ?? '' }}" {{ $field['required'] ? 'required' : '' }} />
             @elseif ($field['type'] === 'color')
             <input type="color" id="{{ $field['name'] }}" name="{{ $field['name'] }}" value="{{ old($field['name'], $values->{$field['name']} ?? '') }}" class="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" placeholder="{{ $field['placeholder'] ?? '' }}" {{ $field['required'] ? 'required' : '' }} />
-
-            @elseif ($field['type'] === 'checkbox')
             @elseif ($field['type'] === 'invisible')
             <input type="text" id="{{ $field['name'] }}" class="invisible" name="{{ $field['name'] }}" value="{{ old($field['name'], $values->{$field['name']} ?? '') }}" hidden placeholder="{{ $field['placeholder'] ?? '' }}" {{ $field['required'] ? 'required' : '' }} />
             @elseif ($field['type'] === 'checkbox')
@@ -36,20 +34,16 @@
                 <div class="flex items-center h-5">
                     <input id="{{ $field['name'] }}" name="{{ $field['name'] }}" type="checkbox" value="{{ $field['value'] ?? '' }}" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" {{ $field['required'] ? 'required' : '' }} {{ old($field['name'], $values->{$field['name']} ?? false) ? 'checked' : '' }} />
                 </div>
-                <label for="{{ $field['name'] }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $field['label'] }}</label>
             </div>
             @elseif ($field['type'] === 'select')
-            <select id="{{ $field['name'] }}" name="{{ $field['name'] }}{{ isset($field['multiple']) && $field['multiple'] ? '[]' : '' }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ $field['required'] ? 'required' : '' }} {{ isset($field['multiple']) && $field['multiple'] ? 'multiple' : '' }}>
-
-                <!-- Add a first null value -->
-                <option value="">{{ $field['placeholder'] ?? 'Please select an option' }}</option>
-
+            <select style="width: 100%" data-placeholder="{{ $field['placeholder'] ?? 'Please select an option' }}" data-allow-clear="false" title="Select city..." id="{{ $field['name'] }}" name="{{ $field['name'] }}{{ isset($field['multiple']) && $field['multiple'] ? '[]' : '' }}" class="{{ isset($field['multiple']) && $field['multiple'] ? 'multipleselect' : '' }} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ $field['required'] ? 'required' : '' }} {{ isset($field['multiple']) && $field['multiple'] ? 'multiple' : '' }}>
                 @foreach ($field['options'] as $value => $label)
                 <option value="{{ $value }}" @if(isset($field['multiple']) && $field['multiple']) {{ in_array($value, old($field['name'], $values->{$field['name']} ?? [])) ? 'selected' : '' }} @else {{ old($field['name'], $values->{$field['name']} ?? '') == $value ? 'selected' : '' }} @endif>
                     {{ $label }}
                 </option>
                 @endforeach
             </select>
+
             @endif
         </div>
         @endforeach
