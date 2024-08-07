@@ -10,3 +10,19 @@
 @import '@fortawesome/fontawesome-free/css/regular.css';
 @import '@fortawesome/fontawesome-free/css/solid.css';
 @import '@fortawesome/fontawesome-free/css/brands.css';
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid #bfc4cd 1px !important;
+    outline: 0 !important;
+    padding: 0.4rem !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #bfc4cd !important;
+    padding: 0.4rem !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #1d4ed8 !important;
+    color: white !important;
+    font-size: 0.875rem !important;
+}

@@ -39,8 +39,9 @@ class ThematicAreaController extends Controller
     public function index()
     {
 
-        $thematicareas = $this->thematicareas->with(['targetGroup'])->orderby('thematic_area', 'asc')->get();
+        $thematicareas = $this->thematicareas->with(['targetGroups'])->orderby('thematic_area', 'asc')->get();
 
+        // return response()->json(['status' => 'ok', 'thematicarea' => $thematicareas], 200);
         // $this->authorize('manage-account-code');
         return view('Configuration::ThematicArea.index')
             ->withThematicareas($thematicareas);
@@ -74,7 +75,7 @@ class ThematicAreaController extends Controller
         $thematicArea = $this->thematicareas->create($thematicAreaData);
         // Extract target group IDs from the request
         $targetGroupIds = collect($request->input('target_group_id'))->flatten()->all();
-        
+
         // Attach target groups to the thematic area
         if ($thematicArea) {
             $thematicArea->targetGroups()->attach($targetGroupIds);
@@ -105,11 +106,7 @@ class ThematicAreaController extends Controller
      */
     public function edit($id)
     {
-        // $this->authorize('manage-account-code');
-        $targetgroups = $this->targetgroups->all()->mapWithKeys(function ($targetgroup) {
-            return [$targetgroup->id => $targetgroup->target_group];
-        })->toArray();
-
+        $targetgroups = $this->targetgroups->pluck('target_group', 'id')->toArray();
         return view('Configuration::ThematicArea.edit')
             ->withThematicArea($this->thematicareas->find($id))
             ->withTargetGroups($targetgroups);
@@ -126,17 +123,31 @@ class ThematicAreaController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         // $this->authorize('manage-account-code');
+        // Find the ThematicArea by ID
+        $thematicArea = $this->thematicareas->find($id);
 
-
-        $thematicareas = $this->thematicareas->update($id, $request->except('id'));
-
-        if ($thematicareas) {
-            return redirect()->route('thematicarea.index')->with('success', 'Thematic Area Updated successfully!');
+        // $thematicareas = $this->thematicareas->update($id, $request->except('id
+        // Update the ThematicArea
+        $thematicArea->update([
+            'thematic_area' => $request->input('thematic_area'),
+        ]);
+        if (!$thematicArea) {
+            return response()->json(['status' => 'error', 'message' => 'Thematic Area not found.'], 404);
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Account Code can not be updated.'
-        ], 422);
+
+        // Update the ThematicArea
+        $thematicArea->update([
+            'thematic_area' => $request->input('thematic_area'),
+        ]);
+
+        // Extract target group IDs from the request
+        $targetGroupIds = collect($request->input('target_group_id'))->flatten()->all();
+
+        // Sync target groups with the thematic area
+        $thematicArea->targetGroups()->sync($targetGroupIds);
+
+        // Redirect or return a response
+        return redirect()->route('thematicarea.index')->with('success', 'Thematic Area updated successfully!');
     }
 
     /**

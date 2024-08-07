@@ -1,41 +1,49 @@
 <x-app-layout>
-    <x-table-listing 
-    :title="'Thematic Areas'" 
-    :headers="['S.N', 'Target Groups','Thematic Areas', 'Actions']" 
-    :useAddModal="false" 
-    :name="'province'" 
-    :addRoute="route('thematicarea.create')"
-    
-    >
+    <x-table-listing :title="'Thematic Areas'" :headers="['S.N', 'Target Groups', 'Thematic Areas', 'Actions']" :useAddModal="false" :name="'province'" :addRoute="route('thematicarea.create')">
         @forelse ($thematicareas as $index => $thematicarea)
-        <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $thematicarea->targetGroup->target_group }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $thematicarea->thematic_area }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="flex space-x-4">
-                    <a href="{{ route('thematicarea.view', $thematicarea->id) }}" class="text-blue-500 hover:text-blue-700">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                    <a href="{{ route('thematicarea.edit', $thematicarea->id) }}" class="text-yellow-500 hover:text-yellow-700">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('thematicarea.destroy', $thematicarea->id) }}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </td>
-        </tr>
+            <tr>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
+                
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                   
+
+                        <!-- Container for Target Groups Capsules in 3-column layout -->
+                        <div class="grid grid-cols-4 gap-2">
+                            @foreach ($thematicarea->targetGroups as $targetGroup)
+                                <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                                    {{ $targetGroup->target_group }}
+                                </div>
+                            @endforeach
+                        </div>
+                   
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="text-sm leading-5 text-gray-900">{{ $thematicarea->thematic_area }}</div>
+                </td>
+
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="flex space-x-4">
+                        <a href="{{ route('thematicarea.view', $thematicarea->id) }}"
+                            class="text-blue-500 hover:text-blue-700">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ route('thematicarea.edit', $thematicarea->id) }}"
+                            class="text-yellow-500 hover:text-yellow-700">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button type="button" class="text-red-500 hover:text-red-700"
+                            onclick="showDeleteModal('{{ route('thematicarea.destroy', $thematicarea->id) }}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
         @empty
-        <tr>
-            <td colspan="4" class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
-                No data available
-            </td>
-        </tr>
+            <tr>
+                <td colspan="4" class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
+                    No data available
+                </td>
+            </tr>
         @endforelse
     </x-table-listing>
 </x-app-layout>

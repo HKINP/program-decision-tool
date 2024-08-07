@@ -128,3 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   dashboardCard09();
   dashboardCard11();
 });
+
+$(document).ready(function() {
+  $('.multipleselect').select2();
+});

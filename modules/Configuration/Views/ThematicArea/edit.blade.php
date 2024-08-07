@@ -17,27 +17,27 @@
                 :method="'PUT'" 
                 :values="$thematicArea"
                 :fields="[
-                    [
-                        'name' => 'target_group_id',
+                     [
+                        'name' => 'target_group_id[]',
                         'label' => 'Target Group',
                         'type' => 'select',
                         'required' => true,
-                        'width' => 12,
+                        'width' => 'w-1/2',
                         'options' => $targetGroups,
+                        'multiple'=>true,
                     ],
                     [
                         'name' => 'thematic_area',
                         'label' => 'Thematic Area',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'w-1/2',
                     ],
-                    
                     
                     
                 ]" />
             </div>
         </div>
     </div>
-
+  
 </x-app-layout>
