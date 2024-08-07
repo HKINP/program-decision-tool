@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Indicators'" 
-    :headers="['S.N', 'Stages','Thematic Areas','Indicator', 'Actions']" 
+    :headers="['S.N','Indicator', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('indicators.create')"
@@ -11,12 +11,7 @@
  
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $indicator->stage->stages?? '-' }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $indicator->thematicArea->thematic_area }}</div>
-            </td>
+            
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $indicator->indicator_name }}</div>
             </td>

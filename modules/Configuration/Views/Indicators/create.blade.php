@@ -13,22 +13,7 @@
             <div
                 class="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b px-6 py-6 bg-white border-gray-200">
                 <x-form-component :action="route('indicators.store')" :method="'POST'" :fields="[
-                    [
-                        'name' => 'stage_id',
-                        'label' => 'Stage',
-                        'type' => 'select',
-                        'required' => false,
-                        'width' => 'w-1/2',
-                        'options' => $stages,
-                    ],
-                    [
-                        'name' => 'thematic_area_id',
-                        'label' => 'Thematic Area',
-                        'type' => 'select',
-                        'required' => true,
-                        'width' => 'w-1/2',
-                        'options' => $thematicareas,
-                    ],
+                   
                     [
                         'name' => 'indicator_name',
                         'label' => 'Indicator Name',

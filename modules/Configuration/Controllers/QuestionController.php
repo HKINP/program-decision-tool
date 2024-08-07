@@ -51,7 +51,7 @@ class QuestionController extends Controller
         // $this->authorize('manage-account-code');
 
         $questions = $this->questions->with(['thematicArea', 'indicator', 'targetGroup'])
-        ->orderBy('question', 'asc')
+        ->orderBy('id', 'asc')
         ->get();
         // return response()->json(['status'=>'Good',
         //     'data'=>$questions], 200);

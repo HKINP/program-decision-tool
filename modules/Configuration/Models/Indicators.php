@@ -25,8 +25,7 @@ class Indicators extends Model
      * @var array
      */
     protected $fillable = [
-        'stage_id',
-        'thematic_area_id',
+       
         'indicator_name',
     ];
 
@@ -37,15 +36,7 @@ class Indicators extends Model
      */
     protected $hidden = [];
 
-    public function stage()
-    {
-        return $this->belongsTo(Stages::class, 'stage_id');
-    }
-
-    public function thematicArea()
-    {
-        return $this->belongsTo(ThematicArea::class, 'thematic_area_id');
-    }    
+      
     
     public function districtProfiles()
     {

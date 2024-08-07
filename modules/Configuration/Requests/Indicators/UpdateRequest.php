@@ -27,8 +27,6 @@ class UpdateRequest extends FormRequest
     {
         return [
             'indicator_name' => 'required|string|max:255',
-            'thematic_area_id' => 'required',
-            'stage_id' => 'nullable|exists:stages,id',
         ];
     }
     

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Questions'" 
-    :headers="['S.N','Thematic Area','Targeted Groups', 'Question','Indicator', 'Actions']" 
+    :headers="['S.N','Targeted Groups','Thematic Area', 'Question','Indicator', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('question.create')"
@@ -11,12 +11,12 @@
 
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $question->targetGroup->target_group  }}</div>
+            </td>
             
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $question->thematicArea->thematic_area }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $question->targetGroup->target_group  }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $question->question }}</div>

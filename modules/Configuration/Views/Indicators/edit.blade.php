@@ -17,22 +17,7 @@
                 :method="'PUT'" 
                 :values="$indicators"
                 :fields="[
-                  [
-                        'name' => 'stage_id',
-                        'label' => 'Stage',
-                        'type' => 'select',
-                        'required' => true,
-                        'width' => 'w-1/2',
-                        'options' => $stages,
-                    ],
-                    [
-                        'name' => 'thematic_area_id',
-                        'label' => 'Thematic Area',
-                        'type' => 'select',
-                        'required' => true,
-                        'width' => 'w-1/2',
-                        'options' => $thematicareas,
-                    ],
+                  
                     [
                         'name' => 'indicator_name',
                         'label' => 'Indicator Name',

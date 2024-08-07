@@ -43,9 +43,7 @@ class IndicatorsController extends Controller
         
         // $this->authorize('manage-account-code');
 
-        $indicators = $this->indicators->with(['stage', 'thematicArea'])
-        ->orderBy('stage_id', 'asc')
-        ->get();
+        $indicators = $this->indicators->orderBy('id', 'asc')->get();
         // return response()->json(['status'=>'Good',
         //     'data'=>$indicators], 200);
 
@@ -61,20 +59,8 @@ class IndicatorsController extends Controller
     public function create()
     {
         
-        // dd($this->stages->all());
-        $stages=$this->stages->all()->mapWithKeys(function($stage) {
-            return [$stage->id => $stage->stages];
-        })->toArray();
-     
-
-        $thematicareas=$this->thematicareas->all()->mapWithKeys(function($thematicareas) {
-            return [$thematicareas->id => $thematicareas->thematic_area];
-        })->toArray();
-
-        
-        return view('Configuration::Indicators.create')
-        ->withThematicareas($thematicareas)
-        ->withStages($stages);
+             
+        return view('Configuration::Indicators.create');
     }
 
     /**

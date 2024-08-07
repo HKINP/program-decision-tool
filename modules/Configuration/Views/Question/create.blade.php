@@ -12,7 +12,13 @@
         <div class="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
             <div class="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b px-6 py-6 bg-white border-gray-200">
                 <x-form-component :action="route('question.store')" :method="'POST'" :fields="[
-                 
+                 [
+                      'name' => 'question',
+                      'label' => 'Question Name',
+                      'type' => 'text',
+                      'required' => true,
+                      'width' => 'w-1/2'
+                  ],
                  [
                     'name' => 'target_group_id',
                     'label' => 'Target Group',
@@ -41,13 +47,7 @@
                     'options' => $indicators,
                     'multiple' => false,
                 ],
-                 [
-                      'name' => 'question',
-                      'label' => 'Question Name',
-                      'type' => 'text',
-                      'required' => true,
-                      'width' => 'w-1/2'
-                  ],
+                 
                     
                 ]" />
             </div>
