@@ -51,13 +51,13 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     // });
 
     // Route::middleware('can:manage-targetgroup')->prefix('privilege')->group(function(){
-    Route::get('targetgroup', [TargetgroupController::class, 'index'])->name('targetgroup.index');
-    Route::get('targetgroup/create', [TargetgroupController::class, 'create'])->name('targetgroup.create');
-    Route::post('targetgroup', [TargetgroupController::class, 'store'])->name('targetgroup.store');
-    Route::get('targetgroup/{targetgroup}/edit', [TargetgroupController::class, 'edit'])->name('targetgroup.edit');
-    Route::put('targetgroup/{targetgroup}', [TargetgroupController::class, 'update'])->name('targetgroup.update');
-    Route::delete('targetgroup/{targetgroup}', [TargetgroupController::class, 'destroy'])->name('targetgroup.destroy');
-    Route::get('targetgroup/{targetgroup}/view', [TargetgroupController::class, 'view'])->name('targetgroup.view');
+    Route::get('targetgroup', [TargetGroupController::class, 'index'])->name('targetgroup.index');
+    Route::get('targetgroup/create', [TargetGroupController::class, 'create'])->name('targetgroup.create');
+    Route::post('targetgroup', [TargetGroupController::class, 'store'])->name('targetgroup.store');
+    Route::get('targetgroup/{targetgroup}/edit', [TargetGroupController::class, 'edit'])->name('targetgroup.edit');
+    Route::put('targetgroup/{targetgroup}', [TargetGroupController::class, 'update'])->name('targetgroup.update');
+    Route::delete('targetgroup/{targetgroup}', [TargetGroupController::class, 'destroy'])->name('targetgroup.destroy');
+    Route::get('targetgroup/{targetgroup}/view', [TargetGroupController::class, 'view'])->name('targetgroup.view');
     // });
 
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
