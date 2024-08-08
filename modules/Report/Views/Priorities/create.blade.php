@@ -137,7 +137,7 @@
                                {{ $question->targetGroup->target_group }}
                             </td>
                             <td class="border text-sm border-gray-200 p-2">
-                                <{{ $question->thematicArea->thematic_area }}
+                                {{ $question->thematicArea->thematic_area }}
                             </td>
                             <td class="border text-sm border-gray-200 p-2">{{ $index++ }}</td>
                             <td class="border text-sm border-gray-200 p-2">{{$question->question}}
