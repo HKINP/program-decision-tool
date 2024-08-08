@@ -10,6 +10,7 @@ use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\TagsRepository;
 use Modules\Configuration\Repositories\TargetGroupRepository;
+use Modules\Report\Models\DistrictVulnerability;
 use Modules\Report\Repositories\PriorityRepository;
 use Modules\Report\Requests\Priority\StoreRequest;
 use Modules\Report\Requests\Priority\UpdateRequest;
@@ -22,7 +23,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags,$locallevel;
+    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags,$locallevel,$vulnerability;
 
 
     public function __construct(
@@ -31,8 +32,8 @@ class PriorityController extends Controller
         ProvinceRepository $provinces,
         PriorityRepository $priorities,
         QuestionRepository $questions,
-        TargetGroupRepository $targetgroups,
         LocalLevelRepository $locallevel,
+        DistrictVulnerability $vulnerability,
 
     ) {
         $this->districts = $districts;
@@ -40,6 +41,7 @@ class PriorityController extends Controller
         $this->priorities = $priorities;
         $this->questions = $questions;
         $this->locallevel = $locallevel;
+        $this->vulnerability = $vulnerability;
     }
 
     /**
@@ -52,16 +54,14 @@ class PriorityController extends Controller
     {
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
-            $lgid=$this->locallevel->where('district_id','=',$did);
             $stageId = $request->query('stageId');
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
-            // $locallevel=$this->locallevel->where('district_id', '=', $did)->get();
+            $locallevel=$this->locallevel->where('district_id', '=', $did)->get();            
 
             return view('Report::DistrictContext.create')
-            ->withDistrictprofile($districtprofile);
-
-            
+            ->withLocallevel($locallevel)
+            ->withDistrictprofile($districtprofile);            
 
         }
        
@@ -71,35 +71,37 @@ class PriorityController extends Controller
 
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
+           
 
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
                 ->get();
 
-            // Fetch target groups
-            $targetgroups = $this->targetgroups->get();
+            $vulnerability = $this->vulnerability->where('district_id', $did)->get();
+            $province_id = $districtprofile->province->id;
 
             // Fetch questions
-            $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
-                ->where('stage_id', '=', $stageId)
-                ->get();
+            $questions = $this->questions->with([
+                'thematicArea',
+                'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
+                    $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
+                        $query->where('province_id', $province_id);
+                    }]);
+                },
+                'targetGroup'
+            ])->get();
+            
 
-            // Attach colors and recommendations to priorities
-            foreach ($priorities as $priority) {
-                $questionId = $priority->question_id;
-                $responseAll = $priority->response_all;
-                $responseUnderserved = $priority->response_underserved;
-
-                $priority->color_all = $this->questions->getColor($questionId, $responseAll);
-                $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
-            }
+            // return response()->json([
+            //     'status' => 'error',
+            //     'data' => $questions
+            // ], 422);
 
             // Return the view with additional data
             return view('Report::Priorities.create')
                 ->withDistrictprofile($districtprofile)
                 ->withQuestions($questions)
-                ->withTargetgroups($targetgroups)
                 ->withPriorities($priorities);
         } elseif (
             $request->has('did') && $request->input('did') != '' &&

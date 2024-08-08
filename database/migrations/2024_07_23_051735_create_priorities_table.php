@@ -18,9 +18,7 @@ return new class extends Migration
             $table->integer('lgid')->unsigned()->nullable();
             $table->integer('target_group_id')->unsigned();
             $table->integer('thematic_area_id')->unsigned();
-            $table->integer('question_id')->unsigned();            
-            $table->text('response_all')->nullable();
-            $table->text('response_underserved')->nullable();
+            $table->integer('question_id')->unsigned(); 
             $table->integer('priority');
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
