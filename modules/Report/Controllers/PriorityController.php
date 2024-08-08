@@ -52,6 +52,20 @@ class PriorityController extends Controller
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
             $stageId = $request->query('stageId');
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province'])->find($did);
+            // $locallevel=$this->locallevel->where('district_id', '=', $did)->get();
+
+            return view('Report::DistrictContext.create')
+            ->withDistrictprofile($districtprofile);
+
+            
+
+        }
+       
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');
 
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);

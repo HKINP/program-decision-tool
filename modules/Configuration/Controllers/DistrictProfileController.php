@@ -54,9 +54,7 @@ class DistrictProfileController extends Controller
             return [$district->id => $district->district];
         })->toArray();
 
-        $indicators = $this->indicators->all()->mapWithKeys(function ($indicator) {
-            return [$indicator->id => $indicator->indicator_name];
-        })->toArray();
+        $indicators = $this->indicators->all();
 
      return view('Configuration::District.Profile.create')
             ->withDistricts($district)

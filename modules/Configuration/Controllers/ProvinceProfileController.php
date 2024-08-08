@@ -61,9 +61,7 @@ class ProvinceProfileController extends Controller
             return [$province->id => $province->province];
         })->toArray();
 
-        $indicators=$this->indicators->all()->mapWithKeys(function($indicator) {
-                 return [$indicator->id => $indicator->indicator_name];
-        })->toArray();
+        $indicators=$this->indicators->all();
 
         return view('Configuration::Province.Profile.create')
         ->withProvinces($provinces)
@@ -79,16 +77,35 @@ class ProvinceProfileController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        // $this->authorize('manage-account-code');
-        $provinceprofile = $this->profile->create($request->all());
-        
-        if($provinceprofile){
-            return redirect()->route('provinceprofile.index')->with('success', 'Added Province Profile data successfully!');
-        }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be added.'], 422);
+        // Retrieve all data from the request
+        $data = $request->all();
+    
+        // Extract individual arrays
+        $indicatorIds = $data['indicator_id'];
+        $allValues = $data['all_value'];
+        $ruralValues = $data['rural_value'];
+        $sources = $data['source'];
+    
+            // Loop through each array to create indicator records
+            for ($i = 0; $i < count($indicatorIds); $i++) {
+                $inputs = [
+                    'province_id' => $data['province_id'], // Link to the created profile
+                    'indicator_id' => $indicatorIds[$i],
+                    'all_value' => $allValues[$i],
+                    'rural_value' => $ruralValues[$i],
+                    'source' => $sources[$i],
+                ];
+    
+                $this->profile->create($inputs);
+            }
+    
+            return redirect()->route('provinceprofile.index')
+                             ->with('success', 'Added Province Profile data successfully!');
+       
+     
     }
-
+    
+    
     /**
      * Display the specified account head.
      *
@@ -135,17 +152,19 @@ class ProvinceProfileController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        // $this->authorize('manage-account-code');
+         // $this->authorize('manage-account-code');
      
         
-        $provinceprofile = $this->profile->update($id, $request->except('id'));
+         $provinceprofile = $this->profile->update($id, $request->except(['id', 'province_id','indicator_id']));
        
-        if($provinceprofile){
-            return redirect()->route('provinceprofile.index')->with('success', 'Provice Profile Updated successfully!');
-        }
-        return response()->json(['status'=>'error',
-            'message'=>'Account Code can not be updated.'], 422);
-    }
+         if($provinceprofile){
+             return redirect()->route('provinceprofile.index')->with('success', 'Provice Profile Updated successfully!');
+         }
+         return response()->json(['status'=>'error',
+             'message'=>'Account Code can not be updated.'], 422);
+     }
+   
+    
 
     /**
      * Remove the specified account head from storage.

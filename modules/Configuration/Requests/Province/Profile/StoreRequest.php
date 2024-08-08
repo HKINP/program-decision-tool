@@ -25,13 +25,19 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-            return [
-                'province_id' => 'required|exists:provinces,id|integer',
-                'indicator_id' => 'required|exists:indicators,id|integer',
-                'all_value' => 'required|string',
-                'rural_value' => 'required|string',
-                'source' => 'required|string',
-            ];
+       
+        return [
+           
+            'province_id' => 'required|integer|exists:provinces,id',
+            'indicator_id' => 'required|array',
+            'indicator_id.*' => 'required|integer|exists:indicators,id', 
+            'all_value' => 'required|array',
+            'all_value.*' => 'nullable|numeric', 
+            'rural_value' => 'required|array',
+            'rural_value.*' => 'nullable|numeric',
+            'source' => 'required|array',
+            'source.*' => 'nullable|string',
+        ];
       
     }
 }

@@ -1,74 +1,169 @@
 <x-app-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-        <div class="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-            <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Province Profile</h1>
+        <div class=" p-4 rounded-lg w-full mb-5">
+           
+            <div class="flex items-center gap-2 text-2xl p-4">
+                <div class="border bg-white p-2 rounded-full ml-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
+                        </path>
+                    </svg></div>
+                <p class="font-semibold text-[24px]">Step1. Prioritize Behaviors</p>
+            </div>           
+        </div>
+        <div class="flex gap-4">
+            <!-- Province Section -->
+            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
+                <div class="flex items-center mb-4">
+                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
+
+                    <p class="font-semibold text-md  ml-4">
+                        <span class="text-blue-600"> Province: </span>
+                        <span class="text-black">{{ $districtprofile->province->province }}</span>
+                    </p>
+                </div>
+            </div>
+            <!-- District Section -->
+            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
+                <div class="flex items-center mb-4">
+                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">02</p>
+                    <p class="font-semibold text-md  ml-4">
+                        <span class="text-blue-600"> District: </span>
+                        <span class="text-black">{{ $districtprofile->district }}</span>
+                    </p>
+                </div>
             </div>
         </div>
-        <form action="{{ route('provinceprofile.store') }}" method="POST">
-            @csrf
-            <div class="12 px-2 mb-6 mt-8">
-                <label for="province_id"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province</label>
 
-
-                <select style="width: 100%"  name="province_id"
-                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required="" >
-                    <option value="">Select</option>
-                    @foreach ($provinces as $key=>$province)
-                        <option value="{{ $key }}">{{ $province }}</option>
-                    @endforeach
-                </select>
+        <div class="bg-white p-4 rounded-lg w-full mb-5">
+            <div class="flex gap-2 items-center mb-4">
+                <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">03</p>
+                <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
 
-            <div class="overflow-x-auto mt-6">
+            <div class="space-y-2 text-xs italic">
+                <p>1) Use the menu below to design community-level activities. To support women and caregivers to adopt
+                    the selected behaviors, consider what barriers they would need to overcome. These barriers may be
+                    individual (e.g., knowledge, self-confidence, time, cost) or social (family support, cultural
+                    practices, gender norms), or structural (health system, food system). We will address health system
+                    barriers under IR 2 and food system barriers under IR 3.</p>
+                <p class="mb-2">2) For each platform/program determine what you would need to do: conduct IPC,
+                    organize community events (e.g., street theater), refer or link with another program e.g., social
+                    protection. Complete the who and how columns to determine further who needs to be involved and how.
+                    Then describe your activity in as much detail as possible. Once you have completed identifying
+                    activities for everyone in the district, consider how it might change for underserved populations.
+                    Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7
+                    for this IR.</p>
+            </div>
+        </div>
 
+        <div class="flex md:flex-row items-center gap-4 md:gap-x-4 justify-between flex-1 w-full md:w-auto">
+            <div class="bg-white w-full rounded-lg mb-4">
+                <div class="flex justify-between items-center cursor-pointer p-4">
+                    <div class="flex gap-2 items-center">
+                        <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">04
+                        </p>
+                        <p class="font-semibold text-md text-blue-600">District Profile</p>
+                    </div>
+                    <span class="text-4xl">
+                        <!-- Optional icon or element here -->
+                    </span>
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="text-sm font-bold">WRA: <span class="font-normal">{{ $districtprofile->wra }}</span>
+                        </p>
+                        <p class="text-sm font-bold">Pregnant women: <span
+                                class="font-normal">{{ $districtprofile->pregnant_women }}</span></p>
+                        <p class="text-sm font-bold">Adolescent girls: <span
+                                class="font-normal">{{ $districtprofile->adolescent_girls }}</span></p>
+                        <p class="text-sm font-bold">Children under 5: <span
+                                class="font-normal">{{ $districtprofile->children_under_5 }}</span></p>
+                        <p class="text-sm font-bold">Children 0 to 23 months: <span
+                                class="font-normal">{{ $districtprofile->children_0_to_23_months }}</span></p>
+                        <p class="text-sm font-bold">Low equity quintile municipalities: <span
+                                class="font-normal">{{ $districtprofile->low_equity_quintile_municipalities }}</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bg-white w-full rounded-lg mb-4">
+                <div class="flex justify-between items-center cursor-pointer p-4">
+                    <div class="flex gap-2 items-center">
+                        <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">05
+                        </p>
+                        <p class="font-semibold text-md text-blue-600">Health Facilities</p>
+                    </div>
+                    <span class="text-4xl">
+                        <!-- Optional icon or element here -->
+                    </span>
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="text-sm font-bold">Hospitals: <span
+                                class="font-normal">{{ $districtprofile->hospitals }}</span></p>
+                        <p class="text-sm font-bold">PHCCs: <span
+                                class="font-normal">{{ $districtprofile->phccs }}</span></p>
+                        <p class="text-sm font-bold">HPs: <span class="font-normal">{{ $districtprofile->hps }}</span>
+                        </p>
+                        <p class="text-sm font-bold">UHCs: <span
+                                class="font-normal">{{ $districtprofile->uhcs }}</span></p>
+                        <p class="text-sm font-bold">CHUs: <span
+                                class="font-normal">{{ $districtprofile->chus }}</span></p>
+                        <p class="text-sm font-bold">FCHVs: <span
+                                class="font-normal">{{ $districtprofile->fchvs }}</span></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="overflow-x-auto mt-6">
+            <form action="{{ route('priority.store') }}" method="POST">
+                @csrf
+                <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
+                <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
 
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
-                    <thead
-                        class="bg-gray-50 border-b border-gray-200 text-xs leading-4 text-gray-500 uppercase tracking-wider">
+                    <thead class="rounded-lg">
                         <tr>
-                            <th class="px-6 py-3 text-left font-medium">#</th>
-                            <th class="px-6 py-3 text-left font-medium">Indicator</th>
-                            <th class="px-6 py-3 text-left font-medium">All Value</th>
-                            <th class="px-6 py-3 text-left font-medium">Rural Value</th>
-                            <th class="px-6 py-3 text-left font-medium">Source</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Target Group</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Thematic area</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">#</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Questions (based on MSNP III
+                                indicators)</th>
+                            <th colspan="2" class="bg-gray-500 text-white text-xs p-2">Responses (%)</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Priority for Y1</th>
+                            <th rowspan="2" class="bg-gray-500 text-white text-xs p-2">Actions</th>
+                        </tr>
+                        <tr>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">All</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 w-20">Underserved</th>
                         </tr>
                     </thead>
-
                     <tbody class="rounded-lg" id="priority-table-body">
                         <!-- Existing rows rendered by server-side logic -->
-                        @php $index = 1; @endphp
-                        @foreach ($indicators as $indicator)
-                            <input type="number" name="indicator_id[]" value="{{ $indicator->id }}" hidden>
-                            <tr>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    {{ $index++ }}
-                                </td>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    {{ $indicator->indicator_name }}
-                                </td>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    <input type="number" required name="all_value[]"
-                                        class="mt-1 block text-sm  w-full border-gray-300 rounded-lg shadow-sm">
-                                </td>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    <input type="number" required name="rural_value[]"
-                                        class="mt-1 text-sm  block w-full border-gray-300 rounded-lg shadow-sm">
-                                </td>
-                                <td class="border text-sm border-gray-200 p-2">
-                                    <input type="text" required name="source[]"
-                                        class="mt-1 text-sm  block w-full border-gray-300 rounded-lg shadow-sm">
-                                </td>
-                            </tr>
-                        @endforeach
+                    
                     </tbody>
                 </table>
 
+                <div class="relative">
+                    <button type="button" id="add-row-btn"
+                        class="absolute top-0 right-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="w-3 h-3 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span class="sr-only">Add row</span>
+                    </button>
+                </div>
+
+
                 <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
-        </form>
-    </div>
+            </form>
+        </div>
     </div>
 
     <!-- Delete Modal -->
@@ -143,13 +238,15 @@
                     @csrf
                     @method('PUT')
                     <div class="mt-4">
-                        <div class="mb-4">
+                           <div class="mb-4">
                             <label for="target-group" class="block text-sm font-medium text-gray-700">Target
                                 Group</label>
                             <select name="target_group_id" required id="target-group"
                                 class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm edit-context target-group">
                                 <option value="">Select Target Group</option>
-
+                                {{-- @foreach ($targetgroups as $targetgroup)
+                                    <option value="{{ $targetgroup->id }}">{{ $targetgroup->target_group }}</option>
+                                @endforeach --}}
                             </select>
                         </div>
                         <div class="mb-4">
@@ -206,7 +303,7 @@
 
 
     <script>
-        function showEditModal(id, editRoute) {
+        function showEditModal(id,editRoute) {
             document.getElementById('edit-form').action = editRoute;
             $.ajax({
                 url: '/priority/' + id, // Replace with your route
@@ -230,10 +327,10 @@
         function closeModal() {
             document.getElementById('edit-modal').classList.add('hidden');
         }
-
+        
         $(document).ready(function() {
 
-            let rowIndex = {{ 1 + 1 }};
+            let rowIndex =5;
 
             $('#add-row-btn').click(function() {
                 let newRow = `
@@ -241,7 +338,7 @@
                  <td class="border text-sm border-gray-200 p-2">
                      <select name="target_group_id[]" required class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm add-context target-group">
                          <option value="">Select Target Group</option>
-                        
+                      
                      </select>
                  </td>
                  <td class="border text-sm border-gray-200 p-2">
@@ -249,7 +346,7 @@
                          <option value="">Select Thematic Area</option>
                      </select>
                  </td>
-                 <td class="border text-sm border-gray-200 p-2"></td>
+                 <td class="border text-sm border-gray-200 p-2">${rowIndex++}</td>
                  <td class="border text-sm border-gray-200 p-2">
                      <select name="question_id[]" required class="mt-1 block w-full add-context text-sm border-gray-300 rounded-lg shadow-sm question" disabled>
                          <option value="">Select Question</option>
@@ -292,10 +389,10 @@
                 let targetGroupId = $(this).val();
                 let thematicAreaSelect, questionSelect;
 
-                if ($(this).hasClass('add-context')) {
+                if ($(this).hasClass('add-context')) {                    
                     thematicAreaSelect = $(this).closest('tr').find('.thematic-area');
                     questionSelect = $(this).closest('tr').find('.question');
-                } else if ($(this).hasClass('edit-context')) {
+                } else if ($(this).hasClass('edit-context')) {                 
                     thematicAreaSelect = $('#thematic-area');
                     questionSelect = $('#question');
                 }
@@ -332,16 +429,16 @@
                 let thematicAreaId = $(this).val();
                 let questionSelect;
 
-                if ($(this).hasClass('add-context')) {
+                if ($(this).hasClass('add-context')) {                    
                     questionSelect = $(this).closest('tr').find('.question');
-                } else if ($(this).hasClass('edit-context')) {
+                } else if ($(this).hasClass('edit-context')) {                   
                     questionSelect = $('#question');
                 }
 
                 if (thematicAreaId) {
                     $.ajax({
                         url: '/api/priorities/questions/' +
-                            thematicAreaId, // Replace with your route
+                        thematicAreaId, // Replace with your route
                         method: 'GET',
                         success: function(data) {
                             questionSelect.html('<option value="">Select Question</option>')

@@ -14,27 +14,7 @@ return new class extends Migration
         Schema::create('districts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('province_id')->unsigned();
-            $table->string('district');
-            $table->integer('adolescent_girls')->nullable();
-            $table->integer('children_under_5')->nullable();
-            $table->integer('hospitals')->nullable();
-            $table->integer('hps')->nullable(); // HPs
-            $table->integer('otcs')->nullable(); // Of OTCs
-            $table->integer('phccs')->nullable(); // PHCCs
-            $table->integer('pregnant_women')->nullable();
-            $table->integer('wra')->nullable(); // Women of Reproductive Age
-            $table->integer('chus')->nullable(); // CHUs
-            $table->integer('fchvs')->nullable(); // FCHVs
-            $table->integer('uhcs')->nullable(); // UHCs
-            $table->integer('akc')->nullable(); // AKC
-            $table->integer('vhlc')->nullable(); // VHLC
-            $table->integer('children_0_to_23_months')->nullable(); // Children 0 to 23 months
-            $table->integer('epi_clinics')->nullable(); // EPI clinics
-            $table->integer('hmg')->nullable(); // HMG
-            $table->integer('low_equity_quintile_municipalities')->nullable(); // Low equity quintile municipalities
-            $table->integer('birthing_centers')->nullable(); // Of birthing centers
-            $table->integer('schools')->nullable(); // Of schools
-            $table->integer('orc')->nullable(); // ORC            
+            $table->string('district');            
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();

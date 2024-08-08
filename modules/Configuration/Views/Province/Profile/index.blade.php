@@ -27,15 +27,11 @@
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
-                    <a href="{{ route('provinceprofile.view', $profile->id) }}" class="text-blue-500 hover:text-blue-700">
-                        <i class="fas fa-eye"></i>
-                    </a>
+                   
                     <a href="{{ route('provinceprofile.edit', $profile->id) }}" class="text-yellow-500 hover:text-yellow-700">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('provinceprofile.destroy', $profile->id) }}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                   
                 </div>
             </td>
         </tr>
