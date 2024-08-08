@@ -4,13 +4,13 @@ namespace Modules\Configuration\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Event\Models\Event;
-use App\Traits\ModelLog;
+use App\Traits\ModelEventLogger;
+use App\Traits\UpdatedBy;
 use Modules\Configuration\Models\District;
 use Modules\Configuration\Models\Province;
 
 class LocalLevel extends Model{
-    use SoftDeletes,ModelLog;
+    use ModelEventLogger, UpdatedBy,SoftDeletes;
     protected $table = 'llevels';
 
     protected $fillable =[

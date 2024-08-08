@@ -5,6 +5,7 @@ namespace Modules\Report\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\DistrictRepository;
+use Modules\Configuration\Repositories\LocalLevelRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\TagsRepository;
@@ -21,7 +22,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags;
+    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags,$locallevel;
 
 
     public function __construct(
@@ -31,14 +32,14 @@ class PriorityController extends Controller
         PriorityRepository $priorities,
         QuestionRepository $questions,
         TargetGroupRepository $targetgroups,
-        TagsRepository $tags,
+        LocalLevelRepository $locallevel,
 
     ) {
         $this->districts = $districts;
         $this->provinces = $provinces;
         $this->priorities = $priorities;
         $this->questions = $questions;
-        $this->targetgroups = $targetgroups;
+        $this->locallevel = $locallevel;
     }
 
     /**
@@ -51,6 +52,7 @@ class PriorityController extends Controller
     {
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
+            $lgid=$this->locallevel->where('district_id','=',$did);
             $stageId = $request->query('stageId');
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
