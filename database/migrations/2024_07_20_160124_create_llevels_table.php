@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('llevels', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('province_id');
-            $table->integer('district_id');
-            $table->integer('updated_by')->nullable();
+            $table->integer('province_id')->unsigned();
+            $table->integer('district_id')->unsigned();
+            $table->integer('updated_by')->unsigned()->default(null);
 
             $table->string('lgname')->nullable()->default(null);
 
