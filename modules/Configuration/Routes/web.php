@@ -12,7 +12,7 @@ use Modules\Configuration\Controllers\ProvinceProfileController;
 use Modules\Configuration\Controllers\QuestionController;
 use Modules\Configuration\Controllers\StagesController;
 use Modules\Configuration\Controllers\TagsController;
-use Modules\Configuration\Controllers\TargetgroupController;
+use Modules\Configuration\Controllers\TargetGroupController;
 use Modules\Configuration\Controllers\ThematicAreaController;
 use Modules\Configuration\Controllers\ThresholdController;
 
