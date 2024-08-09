@@ -1,94 +1,303 @@
-<!-- resources/views/provinces/create.blade.php -->
-
 <x-app-layout>
-    <div class="w-[98%] mx-auto my-4 rounded-lg divide-solid divide-y h-max">
-        <div class="flex items-center gap-2 text-2xl p-4">
-            <div class="border p-2 rounded-full ml-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                    viewBox="0 0 1024 1024" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
-                    </path>
-                </svg></div>
-            <p class="font-semibold text-[24px]">Settings</p>
-        </div>
-        <div id="provinces-container">
-            @foreach ($provinces as $index => $province)
-                <div class="province border bg-white border-[#D8DAE5] rounded-lg divide-y divide-solid mb-4">
-                    <div class="flex justify-between items-center cursor-pointer province-header"
-                        data-index="{{ $index }}">
-                        <div class="flex gap-2 p-4 items-center">
-                            <p
-                                class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">
-                                {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</p>
-                            <p class="font-semibold text-md text-blue-600">{{ $province->province }}</p>
-                        </div>
-                        <span class="text-4xl arrow-icon">
-                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
-                                height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 14L8 10H16L12 14Z"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="province-content grid grid-cols-6 gap-4 p-4">
-                        <div class="col-span-6 mb-4">
-                            <input type="text" class="search-district form-input w-full p-2 border rounded-lg"
-                                placeholder="Search district...">
-                        </div>
-                        @foreach ($province->districts as $district)
-                            <a
-                                href=" <a href="{{ route('dataentry.create', ['did' => $district->id, 'stageId' => 0]) }}" 
-                            
-                            class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
-                            <p class="text-center mt-2 text-sm font-semibold">{{ $district->district }}</p>
-                            </a>
-                        @endforeach
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+        <div class=" p-4 rounded-lg w-full mb-5">
 
-                    </div>
+            <div class="flex items-center gap-2 text-2xl p-4">
+                <div class="border bg-white p-2 rounded-full ml-2"><svg stroke="currentColor" fill="currentColor"
+                        stroke-width="0" viewBox="0 0 1024 1024" height="18" width="18"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
+                        </path>
+                    </svg></div>
+                <p class="font-semibold text-[24px]">Step1. District Context</p>
+            </div>
+        </div>
+        <div class="flex gap-4">
+            <!-- Province Section -->
+            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
+                <div class="flex items-center mb-4">
+                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
+
+                    <p class="font-semibold text-md  ml-4">
+                        <span class="text-blue-600"> Province: </span>
+                        <span class="text-black">{{ $districtprofile->province->province }}</span>
+                    </p>
                 </div>
-            @endforeach
+            </div>
+            <!-- District Section -->
+            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
+                <div class="flex items-center mb-4">
+                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">02</p>
+                    <p class="font-semibold text-md  ml-4">
+                        <span class="text-blue-600"> District: </span>
+                        <span class="text-black">{{ $districtprofile->district }}</span>
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <div class="bg-white p-4 rounded-lg w-full mb-5">
+            <div class="flex gap-2 items-center mb-4">
+                <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">04</p>
+                <p class="font-semibold text-md text-blue-600">District profile</p>
+            </div>
+            <form action="{{ route('districtvulnerability.store') }}" method="POST">
+                @csrf
+
+                <div class="flex flex-wrap -mx-2">
+                    <!-- Column 1 -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="municipality-count"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of
+                            Municipality</label>
+                        <input type="text" id="municipality-count" value="{{ count($locallevel) }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" required="">
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="vulnerable-municipality-count"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable
+                            Municipality</label>
+                        <input type="number" value="{{ $districtprofile->vulnerable_municipality }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" required="">
+                    </div>
+
+                    <!-- Column 3  -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="Ecological Zone"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ecological Zone</label>
+                        <input type="text" value="{{ $districtprofile->ecological_zone }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" required="">
+                    </div>
+                    <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+                </div>
 
 
-    <script>
-        $(document).ready(function() {
-            // Collapse functionality
-            $('.province-header').on('click', function() {
-                var index = $(this).data('index');
-                var $content = $(this).next('.province-content');
+                <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
+                    <thead class="rounded-lg">
 
-                // Collapse all other provinces
-                $('.province-content').not($content).slideUp();
-                $('.arrow-icon').not($(this).find('.arrow-icon')).removeClass('rotate-180');
+                        <tr>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Municipality
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Remote
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Caste/Ethnicity
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Geography (municipalities)
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Food insecurity
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Wealth
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Climatic Change
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Remark
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="rounded-lg" id="priority-table-body">
 
-                // Toggle current province
-                $content.slideToggle();
-                $(this).find('.arrow-icon').toggleClass('rotate-180');
-            });
+                        @foreach ($districtVulnerability as $data)
+                            <tr>
+                                <td class="p-2 text-center">
+                                    {{ $data->locallevel->lgname }}
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->remote_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->caste_ethnicity_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->geography_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->food_security_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->wealth_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="checkbox"
+                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        value="1" {{ $data->climatic_change_status == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="text"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        value="{{ $data->remarks }}">
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
-            // Open the first province by default
-            $('.province-header').first().trigger('click');
+            </form>
 
-            // Search functionality
-            $('.search-district').on('keyup', function() {
-                var searchText = $(this).val().toLowerCase();
-                var $provinceContent = $(this).closest('.province-content');
+        </div>
 
-                $provinceContent.find('.district').each(function() {
-                    var districtName = $(this).text().toLowerCase();
-                    if (districtName.includes(searchText)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const vulnerableMunicipalityInput = document.getElementById('vulnerable-municipality-count');
+                const priorityTableBody = document.getElementById('priority-table-body');
+                const locallevel = @json($locallevel);
+
+                function createMunicipalityOptions(selectedValues = []) {
+                    return locallevel.map(item => {
+                        if (!selectedValues.includes(item.id)) {
+                            return `<option value="${item.id}">${item.lgname}</option>`;
+                        }
+                        return '';
+                    }).join('');
+                }
+
+                function getSelectedMunicipalities() {
+                    return Array.from(priorityTableBody.querySelectorAll('select.municipality-select'))
+                        .map(select => select.value)
+                        .filter(value => value);
+                }
+
+                function updateTableRows() {
+                    const count = parseInt(vulnerableMunicipalityInput.value, 10);
+                    if (isNaN(count) || count < 0) return; // Ensure count is a valid number
+
+                    const existingRows = priorityTableBody.querySelectorAll('tr').length;
+
+                    if (count > existingRows) {
+                        for (let i = existingRows; i < count; i++) {
+                            const selectedValues = getSelectedMunicipalities();
+                            const row = document.createElement('tr');
+
+                            row.innerHTML = `
+                            <td class="p-2 text-center">
+                                    <select name="lgid[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
+                                        <option value="">Select Municipality</option>
+                                        ${createMunicipalityOptions(selectedValues)}
+                                    </select>
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="remote_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="caste_ethnicity_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="geography_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="food_security_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="wealth_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="climatic_change_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <input type="text" name="remark[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </td>
+                                <td class="p-2 text-center">
+                                    <button type="button" class="remove-row-btn text-red-500 hover:text-red-700">
+                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            `;
+
+                            priorityTableBody.appendChild(row);
+                        }
+                    } else if (count < existingRows) {
+                        for (let i = existingRows; i > count; i--) {
+                            priorityTableBody.querySelector('tr:last-child').remove();
+                        }
+                    }
+
+                    updateDropdowns();
+                }
+
+                function handleRowRemoval(event) {
+                    if (event.target.closest('.remove-row-btn')) {
+                        event.target.closest('tr').remove();
+                        vulnerableMunicipalityInput.value = parseInt(vulnerableMunicipalityInput.value, 10) - 1;
+                        updateTableRows();
+                    }
+                }
+
+                function updateDropdowns() {
+                    const selectedValues = getSelectedMunicipalities();
+                    const dropdowns = priorityTableBody.querySelectorAll('select.municipality-select');
+                    dropdowns.forEach(dropdown => {
+                        const currentValue = dropdown.value;
+                        dropdown.innerHTML =
+                            `<option value="">Select Municipality</option>${createMunicipalityOptions(selectedValues)}`;
+                        if (currentValue && !selectedValues.includes(currentValue)) {
+                            dropdown.value = ''; // Clear if not included in options
+                        } else {
+                            dropdown.value = currentValue; // Set back the previous value if still valid
+                        }
+                    });
+                }
+
+                function handleCheckboxChange(event) {
+                    const checkbox = event.target;
+                    const hiddenInput = checkbox.previousElementSibling;
+                    hiddenInput.value = checkbox.checked ? '1' : '0'; // Set value of hidden input
+                }
+
+                priorityTableBody.addEventListener('change', function(event) {
+                    if (event.target.matches('input[type="checkbox"]')) {
+                        handleCheckboxChange(event);
                     }
                 });
-            });
-        });
-    </script>
 
-    <style>
-        .rotate-180 {
-            transform: rotate(180deg);
-        }
-    </style>
+                vulnerableMunicipalityInput.addEventListener('change', updateTableRows);
+                priorityTableBody.addEventListener('click', handleRowRemoval);
+            });
+        </script>
+
+
+
+
 </x-app-layout>

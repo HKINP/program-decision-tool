@@ -6,21 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\DataFeed;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\StagesRepository;
+use Modules\Report\Repositories\DistrictVulnerabilityRepository;
 
 class DashboardController extends Controller
 {
 
-    protected $provinces, $stages;
+    protected $provinces, $stages,$districtVulnerability;
 
 
     public function __construct(
 
         ProvinceRepository $provinces,
-        StagesRepository $stages
+        StagesRepository $stages,
+        DistrictVulnerabilityRepository $districtVulnerability,
 
     ) {
         $this->provinces = $provinces;
         $this->stages = $stages;
+        $this->districtVulnerability = $districtVulnerability;
     }
 
     public function index()
@@ -37,9 +40,13 @@ class DashboardController extends Controller
     {
 
         if ($request->has('did')) {
+
+            
             $did = $request->query('did');
             $stages = $this->stages->get();
+            $districtvulnerability=$this->districtVulnerability->where('district_id', '=', $did)->exists();           
             return view('pages/dashboard/toolscreate')
+                ->withDistrictvulnerability($districtvulnerability)
                 ->withStages($stages)
                 ->withDistrictID($did);
         } else {
