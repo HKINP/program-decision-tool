@@ -114,17 +114,14 @@
                                 style="line-height: 1.2;">
                                 Remark
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
-                                style="line-height: 1.2;">
-                                Actions
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody class="rounded-lg" id="priority-table-body">
 
                         @foreach ($districtVulnerability as $data)
                             <tr>
-                                <td class="p-2 text-center">
+                                <td class="p-2">
                                     {{ $data->locallevel->lgname }}
                                 </td>
                                 <td class="p-2 text-center">
@@ -170,134 +167,4 @@
             </form>
 
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const vulnerableMunicipalityInput = document.getElementById('vulnerable-municipality-count');
-                const priorityTableBody = document.getElementById('priority-table-body');
-                const locallevel = @json($locallevel);
-
-                function createMunicipalityOptions(selectedValues = []) {
-                    return locallevel.map(item => {
-                        if (!selectedValues.includes(item.id)) {
-                            return `<option value="${item.id}">${item.lgname}</option>`;
-                        }
-                        return '';
-                    }).join('');
-                }
-
-                function getSelectedMunicipalities() {
-                    return Array.from(priorityTableBody.querySelectorAll('select.municipality-select'))
-                        .map(select => select.value)
-                        .filter(value => value);
-                }
-
-                function updateTableRows() {
-                    const count = parseInt(vulnerableMunicipalityInput.value, 10);
-                    if (isNaN(count) || count < 0) return; // Ensure count is a valid number
-
-                    const existingRows = priorityTableBody.querySelectorAll('tr').length;
-
-                    if (count > existingRows) {
-                        for (let i = existingRows; i < count; i++) {
-                            const selectedValues = getSelectedMunicipalities();
-                            const row = document.createElement('tr');
-
-                            row.innerHTML = `
-                            <td class="p-2 text-center">
-                                    <select name="lgid[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
-                                        <option value="">Select Municipality</option>
-                                        ${createMunicipalityOptions(selectedValues)}
-                                    </select>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="remote_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="caste_ethnicity_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="geography_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="food_security_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="wealth_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden" name="climatic_change_status[]" value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="text" name="remark[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </td>
-                                <td class="p-2 text-center">
-                                    <button type="button" class="remove-row-btn text-red-500 hover:text-red-700">
-                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            `;
-
-                            priorityTableBody.appendChild(row);
-                        }
-                    } else if (count < existingRows) {
-                        for (let i = existingRows; i > count; i--) {
-                            priorityTableBody.querySelector('tr:last-child').remove();
-                        }
-                    }
-
-                    updateDropdowns();
-                }
-
-                function handleRowRemoval(event) {
-                    if (event.target.closest('.remove-row-btn')) {
-                        event.target.closest('tr').remove();
-                        vulnerableMunicipalityInput.value = parseInt(vulnerableMunicipalityInput.value, 10) - 1;
-                        updateTableRows();
-                    }
-                }
-
-                function updateDropdowns() {
-                    const selectedValues = getSelectedMunicipalities();
-                    const dropdowns = priorityTableBody.querySelectorAll('select.municipality-select');
-                    dropdowns.forEach(dropdown => {
-                        const currentValue = dropdown.value;
-                        dropdown.innerHTML =
-                            `<option value="">Select Municipality</option>${createMunicipalityOptions(selectedValues)}`;
-                        if (currentValue && !selectedValues.includes(currentValue)) {
-                            dropdown.value = ''; // Clear if not included in options
-                        } else {
-                            dropdown.value = currentValue; // Set back the previous value if still valid
-                        }
-                    });
-                }
-
-                function handleCheckboxChange(event) {
-                    const checkbox = event.target;
-                    const hiddenInput = checkbox.previousElementSibling;
-                    hiddenInput.value = checkbox.checked ? '1' : '0'; // Set value of hidden input
-                }
-
-                priorityTableBody.addEventListener('change', function(event) {
-                    if (event.target.matches('input[type="checkbox"]')) {
-                        handleCheckboxChange(event);
-                    }
-                });
-
-                vulnerableMunicipalityInput.addEventListener('change', updateTableRows);
-                priorityTableBody.addEventListener('click', handleRowRemoval);
-            });
-        </script>
-
-
-
-
 </x-app-layout>
