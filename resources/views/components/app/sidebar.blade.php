@@ -74,10 +74,10 @@
                             </div>
                         </a>
                     </li>
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['dataentry.create'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
-                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['dataentry.create'])){{ 'hover:text-gray-500 dark:hover:text-white' }}@endif" href="{{ route('dataentry.create') }}">
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['dataentry'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
+                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['dataentry'])){{ 'hover:text-gray-500 dark:hover:text-white' }}@endif" href="{{ route('dataentry.create') }}">
                             <div class="flex items-center">
-                                <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['dashboard'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['dataentry'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                     <path d="M12 0c-.553 0-1 .448-1 1v10h-10c-.552 0-1 .448-1 1s.448 1 1 1h10v10c0 .552.447 1 1 1s1-.448 1-1v-10h10c.552 0 1-.448 1-1s-.448-1-1-1h-10v-10c0-.552-.447-1-1-1z"/>
                                 </svg>
                                 
@@ -125,25 +125,25 @@
                         </div>
                     </li>
                     <!-- Community -->
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['community'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['community']) ? 1 : 0 }} }">
-                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['community'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors']) ? 1 : 0 }} }">
+                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['community'])){{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                         <path d="M12 1a1 1 0 1 0-2 0v2a3 3 0 0 0 3 3h2a1 1 0 1 0 0-2h-2a1 1 0 0 1-1-1V1ZM1 10a1 1 0 1 0 0 2h2a1 1 0 0 1 1 1v2a1 1 0 1 0 2 0v-2a3 3 0 0 0-3-3H1ZM5 0a1 1 0 0 1 1 1v2a3 3 0 0 1-3 3H1a1 1 0 0 1 0-2h2a1 1 0 0 0 1-1V1a1 1 0 0 1 1-1ZM12 13a1 1 0 0 1 1-1h2a1 1 0 1 0 0-2h-2a3 3 0 0 0-3 3v2a1 1 0 1 0 2 0v-2Z" />
                                     </svg>
                                     <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">System Configuration</span>
                                 </div>
                                 <!-- Icon -->
                                 <div class="flex shrink-0 ml-2 mr-2  lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(in_array(Request::segment(1), ['community'])){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors'])){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
                                         <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                     </svg>
                                 </div>
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['community'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
+                            <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','actions','actors'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('targetgroup.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('targetgroup.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Target Groups</span>
