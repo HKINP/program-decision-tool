@@ -32,7 +32,7 @@
                         <input type="text" class="search-district form-input w-full p-2 border rounded-lg" placeholder="Search district...">
                     </div>
                     @foreach($province->districts as $district)
-                    <a href="{{ route('dataentry.create', ['did' => $district->id]) }}" class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 cursor-pointer ease-in-out duration-300">
+                    <a href="{{ route('steplist.create', ['did' => $district->id]) }}" class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 cursor-pointer ease-in-out duration-300">
                         <p class="text-center mt-2 text-sm font-semibold">{{ $district->district }}</p>
                     </a>
                     @endforeach

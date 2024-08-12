@@ -45,7 +45,7 @@ class Indicators extends Model
 
     public function provinceProfiles()
     {
-        return $this->hasMany(ProvinceProfile::class);
+        return $this->hasMany(ProvinceProfile::class, 'indicator_id');
     }
 
     

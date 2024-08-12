@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('actors', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('ir_id')->unsigned();
             $table->integer('parent_id')->unsigned()->nullable();
-            $table->string('actors');
+            $table->string('activities');
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();
 
-            $table->foreign('parent_id')->references('id')->on('actors');
+            $table->foreign('parent_id')->references('id')->on('activities');
             $table->foreign('updated_by')->references('id')->on('users');
         });
     }

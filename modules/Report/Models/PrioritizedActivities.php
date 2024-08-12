@@ -2,18 +2,20 @@
 
 namespace Modules\Report\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Configuration\Models\District;
+use Modules\Configuration\Models\Indicators;
+use Modules\Configuration\Models\Platforms;
 use Modules\Configuration\Models\Province;
 use Modules\Configuration\Models\Question;
 use Modules\Configuration\Models\TargetGroup;
 use Modules\Configuration\Models\ThematicArea;
 
-class Priority extends Model
+class PrioritizedActivities extends Model
 {
     use ModelEventLogger, UpdatedBy, SoftDeletes;
     
@@ -22,7 +24,7 @@ class Priority extends Model
      *
      * @var string
      */
-    protected $table = 'priorities';
+    protected $table = 'prioritized_activities';
 
     /**
      * The attributes that are mass assignable.
@@ -32,12 +34,14 @@ class Priority extends Model
     protected $fillable = [
         'province_id',
         'district_id',
-        'lgid',
+        'stage_id',
         'target_group_id',
         'thematic_area_id',
-        'question_id',
-        'priority',
-        'updated_by'
+        'indicator_id',
+        'platforms_id',
+        'proposed_activities',
+        'targeted_for',
+        'remarks',
     ];
 
     /**
@@ -56,7 +60,6 @@ class Priority extends Model
     {
         return $this->belongsTo(District::class);
     }
-
     public function targetGroup()
     {
         return $this->belongsTo(TargetGroup::class);
@@ -67,9 +70,13 @@ class Priority extends Model
         return $this->belongsTo(ThematicArea::class);
     }
 
-    public function question()
+    public function indicator()
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Indicators::class);
+    }
+    public function platforms()
+    {
+        return $this->belongsTo(Platforms::class);
     }
 
 }

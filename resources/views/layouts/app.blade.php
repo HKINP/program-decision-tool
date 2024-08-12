@@ -72,6 +72,8 @@
             <!-- Success message display -->
             <x-success-message :message="session('success')" />
             <x-validation-errors class="mt-4 mx-8" />
+            <x-error-message :message="session('error')" />
+
             <main class="grow">
                 <div class="container mx-auto py-4">
                     <!-- Error Alert Section -->

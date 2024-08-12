@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
 
-class Actions extends Model
+class Activities extends Model
 {
     use ModelEventLogger, UpdatedBy,SoftDeletes;
     
@@ -17,14 +17,14 @@ class Actions extends Model
      *
      * @var string
      */
-    protected $table = 'actions';
+    protected $table = 'activities';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'actions'];
+    protected $fillable = ['ir_id','parent_id', 'activities'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -35,7 +35,7 @@ class Actions extends Model
 
     public function parents()
     {
-        return $this->belongsTo(Actions::class, 'parent_id');
+        return $this->belongsTo(Activities::class, 'parent_id');
     }
    
 }

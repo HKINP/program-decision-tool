@@ -10,7 +10,9 @@ use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Configuration\Repositories\TagsRepository;
 use Modules\Configuration\Repositories\TargetGroupRepository;
+use Modules\Report\Models\DistrictVulnerability;
 use Modules\Report\Repositories\PriorityRepository;
+use Modules\Report\Repositories\StepRemarksRepository;
 use Modules\Report\Requests\Priority\StoreRequest;
 use Modules\Report\Requests\Priority\UpdateRequest;
 
@@ -22,7 +24,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags,$locallevel;
+    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags, $locallevel, $vulnerability, $stepRemarks;
 
 
     public function __construct(
@@ -31,8 +33,9 @@ class PriorityController extends Controller
         ProvinceRepository $provinces,
         PriorityRepository $priorities,
         QuestionRepository $questions,
-        TargetGroupRepository $targetgroups,
         LocalLevelRepository $locallevel,
+        DistrictVulnerability $vulnerability,
+        StepRemarksRepository  $stepRemarks,
 
     ) {
         $this->districts = $districts;
@@ -40,6 +43,8 @@ class PriorityController extends Controller
         $this->priorities = $priorities;
         $this->questions = $questions;
         $this->locallevel = $locallevel;
+        $this->vulnerability = $vulnerability;
+        $this-> stepRemarks = $stepRemarks;
     }
 
     /**
@@ -52,55 +57,75 @@ class PriorityController extends Controller
     {
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
-            $lgid=$this->locallevel->where('district_id','=',$did);
             $stageId = $request->query('stageId');
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
-            // $locallevel=$this->locallevel->where('district_id', '=', $did)->get();
-
-            return view('Report::DistrictContext.create')
-            ->withDistrictprofile($districtprofile);
-
+            $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
             
 
+            return view('Report::DistrictContext.create')
+                ->withLocallevel($locallevel)
+                ->withDistrictprofile($districtprofile);
         }
-       
+
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
             $did = $request->query('did');
             $stageId = $request->query('stageId');
 
+            $prioritystatus = $this->priorities->where('district_id', '=', $did)->exists();
+            $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
+
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
-
-            // Fetch priorities with associated relationships
-            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
-                ->where('district_id', '=', $did)
-                ->get();
-
-            // Fetch target groups
-            $targetgroups = $this->targetgroups->get();
+            $districtVulnerability = $this->vulnerability->where('district_id', $did)->get();
+            $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
+            $province_id = $districtprofile->province->id;
 
             // Fetch questions
-            $questions = $this->questions->with(['stage', 'thematicArea', 'tag', 'targetGroup'])
-                ->where('stage_id', '=', $stageId)
-                ->get();
+            $questions = $this->questions->with([
+                'thematicArea',
+                'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
+                    $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
+                        $query->where('province_id', $province_id);
+                    }]);
+                },
+                'targetGroup'
+            ])->get();
 
-            // Attach colors and recommendations to priorities
-            foreach ($priorities as $priority) {
-                $questionId = $priority->question_id;
-                $responseAll = $priority->response_all;
-                $responseUnderserved = $priority->response_underserved;
+            if ($prioritystatus) {
+                // Fetch priorities with associated relationships
+                $priorities = $this->priorities->with([
+                    'thematicArea',
+                    'targetGroup',
+                    'question' => function ($query) use ($province_id) {
+                        $query->with([
+                            'indicator' => function ($query) use ($province_id) {
+                                $query->with(['provinceProfiles' => function ($query) use ($province_id) {
+                                    $query->where('province_id', $province_id);
+                                }]);
+                            }
+                        ]);
+                    }
+                ])
+                    ->where('district_id', '=', $did)
+                    ->get();
 
-                $priority->color_all = $this->questions->getColor($questionId, $responseAll);
-                $priority->color_underserved = $this->questions->getColor($questionId, $responseUnderserved);
+                // Return view response if $prioritystatus is not true
+                return view('Report::Priorities.index')
+                    ->withDistrictprofile($districtprofile)
+                    ->withDistrictVulnerability($districtVulnerability)
+                    ->withLocallevel($locallevel)
+                    ->withQuestions($questions)
+                    ->withStepRemarks($stepRemarks)
+                    ->withPriorities($priorities);
             }
-
             // Return the view with additional data
             return view('Report::Priorities.create')
                 ->withDistrictprofile($districtprofile)
-                ->withQuestions($questions)
-                ->withTargetgroups($targetgroups)
-                ->withPriorities($priorities);
+                ->withDistrictVulnerability($districtVulnerability)
+                ->withLocallevel($locallevel)
+                ->withStepRemarks($stepRemarks)
+                ->withQuestions($questions);
         } elseif (
             $request->has('did') && $request->input('did') != '' &&
             $request->has('stageId') && $request->input('stageId') == 2
@@ -128,10 +153,10 @@ class PriorityController extends Controller
 
             // Ensure $tagIds is a collection of unique tag IDs
             $tagIds = $questions->pluck('tag.id')->unique()->toArray();
-           
-            
+
+
             // Retrieve tags that match the extracted IDs
-           
+
             dd($tagIds);
 
             // Attach colors and recommendations to priorities
@@ -183,9 +208,14 @@ class PriorityController extends Controller
         $targetGroups = $data['target_group_id'];
         $thematicAreas = $data['thematic_area_id'];
         $questions = $data['question_id'];
-        $responsesAll = $data['response_all'];
-        $responsesUnderserved = $data['response_underserved'];
         $priorities = $data['priority'];
+
+        $remarks = $this->stepRemarks->create([
+            'district_id' => $data['district_id'], 
+            'notes' => $data['notes'],
+            'province_id' => $data['province_id'],
+            'stage_id' => 2
+        ]);
 
         for ($i = 0; $i < count($targetGroups); $i++) {
             $inputs = [
@@ -194,8 +224,6 @@ class PriorityController extends Controller
                 'target_group_id' => $targetGroups[$i],
                 'thematic_area_id' => $thematicAreas[$i],
                 'question_id' => $questions[$i],
-                'response_all' => $responsesAll[$i],
-                'response_underserved' => $responsesUnderserved[$i],
                 'priority' => $priorities[$i],
             ];
 
@@ -247,16 +275,33 @@ class PriorityController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
+        // Retrieve the priority being updated
+        $priorityToUpdate = $this->priorities->find($id);
 
+
+        // Count the number of priorities with the same district_id
+        $priorityCount = $this->priorities
+            ->where('district_id', '=', $priorityToUpdate->district_id)
+            ->where('priority', '=', 1)
+            ->count();
+
+
+
+        // Check if the number of priorities is less than or equal to five
+        if ($request->input('priority') == 1 && $priorityCount >= 5) {
+            // Redirect back with an error message
+            return redirect()->back()->with('error', 'The number of priorities for this district exceeds the limit of five.');
+        }
+
+        // Proceed with the update
         $priorities = $this->priorities->update($id, $request->except('id'));
 
         if ($priorities) {
             return redirect()->back()->with('success', 'Priorities Updated successfully!');
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Priorities can not be updated.'
-        ], 422);
+
+        // If update fails, redirect back with an error message
+        return redirect()->back()->with('error', 'Priorities cannot be updated.');
     }
 
     /**

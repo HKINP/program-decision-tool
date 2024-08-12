@@ -15,6 +15,8 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('province_id')->unsigned();
             $table->string('district');            
+            $table->integer('vulnerable_municipality')->nullable();            
+            $table->string('ecological_zone')->nullable();            
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();

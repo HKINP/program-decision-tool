@@ -44,10 +44,10 @@ class ProvinceProfile extends Model
     {
         return $this->belongsTo(Province::class);
     }
-
     public function indicator()
     {
-        return $this->belongsTo(Indicators::class);
+        return $this->belongsTo(Indicators::class, 'indicator_id');
     }
+    
    
 }

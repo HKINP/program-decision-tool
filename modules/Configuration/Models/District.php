@@ -28,6 +28,8 @@ class District extends Model
         'province_id',
         'district',
         'updated_by',
+        'vulnerable_municpality',
+        'ecological_zone',
     ];
 
 
@@ -45,5 +47,9 @@ class District extends Model
     public function districtProfiles()
     {
         return $this->hasMany(DistrictProfile::class);
+    }
+    public function locallevel()
+    {
+        return $this->hasMany(LocalLevel::class);
     }
 }

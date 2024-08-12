@@ -13,22 +13,15 @@ class StoreRequest extends FormRequest
 
     public function rules()
     {
-   
+     
         return [
-            'province_id' => 'required|integer',
-            'district_id' => 'required|integer',
-            'target_group_id' => 'required|array',
-            'target_group_id.*' => 'integer',
-            'thematic_area_id' => 'required|array',
-            'thematic_area_id.*' => 'integer',
-            'question_id' => 'required|array',
-            'question_id.*' => 'integer',
-            'response_all' => 'required|array',
-            'response_all.*' => 'integer',
-            'response_underserved' => 'required|array',
-            'response_underserved.*' => 'integer',
-            'priority' => 'required|array',
-            'priority.*' => 'integer',
+           
+            'province_id.*' => 'required|integer|exists:provinces,id',
+            'district_id.*' => 'required|integer|exists:districts,id',
+            'question_id.*' => 'required|integer|exists:questions,id',
+            'target_group_id.*' => 'required|integer|exists:target_groups,id',
+            'thematic_area_id.*' => 'required|integer|exists:thematic_areas,id',
+            'priority.*' => 'nullable|integer', 
         ];
     }
 }
