@@ -76,14 +76,14 @@ class PrioritizedActivitiesController extends Controller
 
             // Fetch additional data
             $stepRemarks = $this->stepRemarks
-                ->where('district_id','=', $did)
+                ->where('district_id', '=', $did)
                 ->where('stage_id', $stageId)
                 ->first();
             $districtprofile = $this->districts
                 ->with(['province', 'locallevel'])
                 ->find($did);
             $districtVulnerability = $this->vulnerability
-                ->where('district_id','=', $did)
+                ->where('district_id', '=', $did)
                 ->get();
 
             // Return the view with data
@@ -172,7 +172,7 @@ class PrioritizedActivitiesController extends Controller
 
 
         for ($i = 0; $i < count($data['proposed_activities']); $i++) {
-           
+
             $inputs = [
                 'province_id' => $data['province_id'],
                 'district_id' => $data['district_id'],
@@ -193,79 +193,32 @@ class PrioritizedActivitiesController extends Controller
         return redirect()->route('prioritizedActivities.index', ['stageId' => $stageid, 'did' => $did])
             ->with('success', 'Activities added successfully!');
     }
-
-    /**
-     * Display the specified account head.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function compiledReport(Request $request)
     {
-        $District = $this->districts->find($id);
-        return response()->json(['status' => 'ok', 'district' => $district], 200);
-    }
+        if ($request->has('did')) {
+            $did = $request->query('did');
+            $prioritizedActivities = $this->prioritizedactivities
+            ->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
+            ->where('district_id', $did)
+            ->get();
+        
+        // Group activities by stage_id
+        $groupedByStage = $prioritizedActivities->groupBy('stage_id');
+        
+        // Further group each stage's activities by targeted_for
+        $structuredData = $groupedByStage->map(function ($activities) {
+            return $activities->groupBy('targeted_for');
+        });
 
-    /**
-     * Show the form for editing the specified account head.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function edit($id)
-    {
-        // $this->authorize('manage-account-code');
-        $provinces = $this->provinces->all()->mapWithKeys(function ($province) {
-            return [$province->id => $province->province];
-        })->toArray();
-
-        return view('Configuration::District.edit')
-            ->withDistrict($this->districts->find($id))
-            ->withProvinces($provinces);
-    }
-
-    /**
-     * Update the specified account head in storage.
-     *
-     * @param  \Modules\Configuration\Requests\District\UpdateRequest $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function update(UpdateRequest $request, $id)
-    {
-        // $this->authorize('manage-account-code');
-
-
-        $District = $this->districts->update($id, $request->except('id'));
-
-        if ($District) {
-            return redirect()->route('district.index')->with('success', 'District Updated successfully!');
+        // return response()->json(['status'=>'ads','data'=>$structuredData], 200);
+        
+        $districtprofile = $this->districts
+                ->with(['province', 'locallevel'])
+                ->find($did);
+      
+            return view('Report::Compiled.district')
+                ->withDistrictprofile($districtprofile)
+                ->withActivities($structuredData);
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Account Code can not be updated.'
-        ], 422);
-    }
-
-    /**
-     * Remove the specified account head from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function destroy($id)
-    {
-        // $this->authorize('manage-account-code');
-        $flag = $this->districts->destroy($id);
-        if ($flag) {
-            return redirect()->route('district.index')->with('success', 'District is successfully deleted.');
-        }
-        return response()->json([
-            'type' => 'error',
-            'message' => 'District can not deleted.',
-        ], 422);
     }
 }

@@ -70,11 +70,12 @@ class DashboardController extends Controller
                     $this->getStageInfo($stage->id, $did) // Get route and tick status
                 );
             });
+     
             return view('pages/dashboard/toolscreate')
                 ->withStageInfo($stageInfo)
                 ->withDistrictID($did);
         }
-        
+
         $provinces = $this->provinces->with(['districts'])->get();
         // $this->authorize('manage-account-code');
         return view('pages/dashboard/dataentry')
@@ -84,17 +85,16 @@ class DashboardController extends Controller
     public function stages(Request $request)
     {
 
-        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) 
-        {
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
             $did = $request->query('did');
-            $datastatus=$this->getStatuses($did);
-           
-            
+            $datastatus = $this->getStatuses($did);
+
+
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 1)->first();
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);            
-            
-            if ($datastatus['districtvulnerability']==1) {
-                return redirect()->route('districtvulnerability.index', ['stageId' => 1, 'did' => $did]); 
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+
+            if ($datastatus['districtvulnerability'] == 1) {
+                return redirect()->route('districtvulnerability.index', ['stageId' => 1, 'did' => $did]);
             }
             return view('Report::DistrictContext.create')
                 ->withDistrictprofile($districtprofile);
@@ -105,13 +105,13 @@ class DashboardController extends Controller
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
 
             $did = $request->query('did');
-            $datastatus=$this->getStatuses($did);
+            $datastatus = $this->getStatuses($did);
 
-            if($datastatus['prioritystatus']==1){
+            if ($datastatus['prioritystatus'] == 1) {
                 return redirect()->route('priority.index', ['stageId' => 2, 'did' => $did]);
             }
-        
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
             // Check if district_vulnerability is empty
             if ($districtVulnerability->isEmpty()) {
@@ -138,28 +138,22 @@ class DashboardController extends Controller
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withQuestions($questions);
-
-
-        } 
-
-
-
-        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
+        } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
 
             $did = $request->query('did');
-            $stageId = $request->query('stageId');            
-            $datastatus=$this->getStatuses($did);
-          
-            if($datastatus['prioritystatus']==0){
-                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
-                ->with('error', 'Prioritization steps is incomplete');
+            $stageId = $request->query('stageId');
+            $datastatus = $this->getStatuses($did);
+
+            if ($datastatus['prioritystatus'] == 0) {
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did])
+                    ->with('error', 'Prioritization steps is incomplete');
             }
-            if($datastatus['ir1status']==1){
+            if ($datastatus['ir1status'] == 1) {
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
             // Fetch district profile
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
@@ -174,24 +168,22 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
-        } 
-
-        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
+        } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
 
             $did = $request->query('did');
-            $stageId = $request->query('stageId');            
-            $datastatus=$this->getStatuses($did);
-          
-            if($datastatus['prioritystatus']==0){
-                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
-                ->with('error', 'Prioritization steps is incomplete');
+            $stageId = $request->query('stageId');
+            $datastatus = $this->getStatuses($did);
+
+            if ($datastatus['prioritystatus'] == 0) {
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did])
+                    ->with('error', 'Prioritization steps is incomplete');
             }
-            if($datastatus['ir2status']==1){
+            if ($datastatus['ir2status'] == 1) {
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
             // Fetch district profile
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
@@ -206,23 +198,22 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
-        }
-        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 5) {
+        } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 5) {
 
             $did = $request->query('did');
-            $stageId = $request->query('stageId');            
-            $datastatus=$this->getStatuses($did);
-          
-            if($datastatus['prioritystatus']==0){
-                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
-                ->with('error', 'Prioritization steps is incomplete');
+            $stageId = $request->query('stageId');
+            $datastatus = $this->getStatuses($did);
+
+            if ($datastatus['prioritystatus'] == 0) {
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did])
+                    ->with('error', 'Prioritization steps is incomplete');
             }
-            if($datastatus['ir3status']==1){
+            if ($datastatus['ir3status'] == 1) {
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
             // Fetch district profile
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
@@ -237,20 +228,19 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
-        }
-        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 6) {
+        } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 6) {
 
             $did = $request->query('did');
-            $stageId = $request->query('stageId');            
-            $datastatus=$this->getStatuses($did);
-          
-            
-            if($datastatus['ir4status']==1){
+            $stageId = $request->query('stageId');
+            $datastatus = $this->getStatuses($did);
+
+
+            if ($datastatus['ir4status'] == 1) {
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
             // Fetch district profile
-            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
@@ -265,6 +255,20 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
+        } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 7) {
+
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');
+            $datastatus = $this->getStatuses($did);
+
+            $allStatusesAreOne = array_reduce($datastatus, fn($carry, $status) => $carry && $status === 1, true);
+
+            if ($allStatusesAreOne) {
+                return redirect()->route('compiledreport.district', ['did' => $did]);
+            } else {
+                return redirect()->route('steplist.create', ['did' => $did])
+                    ->with('error', "Compiled Report generation failed. Please complete all data entry steps.");
+            }
         }
     }
 }

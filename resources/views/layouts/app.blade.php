@@ -71,11 +71,11 @@
             <x-app.header :variant="$attributes['headerVariant']" />
             <!-- Success message display -->
             <x-success-message :message="session('success')" />
-            <x-validation-errors class="mt-4 mx-8" />
+            <x-validation-errors class="mt-4" />
             <x-error-message :message="session('error')" />
 
             <main class="grow">
-                <div class="mx-8 py-4">
+                <div class="mx-8">
                     <!-- Error Alert Section -->
                     
                     {{ $slot }}

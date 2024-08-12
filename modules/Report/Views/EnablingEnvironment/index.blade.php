@@ -5,7 +5,7 @@
             <div class="flex justify-between">
                 <!-- Step 1 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
-                    <a href="{{ route('prioritizedActivities.index', ['stageId' => 4, 'did' => $districtprofile->id]) }}"
+                    <a href="{{ route('prioritizedActivities.index', ['stageId' => 5, 'did' => $districtprofile->id]) }}"
                         class="bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-400 transition duration-300">
                         <div class="w-1/3 bg-transparent flex items-center justify-center icon-step">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
@@ -17,8 +17,8 @@
                         </div>
                         <div
                             class="w-2/3 bg-gray-200 h-16 flex flex-col items-center justify-center px-1 rounded-r-lg body-step">
-                            <h2 class="font-bold text-sm">Step 4</h2>
-                            <p class="text-xs text-gray-600">Health and Nutrition Service Activities </p>
+                            <h2 class="font-bold text-sm">Step 5</h2>
+                            <p class="text-xs text-gray-600">Food Systems Activities </p>
                         </div>
                     </a>
                 </div>
@@ -27,7 +27,7 @@
 
                 <!-- Step 3 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
-                    <a href="{{ route('dataentrystage.create', ['stageId' => 6, 'did' => $districtprofile->id]) }}"
+                    <a href="{{ route('dataentrystage.create', ['stageId' => 7, 'did' => $districtprofile->id]) }}"
                         class="bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-400 transition duration-300">
                         <div class="w-1/3 bg-transparent  flex items-center justify-center icon-step">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
@@ -39,8 +39,8 @@
                         </div>
                         <div
                             class="w-2/3 bg-gray-200 h-16 flex flex-col items-center justify-center px-1 rounded-r-lg body-step">
-                            <h2 class="font-bold text-sm">Step 6.</h2>
-                            <p class="text-xs text-gray-600">Enabling Environment Activities</p>
+                            <h2 class="font-bold text-sm">Step 7.</h2>
+                            <p class="text-xs text-gray-600">Compiled Workplan</p>
                         </div>
                     </a>
                 </div>
@@ -49,7 +49,7 @@
         </div>
           <!-- Heading and Edit Button -->
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold">Step 5. Food Systems Activities  </h2>
+            <h2 class="text-lg font-bold">Step 6. Enabling Environment Activities </h2>
             <a href="http://localhost:8000/thematicarea/edit"
                 class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
                 <i class="fas fa-edit"></i>
@@ -233,11 +233,9 @@
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
                         <tr>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Target Group</th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Thematic Area</th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Questions</th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Delivery Platforms</th>
+                 
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Activities for Year 1</th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Delivery Platforms</th>
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Notes</th>
                         </tr>
                     </thead>
@@ -247,11 +245,9 @@
                         </tr>
                         @foreach ($allActivities as $activity)
                             <tr>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->targetGroup->target_group }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->thematicArea->thematic_area }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
+                               
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
                             </tr>
                         @endforeach
@@ -263,10 +259,7 @@
                         </tr>
                         @foreach ($vulnerableActivities as $activity)
                             <tr>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->targetGroup->target_group }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->thematicArea->thematic_area }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
+                                border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
                             </tr>

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->Integer('province_id')->unsigned();
             $table->Integer('district_id')->unsigned();
             $table->Integer('stage_id')->unsigned();
-            $table->Integer('target_group_id')->unsigned();
-            $table->Integer('thematic_area_id')->unsigned();
-            $table->Integer('indicator_id')->unsigned();
+            $table->Integer('target_group_id')->unsigned()->nullable();
+            $table->Integer('thematic_area_id')->unsigned()->nullable();
+            $table->Integer('indicator_id')->unsigned()->nullable();
             $table->Integer('platforms_id')->unsigned();
             $table->text('proposed_activities');
             $table->string('targeted_for');
