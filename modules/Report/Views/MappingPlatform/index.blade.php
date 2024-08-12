@@ -36,7 +36,7 @@
                         </div>
                         @foreach ($province->districts as $district)
                             <a
-                                href=" <a href="{{ route('dataentry.create', ['did' => $district->id, 'stageId' => 0]) }}" 
+                                href=" <a href="{{ route('steplist.create', ['did' => $district->id, 'stageId' => 0]) }}" 
                             
                             class="district bg-gray-100 border rounded-lg p-10 justify-center items-center flex flex-col gap-y-2 hover:bg-blue-300 hover:shadow-lg transition duration-300 ease-in-out cursor-pointer">
                             <p class="text-center mt-2 text-sm font-semibold">{{ $district->district }}</p>

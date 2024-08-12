@@ -12,6 +12,7 @@ use Modules\Configuration\Repositories\TagsRepository;
 use Modules\Configuration\Repositories\TargetGroupRepository;
 use Modules\Report\Models\DistrictVulnerability;
 use Modules\Report\Repositories\PriorityRepository;
+use Modules\Report\Repositories\StepRemarksRepository;
 use Modules\Report\Requests\Priority\StoreRequest;
 use Modules\Report\Requests\Priority\UpdateRequest;
 
@@ -23,7 +24,7 @@ class PriorityController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags, $locallevel, $vulnerability;
+    protected $districts, $provinces, $priorities, $questions, $thematicgroups, $tags, $locallevel, $vulnerability, $stepRemarks;
 
 
     public function __construct(
@@ -34,6 +35,7 @@ class PriorityController extends Controller
         QuestionRepository $questions,
         LocalLevelRepository $locallevel,
         DistrictVulnerability $vulnerability,
+        StepRemarksRepository  $stepRemarks,
 
     ) {
         $this->districts = $districts;
@@ -42,6 +44,7 @@ class PriorityController extends Controller
         $this->questions = $questions;
         $this->locallevel = $locallevel;
         $this->vulnerability = $vulnerability;
+        $this-> stepRemarks = $stepRemarks;
     }
 
     /**
@@ -58,6 +61,7 @@ class PriorityController extends Controller
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
             $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
+            
 
             return view('Report::DistrictContext.create')
                 ->withLocallevel($locallevel)
@@ -69,7 +73,7 @@ class PriorityController extends Controller
             $stageId = $request->query('stageId');
 
             $prioritystatus = $this->priorities->where('district_id', '=', $did)->exists();
-
+            $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
 
             // Fetch district profile
             $districtprofile = $this->districts->with(['province'])->find($did);
@@ -112,6 +116,7 @@ class PriorityController extends Controller
                     ->withDistrictVulnerability($districtVulnerability)
                     ->withLocallevel($locallevel)
                     ->withQuestions($questions)
+                    ->withStepRemarks($stepRemarks)
                     ->withPriorities($priorities);
             }
             // Return the view with additional data
@@ -119,6 +124,7 @@ class PriorityController extends Controller
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withLocallevel($locallevel)
+                ->withStepRemarks($stepRemarks)
                 ->withQuestions($questions);
         } elseif (
             $request->has('did') && $request->input('did') != '' &&
@@ -204,6 +210,13 @@ class PriorityController extends Controller
         $questions = $data['question_id'];
         $priorities = $data['priority'];
 
+        $remarks = $this->stepRemarks->create([
+            'district_id' => $data['district_id'], 
+            'notes' => $data['notes'],
+            'province_id' => $data['province_id'],
+            'stage_id' => 2
+        ]);
+
         for ($i = 0; $i < count($targetGroups); $i++) {
             $inputs = [
                 'province_id' => $data['province_id'],
@@ -264,18 +277,18 @@ class PriorityController extends Controller
     {
         // Retrieve the priority being updated
         $priorityToUpdate = $this->priorities->find($id);
-        
+
 
         // Count the number of priorities with the same district_id
         $priorityCount = $this->priorities
-        ->where('district_id','=', $priorityToUpdate->district_id)
-        ->where('priority','=',1)
-        ->count();
-       
-       
+            ->where('district_id', '=', $priorityToUpdate->district_id)
+            ->where('priority', '=', 1)
+            ->count();
+
+
 
         // Check if the number of priorities is less than or equal to five
-        if ($request->input('priority')==1 && $priorityCount >= 5) {
+        if ($request->input('priority') == 1 && $priorityCount >= 5) {
             // Redirect back with an error message
             return redirect()->back()->with('error', 'The number of priorities for this district exceeds the limit of five.');
         }

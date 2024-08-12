@@ -10,16 +10,22 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
             @foreach ($stages as $index => $stage)
+           
                 @php
                    if($districtvulnerability && $stage->id == 1){
                     $showTick = ($stage->id == 1) && $districtvulnerability;
                     $route = route('districtvulnerability.index', ['stageId' => $stage->id, 'did' => $districtID]);
                    }
+                   elseif($prioritystatus && $stage->id == 2){
+                    $showTick = ($stage->id == 2) && $prioritystatus;
+                    $route = route('priority.index', ['stageId' => $stage->id, 'did' => $districtID]);
+                   }
                    else
                    {
-                    $route = route('priority.index', ['stageId' => $stage->id, 'did' => $districtID]);
+                    $route = route('dataentrystage.create', ['stageId' => $stage->id, 'did' => $districtID]);
                     $showTick = '' ;
-                   }                    
+                   }  
+                                     
                     
                 @endphp
                 <a href="{{ $route }}" class="border bg-white border-[#D8DAE5] rounded-lg divide-y divide-solid block hover:bg-blue-100 hover:shadow-lg transition duration-300 ease-in-out">

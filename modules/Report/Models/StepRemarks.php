@@ -1,23 +1,25 @@
 <?php
 
-namespace Modules\Configuration\Models;
+namespace Modules\Report\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
+use Modules\Configuration\Models\District;
+use Modules\Configuration\Models\Province;
 
-class District extends Model
+class StepRemarks extends Model
 {
-    use ModelEventLogger, UpdatedBy,SoftDeletes;
+    use ModelEventLogger, UpdatedBy, SoftDeletes;
     
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'districts';
+    protected $table = 'steps_remarks';
 
     /**
      * The attributes that are mass assignable.
@@ -26,10 +28,11 @@ class District extends Model
      */
     protected $fillable = [
         'province_id',
-        'district',
+        'district_id',
+        'stage_id',
+        'notes',
+        'key_barriers',
         'updated_by',
-        'vulnerable_municpality',
-        'ecological_zone',
     ];
 
 
@@ -44,12 +47,10 @@ class District extends Model
     {
         return $this->belongsTo(Province::class);
     }
-    public function districtProfiles()
+
+    public function district()
     {
-        return $this->hasMany(DistrictProfile::class);
+        return $this->belongsTo(District::class);
     }
-    public function locallevel()
-    {
-        return $this->hasMany(LocalLevel::class);
-    }
+
 }

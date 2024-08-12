@@ -180,12 +180,14 @@
                 </table>
         </div>
 
+        <form action="{{ route('priority.store') }}" method="POST">
+            @csrf
+            <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
+            <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+        
   
         <div class="overflow-x-auto mt-6">
-            <form action="{{ route('priority.store') }}" method="POST">
-                @csrf
-                <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
-                <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+            
                 <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80%</p>
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
@@ -243,9 +245,21 @@
                     </tbody>
                 </table>
 
-                <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Subssmit</button>
-            </form>
+               
         </div>
+        <div class="bg-white p-4 rounded-lg w-full mb-4 mt-6">
+            <div class="flex gap-2 items-center mb-4">
+                <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">06</p>
+                <p class="font-semibold text-md text-blue-600">Notes</p>
+            </div>
+    
+            <div class="space-y-2 text-xs italic">
+                <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
+                
+            </div>
+        </div>
+        <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
     </div>
-
+   
+</form>
 </x-app-layout>

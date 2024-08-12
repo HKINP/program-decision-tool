@@ -4,11 +4,11 @@ namespace Modules\Configuration\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\Configuration\Repositories\ActionsRepository;
-use Modules\Configuration\Requests\Actions\StoreRequest;
-use Modules\Configuration\Requests\Actions\UpdateRequest;
+use Modules\Configuration\Repositories\ActivitiesRepository;
+use Modules\Configuration\Requests\Activities\StoreRequest;
+use Modules\Configuration\Requests\Activities\UpdateRequest;
 
-class ActionsController extends Controller
+class ActivitiesController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -16,15 +16,15 @@ class ActionsController extends Controller
      * @param  PlatformsRepository $districts
      * @return void
      */
-    protected $actions;
+    protected $activities;
     
 
     public function __construct(
-        ActionsRepository $actions
+        ActivitiesRepository $activities
 
     )
     {
-        $this->actions = $actions;
+        $this->activities = $activities;
     }
     
     /**
@@ -35,10 +35,16 @@ class ActionsController extends Controller
      */
     public function index()
     {
-        
-       $actions=$this->actions->with(['parents'])->orderby('id', 'asc')->where('id','!=',1)->get();
-       return view('Configuration::Actions.index')
-            ->withActions($actions);
+       $ir=[
+        1=>'IR1. Activities',
+        2=>'IR2. Activities',
+        3=>'IR3. Activities',
+        4=>'IR4. Activities',        
+        ] ;
+       $activities=$this->activities->with(['parents'])->orderby('id', 'asc')->where('id','!=',1)->get();
+       return view('Configuration::Activities.index')
+            ->withIr($ir)
+            ->withActivities($activities);
     }
 
     /**
@@ -49,9 +55,17 @@ class ActionsController extends Controller
     public function create()
     {
         
-        $actions = $this->actions->all()->pluck('actors', 'id')->toArray();
-        return view('Configuration::Actions.create')
-        ->withActions($actions);
+        $activities = $this->activities->all()->pluck('activities', 'id')->toArray();
+        $ir=[
+            1=>'IR1. Activities',
+            2=>'IR2. Activities',
+            3=>'IR3. Activities',
+            4=>'IR4. Activities',
+            
+            ] ;
+        return view('Configuration::Activities.create')
+        ->withIr($ir)
+        ->withActivities($activities);
     }
 
     /**
@@ -64,9 +78,9 @@ class ActionsController extends Controller
     public function store(StoreRequest $request)
     {
         // $this->authorize('manage-account-code');
-        $actions = $this->actions->create($request->all());
-        if($actions){
-            return redirect()->route('actions.index')->with('success', 'Added platforms successfully!');
+        $activities = $this->activities->create($request->all());
+        if($activities){
+            return redirect()->route('activities.index')->with('success', 'Added Activities successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Platforms can not be added.'], 422);
@@ -80,8 +94,8 @@ class ActionsController extends Controller
      */
     public function show($id)
     {
-        $actions = $this->actions->find($id);
-        return response()->json(['status'=>'ok','actors'=>$actions], 200);
+        $activities = $this->activities->find($id);
+        return response()->json(['status'=>'ok','actors'=>$activities], 200);
     }
 
     /**
@@ -94,10 +108,18 @@ class ActionsController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $actions = $this->actions->all()->pluck('actors', 'id')->toArray();
-        return view('Configuration::Actions.edit')
-            ->withActions($this->actions->find($id))
-            ->withActionsList($actions);
+        $activities = $this->activities->all()->pluck('activities', 'id')->toArray();
+        $ir=[
+            1=>'IR1. Activities',
+            2=>'IR2. Activities',
+            3=>'IR3. Activities',
+            4=>'IR4. Activities',            
+            ];
+            
+        return view('Configuration::Activities.edit')
+            ->withActivities($this->activities->find($id))
+            ->withIr($ir)
+            ->withActivitiesList($activities);
     }
 
     /**
@@ -113,10 +135,10 @@ class ActionsController extends Controller
         // $this->authorize('manage-account-code');
      
         
-        $actions = $this->actions->update($id, $request->except('id'));
+        $activities = $this->activities->update($id, $request->except('id'));
        
-        if($actions){
-            return redirect()->route('actors.index')->with('success', 'Actors Updated successfully!');
+        if($activities){
+            return redirect()->route('activities.index')->with('success', 'Activities Updated successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Actors can not be updated.'], 422);
@@ -132,9 +154,9 @@ class ActionsController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->actions->destroy($id);
+        $flag = $this->activities->destroy($id);
         if($flag){
-            return redirect()->route('actors.index')->with('success', 'Actors is successfully deleted.');
+            return redirect()->route('activities.index')->with('success', 'Activities is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',

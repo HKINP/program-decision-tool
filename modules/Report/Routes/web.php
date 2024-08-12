@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Report\Controllers\DistrictVulnerabilityController;
+use Modules\Report\Controllers\PrioritizedActivitiesController;
 use Modules\Report\Controllers\PriorityController;
 
 /*
@@ -15,7 +16,9 @@ use Modules\Report\Controllers\PriorityController;
 |
 */
 
-Route::middleware(['web', 'auth', 'logger'])->group(function () {        
+Route::middleware(['web', 'auth', 'logger'])->group(function () {   
+           
         Route::resource('priority', PriorityController::class);
         Route::resource('districtvulnerability', DistrictVulnerabilityController::class);
+        Route::resource('prioritizedActivities', PrioritizedActivitiesController::class);
 });

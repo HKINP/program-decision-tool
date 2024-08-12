@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Configuration\Controllers\ActionsController;
+use Modules\Configuration\Controllers\ActivitiesController;
 use Modules\Configuration\Controllers\ActorsController;
 use Modules\Configuration\Controllers\DistrictController;
 use Modules\Configuration\Controllers\DistrictProfileController;
@@ -122,13 +122,13 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
 
 
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
-    Route::get('actions', [ActionsController::class, 'index'])->name('actions.index');
-    Route::get('actions/create', [ActionsController::class, 'create'])->name('actions.create');
-    Route::post('actions', [ActionsController::class, 'store'])->name('actions.store');
-    Route::get('actions/{actors}/edit', [ActionsController::class, 'edit'])->name('actions.edit');
-    Route::put('actions/{actors}', [ActionsController::class, 'update'])->name('actions.update');
-    Route::delete('actions/{actors}', [ActionsController::class, 'destroy'])->name('actions.destroy');
-    Route::get('actions/{actors}/view', [ActionsController::class, 'view'])->name('actions.view');
+    Route::get('activities', [ActivitiesController::class, 'index'])->name('activities.index');
+    Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
+    Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
+    Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
+    Route::put('activities/{actors}', [ActivitiesController::class, 'update'])->name('activities.update');
+    Route::delete('activities/{actors}', [ActivitiesController::class, 'destroy'])->name('activities.destroy');
+    Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');
     // });
 
 
