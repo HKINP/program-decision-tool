@@ -6,7 +6,7 @@
             <div class="flex justify-between">
                 <!-- Step 1 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
-                    <a href="{{ route('dataentrystage.create', ['stageId' => 1, 'did' => $districtprofile->id]) }}"
+                    <a href="{{ route('districtvulnerability.index', ['stageId' => 1, 'did' => $districtprofile->id]) }}"
                         class="bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-400 transition duration-300">
                         <div class="w-1/3 bg-transparent flex items-center justify-center icon-step">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
@@ -28,7 +28,13 @@
 
                 <!-- Step 3 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
-                    <a href="{{ route('dataentrystage.create', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
+                    <a
+                    @if ($ir1status) href="{{ route('prioritizedActivities.index', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
+                        @else
+                       href="{{ route('dataentrystage.create', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
+                            @endif
+                    
+                    
                         class="bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-400 transition duration-300">
                         <div class="w-1/3 bg-transparent  flex items-center justify-center icon-step">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
@@ -92,7 +98,7 @@
                     <label for="municipality-count"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of
                         Municipality</label>
-                    <input type="text" id="municipality-count" value="{{ count($locallevel) }}"
+                    <input type="text" id="municipality-count" value="{{ count($districtprofile->locallevel) }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="" required="">
                 </div>
