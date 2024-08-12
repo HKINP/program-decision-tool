@@ -70,7 +70,7 @@
                     <label for="municipality-count"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of
                         Municipality</label>
-                    <input type="text" id="municipality-count" value="{{ count($locallevel) }}"
+                    <input type="text" id="municipality-count" value="{{ count($districtprofile->locallevel) }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="" required="">
                 </div>
@@ -185,7 +185,7 @@
             </table>
         </div>
 
-        <form action="{{ route('priority.index') }}" method="post">
+        <form action="{{ route('prioritizedActivities.index') }}" method="post">
             @csrf
             <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
             <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
@@ -237,7 +237,7 @@
                                     <div class="flex flex-col w-full">
                                         <label for="activity-text-{{ $question->id }}-1"
                                             class="text-sm font-medium text-gray-700">Activity Details</label>
-                                        <textarea id="activity-text-{{ $question->id }}-1" name="activities[]" rows="3"
+                                        <textarea id="activity-text-{{ $question->id }}-1" name="proposed_activities[]" rows="3"
                                             class="block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="Write your activity details here..."></textarea>
                                     </div>
@@ -246,7 +246,7 @@
                                         <label for="targetted-for-option-{{ $question->id }}-1"
                                             class="text-sm font-medium text-gray-700">Targetted For</label>
                                         <select id="targetted-for-option-{{ $question->id }}-1"
-                                            name="targetted_for[]"
+                                            name="targeted_for[]"
                                             class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                                             <option value="all">All</option>
                                             <option value="vulnerable">Vulnerable</option>
@@ -257,7 +257,7 @@
                                         <label for="platform-option-{{ $question->id }}-1"
                                             class="text-sm font-medium text-gray-700">Platform</label>
                                         <select id="platform-option-{{ $question->id }}-1"
-                                            name="platform_id[]"
+                                            name="platforms_id[]"
                                             class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                                             <option value="">Select</option>
                                             @foreach ($platforms as $platform)
@@ -317,7 +317,7 @@
         <div class="flex items-center gap-4 mb-2">
             <div class="flex flex-col w-full">
                 <label for="activity-text-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Activity Details</label>
-                <textarea id="activity-text-${questionId}-${activityCount}" name="activities[]"
+                <textarea id="activity-text-${questionId}-${activityCount}" name="proposed_activities[]"
                     rows="3"
                     class="block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Write your activity details here..."></textarea>
@@ -325,7 +325,7 @@
             
             <div class="flex flex-col w-1/3">
                 <label for="targetted-for-option-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Targetted For</label>
-                <select id="targetted-for-option-${questionId}-${activityCount}" name="targetted_for[]"
+                <select id="targetted-for-option-${questionId}-${activityCount}" name="targeted_for[]"
                     class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                     <option value="all">All</option>
                     <option value="vulnerable">Vulnerable</option>
@@ -334,7 +334,7 @@
             
             <div class="flex flex-col w-1/3">
                 <label for="platform-option-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Platform</label>
-                <select id="platform-option-${questionId}-${activityCount}" name="platform_id[]"
+                <select id="platform-option-${questionId}-${activityCount}" name="platforms_id[]"
                     class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                     <option value="">Select</option>
                     @foreach ($platforms as $platform)

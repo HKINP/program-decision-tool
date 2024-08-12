@@ -12,15 +12,17 @@ use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\LocalLevelRepository;
 use Modules\Configuration\Repositories\PlatformsRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
+use Modules\Report\Repositories\PrioritizedActivitiesRepository;
 use Modules\Report\Repositories\StepRemarksRepository;
+use App\Traits\StageStatus;
 
 class DashboardController extends Controller
 {
 
     protected $districts, $stages, $provinces,
-     $priorities, $questions, $thematicgroups,
-      $tags, $locallevel, $vulnerability,$stepRemarks,$platforms;
-
+        $priorities, $questions, $thematicgroups,
+        $tags, $locallevel, $vulnerability, $stepRemarks, $platforms, $prioritizedActivities;
+    use StageStatus;
 
     public function __construct(
 
@@ -33,6 +35,7 @@ class DashboardController extends Controller
         QuestionRepository $questions,
         LocalLevelRepository $locallevel,
         StepRemarksRepository $stepRemarks,
+        PrioritizedActivitiesRepository $prioritizedActivities,
 
     ) {
         $this->provinces = $provinces;
@@ -44,6 +47,7 @@ class DashboardController extends Controller
         $this->vulnerability = $vulnerability;
         $this->stepRemarks = $stepRemarks;
         $this->platforms = $platforms;
+        $this->prioritizedActivities = $prioritizedActivities;
     }
 
     public function index()
@@ -59,16 +63,18 @@ class DashboardController extends Controller
         if ($request->has('did')) {
             $did = $request->query('did');
             $stages = $this->stages->get();
-            $districtvulnerability = $this->vulnerability->where('district_id', '=', $did)->exists();
-            $prioritystatus = $this->priorities->where('district_id', '=', $did)->exists();
+            // Retrieve stage information (route and tick) for each stage
+            $stageInfo = $stages->map(function ($stage) use ($did) {
+                return array_merge(
+                    ['stage' => $stage], // Include the stage object
+                    $this->getStageInfo($stage->id, $did) // Get route and tick status
+                );
+            });
             return view('pages/dashboard/toolscreate')
-                ->withDistrictvulnerability($districtvulnerability)
-                ->withPrioritystatus($prioritystatus)
-                ->withStages($stages)
+                ->withStageInfo($stageInfo)
                 ->withDistrictID($did);
         }
-
-
+        
         $provinces = $this->provinces->with(['districts'])->get();
         // $this->authorize('manage-account-code');
         return view('pages/dashboard/dataentry')
@@ -78,26 +84,19 @@ class DashboardController extends Controller
     public function stages(Request $request)
     {
 
-        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) {
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 1) 
+        {
             $did = $request->query('did');
-            $stageId = $request->query('stageId');
+            $datastatus=$this->getStatuses($did);
+           
             
-            // Fetch district profile
-            $districtvulnerabilitystatus = $this->vulnerability->where('district_id', '=', $did)->exists();
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 1)->first();
-            $districtprofile = $this->districts->with(['province'])->find($did);
-            $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
-            if ($districtvulnerabilitystatus) {
-
-            $districtVulnerability = $this->vulnerability->with(['locallevel'])->where('district_id', $did)->get();
-            return view('Report::DistrictContext.index')
-                ->withDistrictVulnerability($districtVulnerability)
-                ->withLocallevel($locallevel)
-                ->withStepRemarks($stepRemarks)
-                ->withDistrictprofile($districtprofile);
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);            
+            
+            if ($datastatus['districtvulnerability']==1) {
+                return redirect()->route('districtvulnerability.index', ['stageId' => 1, 'did' => $did]); 
             }
             return view('Report::DistrictContext.create')
-                ->withLocallevel($locallevel)
                 ->withDistrictprofile($districtprofile);
         }
 
@@ -106,12 +105,20 @@ class DashboardController extends Controller
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
 
             $did = $request->query('did');
-            $stageId = $request->query('stageId');
-            $prioritystatus = $this->priorities->where('district_id', '=', $did)->exists();
-            // Fetch district profile
-            $districtprofile = $this->districts->with(['province'])->find($did);
+            $datastatus=$this->getStatuses($did);
+
+            if($datastatus['prioritystatus']==1){
+                return redirect()->route('priority.index', ['stageId' => 2, 'did' => $did]);
+            }
+        
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
-            $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
+            // Check if district_vulnerability is empty
+            if ($districtVulnerability->isEmpty()) {
+                return redirect()->route('dataentrystage.create', ['stageId' => 1, 'did' => $did])
+                    ->with('error', 'District vulnerability data is missing.');
+            }
+
             $province_id = $districtprofile->province->id;
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
 
@@ -126,64 +133,80 @@ class DashboardController extends Controller
                 'targetGroup'
             ])->get();
 
-
-            if ($prioritystatus) {
-                // Fetch priorities with associated relationships
-                $priorities = $this->priorities->with([
-                    'thematicArea',
-                    'targetGroup',
-                    'question' => function ($query) use ($province_id) {
-                        $query->with([
-                            'indicator' => function ($query) use ($province_id) {
-                                $query->with(['provinceProfiles' => function ($query) use ($province_id) {
-                                    $query->where('province_id', $province_id);
-                                }]);
-                            }
-                        ]);
-                    }
-                ])
-                    ->where('district_id', '=', $did)
-                    ->get();
-
-                // Return view response if $prioritystatus is not true
-                return view('Report::Priorities.index')
-                    ->withDistrictprofile($districtprofile)
-                    ->withDistrictVulnerability($districtVulnerability)
-                    ->withLocallevel($locallevel)
-                    ->withQuestions($questions)
-                    ->withStepRemarks($stepRemarks)
-                    ->withPriorities($priorities);
-            }
             // Return the view with additional data
             return view('Report::Priorities.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
-                ->withLocallevel($locallevel)
                 ->withQuestions($questions);
-        } elseif (
-            $request->has('did') && $request->input('did') != '' &&
-            $request->has('stageId') && $request->input('stageId') == 3
-        ) {
+
+
+        } 
+
+
+
+        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
+
             $did = $request->query('did');
-            $stageId = $request->query('stageId');
+            $stageId = $request->query('stageId');            
+            $datastatus=$this->getStatuses($did);
+          
+            if($datastatus['prioritystatus']==0){
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
+                ->with('error', 'Prioritization steps is incomplete');
+            }
+            if($datastatus['ir1status']==1){
+                return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
+            }
+
             // Fetch district profile
-            $districtprofile = $this->districts->with(['province'])->find($did);
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
-            $platforms=$this->platforms->get();
-            $locallevel = $this->locallevel->where('district_id', '=', $did)->get();
+            $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
-                     // Return the view with additional data
+            // Return the view with additional data
             return view('Report::Sbc.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
-                ->withLocallevel($locallevel)
+                ->withPriorities($priorities);
+        } 
+
+        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
+
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');            
+            $datastatus=$this->getStatuses($did);
+          
+            if($datastatus['prioritystatus']==0){
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
+                ->with('error', 'Prioritization steps is incomplete');
+            }
+            if($datastatus['ir2status']==1){
+                return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
+            }
+
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            // Fetch priorities with associated relationships
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+                ->where('district_id', '=', $did)
+                ->where('priority', '=', 1)
+                ->get();
+            $platforms = $this->platforms->get();
+            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
+
+            // Return the view with additional data
+            return view('Report::HealthNutrition.create')
+                ->withDistrictprofile($districtprofile)
+                ->withDistrictVulnerability($districtVulnerability)
+                ->withPlatforms($platforms)
                 ->withPriorities($priorities);
         }
+       
     }
 }

@@ -1,15 +1,20 @@
 <x-app-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-        <div class=" p-4 rounded-lg w-full mb-5">
+    <div class="mb-8 rounded-lg w-full mb-5">
+    <div class="flex items-center gap-4 text-2xl">
+        <!-- First Arrow with Anchor Link -->
+        <a href="{{ route('steplist.create', ['did' => $districtprofile->id]) }}" class="border bg-white p-2 rounded-full ml-2 inline-flex items-center">
+            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path>
+            </svg>
+        </a>
+      
 
-            <div class="flex items-center gap-2 text-2xl p-4">
-                <div class="border bg-white p-2 rounded-full ml-2"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
-                        </path>
-                    </svg></div>
-                <p class="font-semibold text-[24px]">Step1. District Context</p>
-            </div>
-        </div>
+        <!-- Step Description -->
+        <p class="font-semibold text-[24px]">Step 1. District Context</p>
+    </div>
+</div>
+
         <div class="flex gap-4">
             <!-- Province Section -->
             <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
@@ -57,73 +62,73 @@
             <form action="{{ route('districtvulnerability.store') }}" method="POST">
                 @csrf
 
-            <div class="flex flex-wrap -mx-2">
-                <!-- Column 1 -->
-                <div class="w-1/3 px-2 mb-6">
-                    <label for="municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Municipality</label>
-                    <input type="text" id="municipality-count" value="{{count($locallevel)}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
-                </div>
-
-                <!-- Column 2 -->
-                <div class="w-1/3 px-2 mb-6">
-                    <label for="vulnerable-municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable Municipality</label>
-                    <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
+                <div class="flex flex-wrap -mx-2">
+                    <!-- Column 1 -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Municipality</label>
+                        <input type="text" id="municipality-count" value="{{count($districtprofile->locallevel)}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
                     </div>
 
-                <!-- Column 3 -->
-                <div class="w-1/3 px-2 mb-6">
-                    <label for="target-group" class="block text-sm font-medium text-gray-700">Ecological Zone</label>
-                    <select name="ecological_zone" required id="ecological_zone" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm edit-context target-group">
-                        <option value="">Select Ecolological Zone</option>                       
-                        <option value="Terai">Terai</option>
-                        <option value="Hill">Hill</option>
-                        <option value="Mountain">Mountain</option>
-                    </select>
+                    <!-- Column 2 -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="vulnerable-municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable Municipality</label>
+                        <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
+                    </div>
+
+                    <!-- Column 3 -->
+                    <div class="w-1/3 px-2 mb-6">
+                        <label for="target-group" class="block text-sm font-medium text-gray-700">Ecological Zone</label>
+                        <select name="ecological_zone" required id="ecological_zone" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm edit-context target-group">
+                            <option value="">Select Ecolological Zone</option>
+                            <option value="Terai">Terai</option>
+                            <option value="Hill">Hill</option>
+                            <option value="Mountain">Mountain</option>
+                        </select>
+                    </div>
+                    <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+                    <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
                 </div>
-                 <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
-                 <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
-            </div>
-           
+
 
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
-            <thead class="rounded-lg">
-                <tr>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Municipality
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Remote
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Caste/Ethnicity
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Geography (municipalities)
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Food insecurity
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Wealth
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Climatic Change
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Remark
-                    </th>
-                    <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                        Actions
-                    </th>
-                </tr>                      
-            </thead>
-            <tbody class="rounded-lg" id="priority-table-body">
-                <!-- Existing rows rendered by server-side logic -->
-            </tbody>
-        </table>
+                    <thead class="rounded-lg">
+                        <tr>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Municipality
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Remote
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Caste/Ethnicity
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Geography (municipalities)
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Food insecurity
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Wealth
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Climatic Change
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Remark
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="rounded-lg" id="priority-table-body">
+                        <!-- Existing rows rendered by server-side logic -->
+                    </tbody>
+                </table>
 
-        
-          
+
+
 
         </div>
         <div class="bg-white p-4 rounded-lg w-full mb-5">
@@ -134,18 +139,18 @@
 
             <div class="space-y-2 text-xs italic">
                 <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
-                
+
             </div>
         </div>
 
-             <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
-            </form>
+        <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
+        </form>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const vulnerableMunicipalityInput = document.getElementById('vulnerable-municipality-count');
                 const priorityTableBody = document.getElementById('priority-table-body');
-                const locallevel = @json($locallevel);
-            
+                const locallevel = @json($districtprofile->locallevel);
+
                 function createMunicipalityOptions(selectedValues = []) {
                     return locallevel.map(item => {
                         if (!selectedValues.includes(item.id)) {
@@ -154,24 +159,24 @@
                         return '';
                     }).join('');
                 }
-            
+
                 function getSelectedMunicipalities() {
                     return Array.from(priorityTableBody.querySelectorAll('select.municipality-select'))
                         .map(select => select.value)
                         .filter(value => value);
                 }
-            
+
                 function updateTableRows() {
                     const count = parseInt(vulnerableMunicipalityInput.value, 10);
                     if (isNaN(count) || count < 0) return; // Ensure count is a valid number
-            
+
                     const existingRows = priorityTableBody.querySelectorAll('tr').length;
-            
+
                     if (count > existingRows) {
                         for (let i = existingRows; i < count; i++) {
                             const selectedValues = getSelectedMunicipalities();
                             const row = document.createElement('tr');
-            
+
                             row.innerHTML = `
                             <td class="p-2 text-center">
                                     <select name="lgid[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
@@ -214,7 +219,7 @@
                                     </button>
                                 </td>
                             `;
-            
+
                             priorityTableBody.appendChild(row);
                         }
                     } else if (count < existingRows) {
@@ -222,10 +227,10 @@
                             priorityTableBody.querySelector('tr:last-child').remove();
                         }
                     }
-            
+
                     updateDropdowns();
                 }
-            
+
                 function handleRowRemoval(event) {
                     if (event.target.closest('.remove-row-btn')) {
                         event.target.closest('tr').remove();
@@ -233,7 +238,7 @@
                         updateTableRows();
                     }
                 }
-            
+
                 function updateDropdowns() {
                     const selectedValues = getSelectedMunicipalities();
                     const dropdowns = priorityTableBody.querySelectorAll('select.municipality-select');
@@ -247,24 +252,24 @@
                         }
                     });
                 }
-            
+
                 function handleCheckboxChange(event) {
                     const checkbox = event.target;
                     const hiddenInput = checkbox.previousElementSibling;
                     hiddenInput.value = checkbox.checked ? '1' : '0'; // Set value of hidden input
                 }
-            
+
                 priorityTableBody.addEventListener('change', function(event) {
                     if (event.target.matches('input[type="checkbox"]')) {
                         handleCheckboxChange(event);
                     }
                 });
-            
+
                 vulnerableMunicipalityInput.addEventListener('change', updateTableRows);
                 priorityTableBody.addEventListener('click', handleRowRemoval);
             });
-            </script>
-            
+        </script>
+
 
 
 

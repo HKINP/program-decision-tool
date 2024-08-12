@@ -58,7 +58,7 @@ class PrioritizedActivitiesController extends Controller
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
             $did = $request->query('did');
             $stageId = $request->query('stageId');
-            $prioritizedActivities = $this->prioritizedactivities->with(['targetGroup','thematicArea','indicator','platforms'])
+            $prioritizedActivities = $this->prioritizedactivities->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
                 ->where('district_id', '=', $request->did)
                 ->where('stage_id', '=', $stageId)
                 ->get();
@@ -71,6 +71,35 @@ class PrioritizedActivitiesController extends Controller
             $vulnerableActivities = $groupedActivities->get('vulnerable', collect()); // default to empty collection if 'other' key doesn't exist
 
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 3)->first();
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
+
+            // Return the view with additional data
+            return view('Report::Sbc.index')
+                ->withDistrictprofile($districtprofile)
+                ->withDistrictVulnerability($districtVulnerability)
+                ->withAllActivities($allActivities)
+                ->withVulnerableActivities($vulnerableActivities)
+                ->withStepRemarks($stepRemarks);
+        }
+
+
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');
+            $prioritizedActivities = $this->prioritizedactivities->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
+                ->where('district_id', '=', $request->did)
+                ->where('stage_id', '=', $stageId)
+                ->get();
+
+            // Group activities by the 'targetted_for' column
+            $groupedActivities = $prioritizedActivities->groupBy('targeted_for');
+
+            // Retrieve specific groups
+            $allActivities = $groupedActivities->get('all', collect()); // default to empty collection if 'all' key doesn't exist
+            $vulnerableActivities = $groupedActivities->get('vulnerable', collect()); // default to empty collection if 'other' key doesn't exist
+
+            $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', $stageId)->first();
             $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -113,13 +142,15 @@ class PrioritizedActivitiesController extends Controller
         $targeted_for = $data['targeted_for'];
         $platforms_id = $data['platforms_id'];
         $remarks = $data['remarks'];
+        $did = $data['district_id'];
+        $stageid=$data['stage_id'];
 
-        $stepremarks = $this->stepRemarks->where('stage_id', '=', $data['stage_id'])->first();
+        $stepremarks = $this->stepRemarks->where('stage_id', '=', $stageid)->first();
 
         if ($stepremarks) {
             // Update existing record
             $inputs = [
-                'district_id' => $data['district_id'],
+                'district_id' => $did,
                 'notes' => $data['notes'],
                 'key_barriers' => $data['key_barriers'],
                 'province_id' => $data['province_id'],
@@ -155,8 +186,9 @@ class PrioritizedActivitiesController extends Controller
             $this->prioritizedactivities->create($inputs);
         }
         // Redirect or return response
-        return redirect()->route('prioritizedactivities.index')
-            ->with('success', 'Prioritized Activities added successfully!');
+        // Redirect or return response
+        return redirect()->route('prioritizedActivities.index', ['stageId' => $stageid, 'did' => $did])
+            ->with('success', 'Activities added successfully!');
     }
 
     /**

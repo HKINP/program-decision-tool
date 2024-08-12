@@ -22,10 +22,15 @@
                     </a>
                 </div>
                 <!-- Step 1 End -->
-        
+
                 <!-- Step 3 -->
                 <div class="w-1/3 text-center mb-6">
-                    <a href="{{ route('dataentrystage.create', ['stageId' => 2, 'did' => $districtprofile->id]) }}"
+                    <a
+                        @if ($prioritystatus==1)
+                        href="{{ route('priority.index', ['stageId' => 2, 'did' => $districtprofile->id]) }}"
+                        @else
+                        href="{{ route('dataentrystage.create', ['stageId' => 2, 'did' => $districtprofile->id]) }}"
+                        @endif
                         class="bg-gray-300 rounded-lg flex items-center justify-center border border-gray-200 hover:bg-gray-400 transition duration-300">
                         <div class="w-1/3 bg-transparent flex items-center justify-center icon-step">
                             <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
@@ -44,7 +49,7 @@
                 <!-- Step 3 End -->
             </div>
         </div>
-        
+
 
         <!-- Heading and Edit Button -->
         <div class="flex items-center justify-between mb-4">
@@ -96,7 +101,7 @@
                         <label for="municipality-count"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of
                             Municipality</label>
-                        <input type="text" id="municipality-count" value="{{ count($locallevel) }}"
+                        <input type="text" id="municipality-count" value="{{ count($districtprofile->locallevel) }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="" required="">
                     </div>
@@ -165,50 +170,50 @@
                     <tbody class="rounded-lg" id="priority-table-body">
 
                         @foreach ($districtVulnerability as $data)
-                            <tr>
-                                <td class="p-2">
-                                    {{ $data->locallevel->lgname }}
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->remote_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->caste_ethnicity_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->geography_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->food_security_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->wealth_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="checkbox"
-                                        class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        value="1" {{ $data->climatic_change_status == 1 ? 'checked' : '' }}>
-                                </td>
-                                <td class="p-2 text-center">
-                                    <input type="text"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        value="{{ $data->remarks }}">
-                                </td>
-                            </tr>
+                        <tr>
+                            <td class="p-2">
+                                {{ $data->locallevel->lgname }}
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->remote_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->caste_ethnicity_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->geography_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->food_security_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->wealth_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="checkbox"
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    value="1" {{ $data->climatic_change_status == 1 ? 'checked' : '' }}>
+                            </td>
+                            <td class="p-2 text-center">
+                                <input type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{ $data->remarks }}">
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
-                
+
             </form>
 
         </div>
