@@ -28,7 +28,7 @@ class District extends Model
         'province_id',
         'district',
         'updated_by',
-        'vulnerable_municpality',
+        'vulnerable_municipality',
         'ecological_zone',
     ];
 

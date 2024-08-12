@@ -55,27 +55,39 @@ class PrioritizedActivitiesController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
+        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId')) {
             $did = $request->query('did');
             $stageId = $request->query('stageId');
-            $prioritizedActivities = $this->prioritizedactivities->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
-                ->where('district_id', '=', $request->did)
-                ->where('stage_id', '=', $stageId)
+
+            // Determine the view to use based on stageId
+            $view = $this->getViewBasedOnStageId($stageId);
+
+            // Fetch prioritized activities
+            $prioritizedActivities = $this->prioritizedactivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
+                ->where('district_id', $did)
+                ->where('stage_id', $stageId)
                 ->get();
 
-            // Group activities by the 'targetted_for' column
+            // Group activities by 'targeted_for'
             $groupedActivities = $prioritizedActivities->groupBy('targeted_for');
+            $allActivities = $groupedActivities->get('all', collect()); // Default to empty collection
+            $vulnerableActivities = $groupedActivities->get('vulnerable', collect()); // Default to empty collection
 
-            // Retrieve specific groups
-            $allActivities = $groupedActivities->get('all', collect()); // default to empty collection if 'all' key doesn't exist
-            $vulnerableActivities = $groupedActivities->get('vulnerable', collect()); // default to empty collection if 'other' key doesn't exist
+            // Fetch additional data
+            $stepRemarks = $this->stepRemarks
+                ->where('district_id','=', $did)
+                ->where('stage_id', $stageId)
+                ->first();
+            $districtprofile = $this->districts
+                ->with(['province', 'locallevel'])
+                ->find($did);
+            $districtVulnerability = $this->vulnerability
+                ->where('district_id','=', $did)
+                ->get();
 
-            $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 3)->first();
-            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
-            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
-
-            // Return the view with additional data
-            return view('Report::Sbc.index')
+            // Return the view with data
+            return view($view)
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withAllActivities($allActivities)
@@ -83,36 +95,26 @@ class PrioritizedActivitiesController extends Controller
                 ->withStepRemarks($stepRemarks);
         }
 
-
-        if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
-            $did = $request->query('did');
-            $stageId = $request->query('stageId');
-            $prioritizedActivities = $this->prioritizedactivities->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
-                ->where('district_id', '=', $request->did)
-                ->where('stage_id', '=', $stageId)
-                ->get();
-
-            // Group activities by the 'targetted_for' column
-            $groupedActivities = $prioritizedActivities->groupBy('targeted_for');
-
-            // Retrieve specific groups
-            $allActivities = $groupedActivities->get('all', collect()); // default to empty collection if 'all' key doesn't exist
-            $vulnerableActivities = $groupedActivities->get('vulnerable', collect()); // default to empty collection if 'other' key doesn't exist
-
-            $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', $stageId)->first();
-            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
-            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
-
-            // Return the view with additional data
-            return view('Report::Sbc.index')
-                ->withDistrictprofile($districtprofile)
-                ->withDistrictVulnerability($districtVulnerability)
-                ->withAllActivities($allActivities)
-                ->withVulnerableActivities($vulnerableActivities)
-                ->withStepRemarks($stepRemarks);
-        }
+        // Handle the case where 'did' or 'stageId' is not present or invalid
+        return redirect()->back()->withErrors('Invalid parameters.');
     }
 
+
+    private function getViewBasedOnStageId($stageId)
+    {
+        switch ($stageId) {
+            case 3:
+                return 'Report::Sbc.index';
+            case 4:
+                return 'Report::HealthNutrition.index';
+            case 5:
+                return 'Report::FoodSystem.index';
+            case 6:
+                return 'Report::EnablingEnvironment.index';
+            default:
+                return 'Report::default.index'; // Handle other cases or default view
+        }
+    }
     /**
      * Show the form for creating a new account head.
      *
@@ -143,7 +145,7 @@ class PrioritizedActivitiesController extends Controller
         $platforms_id = $data['platforms_id'];
         $remarks = $data['remarks'];
         $did = $data['district_id'];
-        $stageid=$data['stage_id'];
+        $stageid = $data['stage_id'];
 
         $stepremarks = $this->stepRemarks->where('stage_id', '=', $stageid)->first();
 
@@ -170,13 +172,14 @@ class PrioritizedActivitiesController extends Controller
 
 
         for ($i = 0; $i < count($data['proposed_activities']); $i++) {
+           
             $inputs = [
                 'province_id' => $data['province_id'],
                 'district_id' => $data['district_id'],
                 'stage_id' => $data['stage_id'],
-                'target_group_id' => $data['target_group_id'],
-                'thematic_area_id' => $data['thematic_area_id'],
-                'indicator_id' => $data['indicator_id'],
+                'target_group_id' => $data['target_group_id'] ?? null,
+                'thematic_area_id' => $data['thematic_area_id'] ?? null,
+                'indicator_id' => $data['indicator_id'] ?? null,
                 'proposed_activities' => $proposed_activities[$i],
                 'targeted_for' => $targeted_for[$i],
                 'platforms_id' => $platforms_id[$i],

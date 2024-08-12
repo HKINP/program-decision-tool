@@ -20,18 +20,13 @@
             </div>
 
             <div class="space-y-2 text-xs italic">
-                <p>1) Spend time discussing why the selected indicators are at the level they are. Consider what
-                    barriers they would need to overcome. These barriers may be individual (e.g., knowledge,
-                    self-confidence, time, cost) or social (family support, cultural practices, gender norms), or
-                    structural (availability, health system, food system). We will address health system barriers under
-                    IR 2 and food system barriers under IR 3.
+                <p>1) Ask participants what health systems-level barriers contribute to the indicators selected. Then identify platforms and how they can strengthen the platforms to help overcome the barriers.
+
 
                 </p>
-                <p class="mb-2">2) Ask participants to beign by identifying the program or platform they would like to
-                    strengthen. Reference the district profile sheet as necessary. Then ask participants to describe
-                    their activity in as much detail as possible. Once they have completed identifying activities for
-                    everyone in the district, consider how it might change for vulnerable populations. Given the year 1
-                    implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this IR.
+                <p class="mb-2">2) Once participants have identified activities for everyone in their district, 
+                    consider how they might change for vulnerable populations. Given the year 1 implementation 
+                    duration of 4-6 months, try to limit the number of activities to 5-7 for this IR. Select management-level activities as necessary.
                 </p>
             </div>
         </div>
@@ -250,6 +245,7 @@
                                         class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                                         <option value="all">All</option>
                                         <option value="vulnerable">Vulnerable</option>
+                                        <option value="management">Management</option>
                                     </select>
                                 </div>
 

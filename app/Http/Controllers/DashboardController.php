@@ -207,6 +207,64 @@ class DashboardController extends Controller
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
         }
-       
+        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 5) {
+
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');            
+            $datastatus=$this->getStatuses($did);
+          
+            if($datastatus['prioritystatus']==0){
+                return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]) 
+                ->with('error', 'Prioritization steps is incomplete');
+            }
+            if($datastatus['ir3status']==1){
+                return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
+            }
+
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            // Fetch priorities with associated relationships
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+                ->where('district_id', '=', $did)
+                ->where('priority', '=', 1)
+                ->get();
+            $platforms = $this->platforms->get();
+            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
+
+            // Return the view with additional data
+            return view('Report::FoodSystem.create')
+                ->withDistrictprofile($districtprofile)
+                ->withDistrictVulnerability($districtVulnerability)
+                ->withPlatforms($platforms)
+                ->withPriorities($priorities);
+        }
+        elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 6) {
+
+            $did = $request->query('did');
+            $stageId = $request->query('stageId');            
+            $datastatus=$this->getStatuses($did);
+          
+            
+            if($datastatus['ir4status']==1){
+                return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
+            }
+
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province','locallevel'])->find($did);
+            // Fetch priorities with associated relationships
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+                ->where('district_id', '=', $did)
+                ->where('priority', '=', 1)
+                ->get();
+            $platforms = $this->platforms->get();
+            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
+
+            // Return the view with additional data
+            return view('Report::EnablingEnvironment.create')
+                ->withDistrictprofile($districtprofile)
+                ->withDistrictVulnerability($districtVulnerability)
+                ->withPlatforms($platforms)
+                ->withPriorities($priorities);
+        }
     }
 }
