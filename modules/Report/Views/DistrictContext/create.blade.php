@@ -149,7 +149,7 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const vulnerableMunicipalityInput = document.getElementById('vulnerable-municipality-count');
                 const priorityTableBody = document.getElementById('priority-table-body');
-                const locallevel = @json($districtprofile - > locallevel);
+                const locallevel = @json($districtprofile->locallevel);
 
                 function createMunicipalityOptions(selectedValues = []) {
                     return locallevel.map(item => {
