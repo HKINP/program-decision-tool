@@ -22,7 +22,6 @@ class ThematicAreasTableSeeder extends Seeder
             [ 'thematic_area' => 'Diet', 'updated_by' => 1],
             [ 'thematic_area' => 'Pregnancy care', 'updated_by' => 1],
             [ 'thematic_area' => 'Postnatal care', 'updated_by' => 1],
-            [ 'thematic_area' => 'Diet', 'updated_by' => 1],
             [ 'thematic_area' => 'Family planning', 'updated_by' => 1],
             [ 'thematic_area' => 'Water', 'updated_by' => 1],
             [ 'thematic_area' => 'Hygiene', 'updated_by' => 1],

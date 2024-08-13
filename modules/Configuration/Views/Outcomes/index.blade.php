@@ -1,34 +1,35 @@
 <x-app-layout>
     <x-table-listing 
-    :title="'Activities'" 
-    :headers="['S.N', 'IR' ,'Outcomes','Activities Name', 'Actions']" 
+    :title="'Outcomes'" 
+    :headers="['S.N', 'IR' ,'Outcomes Name','Budget', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
-    :addRoute="route('activities.create')"
+    :addRoute="route('outcomes.create')"
     
     >
-        @forelse ($activities as $index => $activities)
+        @forelse ($outcomes as $index => $outcome)
      
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $ir[$activities->ir_id] }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $ir[$outcome->ir_id] }}</div>
+            </td>
+           
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $outcome->outcome }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $activities->outcomes->outcome ?? '' }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $activities->activities }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $outcome->total_budget }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
-                    <a href="{{ route('activities.view', $activities->id) }}" class="text-blue-500 hover:text-blue-700">
+                    <a href="{{ route('outcomes.view', $outcome->id) }}" class="text-blue-500 hover:text-blue-700">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('activities.edit', $activities->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                    <a href="{{ route('outcomes.edit', $outcome->id) }}" class="text-yellow-500 hover:text-yellow-700">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('activities.destroy', $activities->id) }}')">
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('outcomes.destroy', $outcome->id) }}')">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>

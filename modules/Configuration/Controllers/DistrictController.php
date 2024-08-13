@@ -39,7 +39,7 @@ class DistrictController extends Controller
     public function index()
     {
         
-       $districts=$this->districts->with(['province'])->orderby('district', 'asc')->get();
+       $districts=$this->districts->with(['province'])->orderby('province_id', 'asc')->get();
     
         // $this->authorize('manage-account-code');
              return view('Configuration::District.index')

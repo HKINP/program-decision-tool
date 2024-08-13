@@ -26,8 +26,8 @@
                         'options' => $ir,
                     ],
                     [
-                        'name' => 'parent_id',
-                        'label' => 'Parent Activities',
+                        'name' => 'outcomes_id',
+                        'label' => 'Outcomes',
                         'type' => 'select',
                         'required' => false,
                         'width' => 'w-1/2',
@@ -45,5 +45,31 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const irSelect = document.getElementById('ir_id');
+            const outcomesSelect = document.getElementById('outcomes_id');
 
+            irSelect.addEventListener('change', function () {
+                const irId = this.value;
+               
+                // Clear current options
+                outcomesSelect.innerHTML = '<option value="">Select an outcome</option>';
+                
+                if (irId) {
+                    fetch(`/api/outcomes/ir/${irId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(outcome => {
+                                const option = document.createElement('option');
+                                option.value = outcome.id;
+                                option.textContent = outcome.outcome;
+                                outcomesSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching outcomes:', error));
+                }
+            });
+        });
+    </script>
 </x-app-layout>

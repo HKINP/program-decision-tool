@@ -246,6 +246,7 @@
                             <td colspan="6" class="border border-gray-300 p-2 font-bold">All Children</td>
                         </tr>
                         @foreach ($allActivities as $activity)
+                        
                             <tr>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->targetGroup->target_group }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->thematicArea->thematic_area }}</td>

@@ -6,6 +6,7 @@ use Modules\Configuration\Controllers\ActorsController;
 use Modules\Configuration\Controllers\DistrictController;
 use Modules\Configuration\Controllers\DistrictProfileController;
 use Modules\Configuration\Controllers\IndicatorsController;
+use Modules\Configuration\Controllers\OutcomesController;
 use Modules\Configuration\Controllers\PlatformsController;
 use Modules\Configuration\Controllers\ProvinceController;
 use Modules\Configuration\Controllers\ProvinceProfileController;
@@ -161,6 +162,8 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::delete('provinceprofile/{provinceprofile}', [ProvinceprofileController::class, 'destroy'])->name('provinceprofile.destroy');
     Route::get('provinceprofile/{provinceprofile}/view', [ProvinceprofileController::class, 'view'])->name('provinceprofile.view');
     // });
+
+
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
     Route::get('districtprofile', [DistrictProfileController::class, 'index'])->name('districtprofile.index');
     Route::get('districtprofile/create', [DistrictprofileController::class, 'create'])->name('districtprofile.create');
@@ -170,5 +173,17 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::delete('districtprofile/{districtprofile}', [DistrictprofileController::class, 'destroy'])->name('districtprofile.destroy');
     Route::get('districtprofile/{districtprofile}/view', [DistrictprofileController::class, 'view'])->name('districtprofile.view');
     // });
+
+    
+    // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
+        Route::get('outcomes', [OutcomesController::class, 'index'])->name('outcomes.index');
+        Route::get('outcomes/create', [OutcomesController::class, 'create'])->name('outcomes.create');
+        Route::post('outcomes', [OutcomesController::class, 'store'])->name('outcomes.store');
+        Route::get('outcomes/{districtprofile}/edit', [OutcomesController::class, 'edit'])->name('outcomes.edit');
+        Route::put('outcomes/{districtprofile}', [OutcomesController::class, 'update'])->name('outcomes.update');
+        Route::delete('outcomes/{districtprofile}', [OutcomesController::class, 'destroy'])->name('outcomes.destroy');
+        Route::get('outcomes/{districtprofile}/view', [OutcomesController::class, 'view'])->name('outcomes.view');
+        // });
+
 
 });

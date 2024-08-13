@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Configuration\Controllers\Api\QuestionApiController;
 use Modules\Configuration\Controllers\Api\ThematicAreaApiController;
+use Modules\Configuration\Controllers\OutcomesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,4 +18,5 @@ use Modules\Configuration\Controllers\Api\ThematicAreaApiController;
 Route::prefix('api')->group(function() {
     Route::get('thematicarea/{targetGroupId}', [ThematicAreaApiController::class, 'getbytargetId'])->name('targetgroup.getbytargetId');
     Route::get('priorities/questions/{thematicAreaId}', [QuestionApiController::class, 'getbythematicareaID'])->name('question.getbythematicareaID');
+    Route::get('outcomes/ir/{ir_id}', [OutcomesController::class, 'getOutcomesByIrid'])->name('outcomes.getOutcomesByIrid');
 });

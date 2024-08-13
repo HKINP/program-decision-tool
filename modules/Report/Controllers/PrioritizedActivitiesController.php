@@ -143,7 +143,7 @@ class PrioritizedActivitiesController extends Controller
         $proposed_activities = $data['proposed_activities'];
         $targeted_for = $data['targeted_for'];
         $platforms_id = $data['platforms_id'];
-        $remarks = $data['remarks'];
+        $remarksdata = $data['remarks'];
         $did = $data['district_id'];
         $stageid = $data['stage_id'];
 
@@ -183,7 +183,7 @@ class PrioritizedActivitiesController extends Controller
                 'proposed_activities' => $proposed_activities[$i],
                 'targeted_for' => $targeted_for[$i],
                 'platforms_id' => $platforms_id[$i],
-                'remarks' => $remarks[$i],
+                'remarks' => $remarksdata[$i],
             ];
 
             $this->prioritizedactivities->create($inputs);
@@ -221,4 +221,27 @@ class PrioritizedActivitiesController extends Controller
                 ->withActivities($structuredData);
         }
     }
+    public function compiledReportProvince($id)
+    {
+      
+            $prioritizedActivities = $this->prioritizedactivities
+            ->with(['targetGroup', 'thematicArea', 'indicator', 'platforms','province'])
+            ->where('province_id', $id)
+            ->get();
+        
+        // Group activities by stage_id
+        $groupedByStage = $prioritizedActivities->groupBy('stage_id');
+        $province=$this->provinces->where('id','=',$id)->first();
+        // Further group each stage's activities by targeted_for
+        $structuredData = $groupedByStage->map(function ($activities) {
+            return $activities->groupBy('targeted_for');
+        });
+
+        // return response()->json(['status'=>'ads','data'=>$structuredData], 200);
+        
+       
+            return view('Report::Compiled.province')
+                ->withProvince($province)
+                ->withActivities($structuredData);
+        }
 }

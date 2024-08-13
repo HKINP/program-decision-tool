@@ -19,7 +19,13 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProvincesTableSeeder::class,
             TargetGroupsTableSeeder::class,
-            ThematicAreasTableSeeder::class
+            ThematicAreasTableSeeder::class,
+            DistrictsTableSeeder::class,
+            IndicatorsTableSeeder::class,
+            QuestionsTableSeeder::class,
+            StagesTableSeeder::class,
+            ThematicAreaTargetGroupSeeder::class,
+            PlatformsTableSeeder::class
         ]);
     }
 }

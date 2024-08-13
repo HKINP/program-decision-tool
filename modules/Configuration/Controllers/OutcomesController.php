@@ -4,29 +4,26 @@ namespace Modules\Configuration\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Modules\Configuration\Repositories\ActivitiesRepository;
 use Modules\Configuration\Repositories\OutcomesRepository;
-use Modules\Configuration\Requests\Activities\StoreRequest;
-use Modules\Configuration\Requests\Activities\UpdateRequest;
+use Modules\Configuration\Requests\Outcomes\StoreRequest;
+use Modules\Configuration\Requests\Outcomes\UpdateRequest;
 
-class ActivitiesController extends Controller
+class OutcomesController extends Controller
 {
     /**
      * Create a new controller instance.
      *
-     * @param  PlatformsRepository $districts
+     * @param  OutcomesRepository $activities
      * @return void
      */
-    protected $activities,$outcomes;
+    protected $outcomes;
     
 
     public function __construct(
-        ActivitiesRepository $activities,
         OutcomesRepository $outcomes
 
     )
     {
-        $this->activities = $activities;
         $this->outcomes = $outcomes;
     }
     
@@ -44,12 +41,10 @@ class ActivitiesController extends Controller
         3=>'IR3. Activities',
         4=>'IR4. Activities',        
         ] ;
-        
-       $activities=$this->activities->with(['outcomes'])->orderby('id', 'asc')->get();
-       
-       return view('Configuration::Activities.index')
+       $outcomes=$this->outcomes->orderby('id', 'asc')->get();
+       return view('Configuration::outcomes.index')
             ->withIr($ir)
-            ->withActivities($activities);
+            ->withOutcomes($outcomes);
     }
 
     /**
@@ -60,15 +55,15 @@ class ActivitiesController extends Controller
     public function create()
     {
         
-        $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+        $outcomes = $this->outcomes->all()->pluck('activities', 'id')->toArray();
         $ir=[
             1=>'IR1. Activities',
             2=>'IR2. Activities',
             3=>'IR3. Activities',
-            4=>'IR4. Activities',            
-            ] ;
+            4=>'IR4. Activities',
             
-        return view('Configuration::Activities.create')
+            ] ;
+        return view('Configuration::outcomes.create')
         ->withIr($ir)
         ->withOutcomes($outcomes);
     }
@@ -83,13 +78,15 @@ class ActivitiesController extends Controller
     public function store(StoreRequest $request)
     {
         // $this->authorize('manage-account-code');
-        $activities = $this->activities->create($request->all());
-        if($activities){
-            return redirect()->route('activities.index')->with('success', 'Added Activities successfully!');
+        $outcomes = $this->outcomes->create($request->all());
+        if($outcomes){
+            return redirect()->route('outcomes.index')->with('success', 'Added Activities successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Platforms can not be added.'], 422);
     }
+
+
 
     /**
      * Display the specified account head.
@@ -99,8 +96,20 @@ class ActivitiesController extends Controller
      */
     public function show($id)
     {
-        $activities = $this->activities->find($id);
-        return response()->json(['status'=>'ok','actors'=>$activities], 200);
+        $outcomes = $this->outcomes->find($id);
+        return response()->json(['status'=>'ok','actors'=>$outcomes], 200);
+    }
+
+    /**
+     * Display the specified account head.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getOutcomesByIrid($id)
+    {
+        $outcomes = $this->outcomes->where('ir_id','=',$id)->get();
+        return response()->json($outcomes);
     }
 
     /**
@@ -113,7 +122,7 @@ class ActivitiesController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $activities = $this->activities->all()->pluck('activities', 'id')->toArray();
+        $outcomes = $this->outcomes->all()->pluck('outcomes', 'id')->toArray();
         $ir=[
             1=>'IR1. Activities',
             2=>'IR2. Activities',
@@ -121,10 +130,10 @@ class ActivitiesController extends Controller
             4=>'IR4. Activities',            
             ];
             
-        return view('Configuration::Activities.edit')
-            ->withActivities($this->activities->find($id))
+        return view('Configuration::outcomes.edit')
+            ->withOutcomes($this->outcomes->find($id))
             ->withIr($ir)
-            ->withActivitiesList($activities);
+            ->withOutcomesList($outcomes);
     }
 
     /**
@@ -140,10 +149,10 @@ class ActivitiesController extends Controller
         // $this->authorize('manage-account-code');
      
         
-        $activities = $this->activities->update($id, $request->except('id'));
+        $activities = $this->outcomes->update($id, $request->except('id'));
        
         if($activities){
-            return redirect()->route('activities.index')->with('success', 'Activities Updated successfully!');
+            return redirect()->route('outcomes.index')->with('success', 'Outcomes Updated successfully!');
         }
         return response()->json(['status'=>'error',
             'message'=>'Actors can not be updated.'], 422);
@@ -159,9 +168,9 @@ class ActivitiesController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
-        $flag = $this->activities->destroy($id);
+        $flag = $this->outcomes->destroy($id);
         if($flag){
-            return redirect()->route('activities.index')->with('success', 'Activities is successfully deleted.');
+            return redirect()->route('outcomes.index')->with('success', 'Outcomes is successfully deleted.');
         }
         return response()->json([
             'type'=>'error',

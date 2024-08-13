@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activities', function (Blueprint $table) {
+        Schema::create('outcomes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ir_id')->unsigned();
-            $table->integer('outcomes_id')->unsigned();
-            $table->string('activities');
+            $table->string('outcome');
+            $table->string('total_budget');
             $table->integer('updated_by')->unsigned();
             $table->softDeletes(); 
             $table->timestamps();
 
-            $table->foreign('outcomes_id')->references('id')->on('outcomes');
             $table->foreign('updated_by')->references('id')->on('users');
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actors');
+        Schema::dropIfExists('outcomes');
     }
 };
