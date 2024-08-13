@@ -22,5 +22,6 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::resource('districtvulnerability', DistrictVulnerabilityController::class);
         Route::resource('prioritizedActivities', PrioritizedActivitiesController::class);
         Route::get('compiledreport', [PrioritizedActivitiesController::class, 'compiledReport'])->name('compiledreport.district');
+        Route::post('activiymapping', [PrioritizedActivitiesController::class, 'activityMapping'])->name('activityMapping.district');
         Route::get('compiledreport/province/{provinceid}', [PrioritizedActivitiesController::class, 'compiledReportProvince'])->name('compiledreport.province');
 });

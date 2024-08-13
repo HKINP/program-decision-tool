@@ -2,36 +2,14 @@
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto print-container">
         <!-- Heading and Edit Button -->
         <div class="flex items-center justify-between mb-4 ">
-            <h2 class="text-lg font-bold">District Compiled Report </h2>
+            <h2 class="text-lg font-bold">{{ $province->province }} Compiled Report </h2>
         </div>
     
-        <div class="flex gap-4">
-            <!-- Province Section -->
-            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
-                <div class="flex items-center mb-4">
-                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
-                    <p class="font-semibold text-md ml-4">
-                        <span class="text-blue-600">Province:</span>
-                        
-                        <span class="text-black">{{ $province->province }}</span>
-                    </p>
-                </div>
-            </div>
-            <!-- District Section -->
-            <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
-                <div class="flex items-center mb-4">
-                    <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">02</p>
-                    <p class="font-semibold text-md ml-4">
-                        <span class="text-blue-600">District:</span>
-                        <span class="text-black"></span>
-                    </p>
-                </div>
-            </div>
-        </div>
+           </div>
     
         <div class="bg-white p-4 rounded-lg w-full mb-5">
             <div class="flex gap-2 items-center mb-4 no-print">
-                <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">03</p>
+                <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
                 <p class="font-semibold text-md text-blue-600">Activities</p>
             </div>
     

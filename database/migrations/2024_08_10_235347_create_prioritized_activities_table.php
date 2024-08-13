@@ -20,6 +20,7 @@ return new class extends Migration
             $table->Integer('thematic_area_id')->unsigned()->nullable();
             $table->Integer('indicator_id')->unsigned()->nullable();
             $table->Integer('platforms_id')->unsigned();
+            $table->Integer('activity_id')->unsigned()->nullable();
             $table->text('proposed_activities');
             $table->string('targeted_for');
             $table->text('remarks')->nullable();            
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->foreign('thematic_area_id')->references('id')->on('thematic_areas')->onDelete('cascade');
             $table->foreign('indicator_id')->references('id')->on('indicators')->onDelete('cascade');
             $table->foreign('platforms_id')->references('id')->on('platforms')->onDelete('cascade');
+            $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
             $table->foreign('updated_by')->references('id')->on('users');
         });
     }

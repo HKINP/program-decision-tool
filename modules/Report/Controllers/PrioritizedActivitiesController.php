@@ -4,6 +4,7 @@ namespace Modules\Report\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Configuration\Repositories\ActivitiesRepository;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
@@ -25,7 +26,8 @@ class PrioritizedActivitiesController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $districts, $provinces, $priorities, $questions, $prioritizedactivities, $stepRemarks, $vulnerability;
+    protected $mapactivities,$districts, $provinces, $priorities, 
+    $questions, $prioritizedactivities, $stepRemarks, $vulnerability;
 
     public function __construct(
 
@@ -36,6 +38,7 @@ class PrioritizedActivitiesController extends Controller
         PrioritizedActivitiesRepository $prioritizedactivities,
         StepRemarksRepository $stepRemarks,
         DistrictVulnerabilityRepository $vulnerability,
+        ActivitiesRepository $mapactivities,
 
     ) {
         $this->districts = $districts;
@@ -45,6 +48,7 @@ class PrioritizedActivitiesController extends Controller
         $this->prioritizedactivities = $prioritizedactivities;
         $this->vulnerability = $vulnerability;
         $this->stepRemarks = $stepRemarks;
+        $this->mapactivities = $mapactivities;
     }
 
     /**
@@ -193,6 +197,9 @@ class PrioritizedActivitiesController extends Controller
         return redirect()->route('prioritizedActivities.index', ['stageId' => $stageid, 'did' => $did])
             ->with('success', 'Activities added successfully!');
     }
+
+
+
     public function compiledReport(Request $request)
     {
         if ($request->has('did')) {
@@ -204,6 +211,8 @@ class PrioritizedActivitiesController extends Controller
         
         // Group activities by stage_id
         $groupedByStage = $prioritizedActivities->groupBy('stage_id');
+
+        $mapactivities=$this->mapactivities->all();
         
         // Further group each stage's activities by targeted_for
         $structuredData = $groupedByStage->map(function ($activities) {
@@ -218,9 +227,29 @@ class PrioritizedActivitiesController extends Controller
       
             return view('Report::Compiled.district')
                 ->withDistrictprofile($districtprofile)
+                
+                ->withMappingActivities($mapactivities)
                 ->withActivities($structuredData);
         }
     }
+
+ public function activityMapping(Request $request)
+    {
+      $data=$request->all();
+      $id=$data['activity_id'];
+      $did=$data['district_id'];
+
+      $inputs = [
+        'activity_id' => $data['activities'],
+    ];
+
+    $this->prioritizedactivities->update($id,$inputs);
+    return redirect()->route('prioritizedActivities.index', ['stageId' => 6, 'did' =>$did ])
+    ->with('success', 'Activities added successfully!');
+
+    }
+
+
     public function compiledReportProvince($id)
     {
       
