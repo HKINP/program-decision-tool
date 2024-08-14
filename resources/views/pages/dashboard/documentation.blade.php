@@ -67,7 +67,13 @@
                             <li class="text-gray-600">Step 8. Plan Governance Activities (IR 4)</li>
                             <li class="text-gray-600">Step 9. Compiled Workplan</li>
                     </div>
-
+                        This web-based software application - Cocreation Decision Support System is developed as a part of cocreation activities for USAID Integrated Nutrition.
+                        
+                        This application is "made possible by the generous support of the American People through the United States Agency for International Development (USAID)”.
+                        
+                        The information provided on this portal is not official U.S. Government information and does not represent the views or positions of the U.S. Agency for International Development or the U.S. Government.
+                        
+                        Kindly refer to the terms of agreement before using this application.
                 </div>
 
             </div>
