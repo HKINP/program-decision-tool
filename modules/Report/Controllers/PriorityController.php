@@ -98,6 +98,7 @@ class PriorityController extends Controller
             }
         ])
             ->where('district_id', '=', $did)
+            ->where('priority', '=', 1)
             ->get();
 
         // Return view response if $prioritystatus is not true
@@ -173,9 +174,57 @@ class PriorityController extends Controller
      */
     public function show($id)
     {
+        $did = $id;        
+        $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
 
-        $priorities = $this->priorities->find($id);
-        return response()->json($priorities);
+        // Fetch district profile
+        $districtprofile = $this->districts->with(['province'])->find($did);
+        $districtVulnerability = $this->vulnerability->where('district_id', $did)->get();
+        $statuses = $this->getStatuses($did);
+        // Check if district_vulnerability is empty
+        if ($districtVulnerability->isEmpty()) {
+            return redirect()->route('dataentrystage.create', ['stageId' => 1, 'did' => $did]); // Replace 'another.route.name' with the actual route name
+        }
+        $province_id = $districtprofile->province->id;
+
+        // Fetch questions
+        $questions = $this->questions->with([
+            'thematicArea',
+            'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
+                $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
+                    $query->where('province_id', $province_id);
+                }]);
+            },
+            'targetGroup'
+        ])->get();
+
+        // Fetch priorities with associated relationships
+        $priorities = $this->priorities->with([
+            'thematicArea',
+            'targetGroup',
+            'question' => function ($query) use ($province_id) {
+                $query->with([
+                    'indicator' => function ($query) use ($province_id) {
+                        $query->with(['provinceProfiles' => function ($query) use ($province_id) {
+                            $query->where('province_id', $province_id);
+                        }]);
+                    }
+                ]);
+            }
+        ])
+            ->where('district_id', '=', $did)
+            ->get();
+            // return response()->json(['data' => $priorities  ], 422);
+        // Return view response if $prioritystatus is not true
+        return view('Report::Priorities.edit')
+            ->withDistrictprofile($districtprofile)
+            ->withDistrictVulnerability($districtVulnerability)
+            ->withIr1status($statuses['ir1status'])
+            ->withQuestions($questions)
+            ->withStepRemarks($stepRemarks)
+            ->withPriorities($priorities);
+
+       
     }
 
     /**
@@ -207,8 +256,46 @@ class PriorityController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
+               
         // Retrieve the priority being updated
         $priorityToUpdate = $this->priorities->find($id);
+
+
+
+        // Count the number of priorities with the same district_id
+        $priorityCount = $this->priorities
+            ->where('district_id', '=', $priorityToUpdate->district_id)
+            ->where('priority', '=', 1)
+            ->count();
+
+
+
+        // Check if the number of priorities is less than or equal to five
+        if ($request->input('priority') == 1 && $priorityCount >= 5) {
+            // Redirect back with an error message
+            return redirect()->back()->with('error', 'The number of priorities for this district exceeds the limit of five.');
+        }
+
+        // Proceed with the update
+        $priorities = $this->priorities->update($id, $request->except('id'));
+
+        if ($priorities) {
+            return redirect()->back()->with('success', 'Priorities Updated successfully!');
+        }
+
+        // If update fails, redirect back with an error message
+        return redirect()->back()->with('error', 'Priorities cannot be updated.');
+    }
+
+
+    public function updateBydistrict(UpdateRequest $request, $id)
+    {
+               
+       
+       dd($request->all());
+        // Retrieve the priority being updated
+        $priorityToUpdate = $this->priorities->find($id);
+
 
 
         // Count the number of priorities with the same district_id

@@ -19,6 +19,7 @@ use Modules\Report\Controllers\PriorityController;
 Route::middleware(['web', 'auth', 'logger'])->group(function () {   
            
         Route::resource('priority', PriorityController::class);
+        Route::put('priority/update/{did}', [PriorityController::class, 'updateBydistrict'])->name('priority.updatebydistrict');
         Route::resource('districtvulnerability', DistrictVulnerabilityController::class);
         Route::resource('prioritizedActivities', PrioritizedActivitiesController::class);
         Route::get('compiledreport', [PrioritizedActivitiesController::class, 'compiledReport'])->name('compiledreport.district');
