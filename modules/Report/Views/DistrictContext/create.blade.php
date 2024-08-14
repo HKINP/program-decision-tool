@@ -49,9 +49,7 @@
                 <p>1) Please begin by asking participants to complete the district profile section. Discuss how they
                     would define vulnerability based on caset/ethnicity, geography, food insecurity, and wealth.
                 </p>
-                <p class="mb-2">
-                    2) Then list the development partners working in the district, the type of programs they implement,
-                    and the number of municipalities where they operate.</p>
+                
             </div>
         </div>
         <div class="bg-white p-4 rounded-lg w-full mb-5">
@@ -64,18 +62,18 @@
 
                 <div class="flex flex-wrap -mx-2">
                     <!-- Column 1 -->
-                    <div class="w-1/3 px-2 mb-6">
+                    <div class="w-1/2 px-2 mb-6">
                         <label for="municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Municipality</label>
                         <input type="text" id="municipality-count" value="{{count($districtprofile->locallevel)}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
                     </div>
 
                     <!-- Column 2 -->
-                    <div class="w-1/3 px-2 mb-6">
+                    <div class="w-1/2 px-2 mb-6">
                         <label for="vulnerable-municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable Municipality</label>
                         <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
                     </div>
 
-                    <!-- Column 3 -->
+                    {{-- <!-- Column 3 -->
                     <div class="w-1/3 px-2 mb-6">
                         <label for="target-group" class="block text-sm font-medium text-gray-700">Ecological Zone</label>
                         <select name="ecological_zone" required id="ecological_zone" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm edit-context target-group">
@@ -84,7 +82,7 @@
                             <option value="Hill">Hill</option>
                             <option value="Mountain">Mountain</option>
                         </select>
-                    </div>
+                    </div> --}}
                     <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
                     <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
                 </div>
@@ -102,9 +100,9 @@
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Caste/Ethnicity
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            {{-- <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Geography (municipalities)
-                            </th>
+                            </th> --}}
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Food insecurity
                             </th>
@@ -138,7 +136,7 @@
             </div>
 
             <div class="space-y-2 text-xs italic">
-                <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
+                <textarea id="notes" required name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
 
             </div>
         </div>
@@ -179,7 +177,7 @@
 
                             row.innerHTML = `
                             <td class="p-2 text-center">
-                                    <select name="lgid[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
+                                    <select name="lgid[]" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
                                         <option value="">Select Municipality</option>
                                         ${createMunicipalityOptions(selectedValues)}
                                     </select>
@@ -193,7 +191,7 @@
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
                                 </td>
                                 <td class="p-2 text-center">
-                                    <input type="hidden" name="geography_status[]" value="0">
+                                    <input type="hidden"  value="0">
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
                                 </td>
                                 <td class="p-2 text-center">

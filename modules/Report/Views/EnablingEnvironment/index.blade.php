@@ -86,12 +86,19 @@
                             <td colspan="6" class="border border-gray-300 p-2 font-bold">All Children</td>
                         </tr>
                         @foreach ($allActivities as $activity)
-                            <tr>
-                               
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
-                            </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2 text-sm">{{ $activity->activities }}</td>
+                            <td class="border border-gray-300 p-2 text-sm">
+                                <ul class="list-none space-y-1">
+                                    @foreach($activity->platforms as $platform)
+                                        <li class="">
+                                            - {{ $platform->platforms }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
+                        </tr>
                         @endforeach
                 @if ($vulnerableActivities)
                     
@@ -100,9 +107,18 @@
                             <td colspan="6" class="border border-gray-300 p-2 font-bold">Vulnerable</td>
                         </tr>
                         @foreach ($vulnerableActivities as $activity)
+                        
                             <tr>
-                                border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->activities }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">
+                                    <ul class="list-none space-y-1">
+                                        @foreach($activity->platforms as $platform)
+                                            <li class="">
+                                                - {{ $platform->platforms }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
                             </tr>
                         @endforeach

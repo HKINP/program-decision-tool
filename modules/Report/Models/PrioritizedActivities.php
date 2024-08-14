@@ -7,6 +7,7 @@ use App\Traits\UpdatedBy;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Configuration\Models\Activities;
 use Modules\Configuration\Models\District;
 use Modules\Configuration\Models\Indicators;
 use Modules\Configuration\Models\Platforms;
@@ -41,6 +42,7 @@ class PrioritizedActivities extends Model
         'platforms_id',
         'proposed_activities',
         'targeted_for',
+        'activity_id',
         'remarks',
     ];
 
@@ -78,6 +80,10 @@ class PrioritizedActivities extends Model
     {
         $platformsIds = explode(',', $this->attributes['platforms_id']);
         return Platforms::whereIn('id', $platformsIds)->get();
+    }
+    public function activities()
+    {
+        return $this->belongsTo(Activities::class);
     }
 
 }

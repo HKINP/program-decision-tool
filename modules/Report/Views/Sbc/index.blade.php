@@ -40,7 +40,7 @@
           <!-- Heading and Edit Button -->
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">Step 3. SBC Activities  </h2>
-            <a href="http://localhost:8000/thematicarea/edit"
+            <a href="#"
                 class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
                 <i class="fas fa-edit"></i>
                 <span class="max-xs:sr-only">Edit</span>
@@ -95,8 +95,8 @@
                                 <td class="border border-gray-300 p-2 text-sm">
                                     <ul class="list-none space-y-1">
                                         @foreach($activity->platforms as $platform)
-                                            <li class="inline-block px-3 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full">
-                                                {{ $platform->platforms }}
+                                            <li class="">
+                                                - {{ $platform->platforms }}
                                             </li>
                                         @endforeach
                                     </ul>
@@ -121,8 +121,8 @@
                                 <td class="border border-gray-300 p-2 text-sm">
                                     <ul class="list-none space-y-1">
                                         @foreach($activity->platforms as $platform)
-                                            <li class="inline-block px-3 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full">
-                                                {{ $platform->platforms }}
+                                            <li class="">
+                                                - {{ $platform->platforms }}
                                             </li>
                                         @endforeach
                                     </ul>

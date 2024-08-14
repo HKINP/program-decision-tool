@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
+use Modules\Report\Models\PrioritizedActivities;
 
 class Activities extends Model
 {
@@ -37,5 +38,7 @@ class Activities extends Model
     {
         return $this->belongsTo(Outcomes::class, 'outcomes_id');
     }
+
+    
    
 }

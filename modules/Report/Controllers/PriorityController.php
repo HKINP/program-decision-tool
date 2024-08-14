@@ -143,6 +143,26 @@ class PriorityController extends Controller
         $questions = $data['question_id'];
         $priorities = $data['priority'];
 
+
+        $stepremarks = $this->stepRemarks->where('stage_id', '=', 2)->first();
+        if ($stepremarks) {
+        // Update existing record
+        $inputs = [
+                  'notes' => $data['notes'],           
+        ];
+
+        $this->stepRemarks->update($stepremarks->id, $inputs);
+    } else {
+        // Create a new record if no existing record is found
+        $remarks = $this->stepRemarks->create([
+            'district_id' => $data['district_id'],
+            'notes' => $data['notes'],
+            'province_id' => $data['province_id'],
+            'stage_id' => 2
+        ]);
+    }
+
+
         $remarks = $this->stepRemarks->create([
             'district_id' => $data['district_id'],
             'notes' => $data['notes'],
@@ -292,7 +312,7 @@ class PriorityController extends Controller
     {
                
        
-       dd($request->all());
+   
         // Retrieve the priority being updated
         $priorityToUpdate = $this->priorities->find($id);
 

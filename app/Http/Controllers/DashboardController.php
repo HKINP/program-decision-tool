@@ -15,13 +15,14 @@ use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Report\Repositories\PrioritizedActivitiesRepository;
 use Modules\Report\Repositories\StepRemarksRepository;
 use App\Traits\StageStatus;
+use Modules\Configuration\Repositories\ActivitiesRepository;
 
 class DashboardController extends Controller
 {
 
     protected $districts, $stages, $provinces,
         $priorities, $questions, $thematicgroups,
-        $tags, $locallevel, $vulnerability, $stepRemarks, $platforms, $prioritizedActivities;
+        $tags, $locallevel, $vulnerability, $stepRemarks,$activities, $platforms, $prioritizedActivities;
     use StageStatus;
 
     public function __construct(
@@ -36,6 +37,7 @@ class DashboardController extends Controller
         LocalLevelRepository $locallevel,
         StepRemarksRepository $stepRemarks,
         PrioritizedActivitiesRepository $prioritizedActivities,
+        ActivitiesRepository $activities,
 
     ) {
         $this->provinces = $provinces;
@@ -48,6 +50,7 @@ class DashboardController extends Controller
         $this->stepRemarks = $stepRemarks;
         $this->platforms = $platforms;
         $this->prioritizedActivities = $prioritizedActivities;
+        $this->activities=$activities;
     }
 
     public function index()
@@ -103,6 +106,7 @@ class DashboardController extends Controller
 
 
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
+          
 
             $did = $request->query('did');
             $datastatus = $this->getStatuses($did);
@@ -110,8 +114,18 @@ class DashboardController extends Controller
             if ($datastatus['prioritystatus'] == 1) {
                 return redirect()->route('priority.index', ['stageId' => 2, 'did' => $did]);
             }
+          
 
-            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+            $districtprofile = $this->districts->with(['province','province.provinceProfiles', 'locallevel'])->find($did);
+        
+            
+            if (count($districtprofile->province->provinceProfiles) === 0) {
+                             return redirect()->route('provinceprofile.create')->with('error', 'Please create a province profile for '.$districtprofile->province->province);
+            }
+            
+          
+            
+            
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
             // Check if district_vulnerability is empty
             if ($districtVulnerability->isEmpty()) {
@@ -241,6 +255,8 @@ class DashboardController extends Controller
 
             // Fetch district profile
             $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+            $activities=$this->activities->where('ir_id','=','4')->get();            
+
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
                 ->where('district_id', '=', $did)
@@ -253,6 +269,7 @@ class DashboardController extends Controller
             return view('Report::EnablingEnvironment.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
+                ->withActivities($activities)
                 ->withPlatforms($platforms)
                 ->withPriorities($priorities);
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 7) {

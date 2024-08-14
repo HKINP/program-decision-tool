@@ -92,8 +92,15 @@
                             <tr>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->targetGroup->target_group }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->thematicArea->thematic_area }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td><td class="border border-gray-300 p-2 text-sm">
+                                    <ul class="list-none space-y-1">
+                                        @foreach($activity->platforms as $platform)
+                                            <li class="">
+                                                - {{ $platform->platforms }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
                             </tr>
@@ -108,8 +115,15 @@
                             <tr>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->targetGroup->target_group }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->thematicArea->thematic_area }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->platforms->platforms }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->indicator->indicator_name }}</td><td class="border border-gray-300 p-2 text-sm">
+                                    <ul class="list-none space-y-1">
+                                        @foreach($activity->platforms as $platform)
+                                            <li class="">
+                                                - {{ $platform->platforms }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->proposed_activities }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $activity->remarks }}</td>
                             </tr>

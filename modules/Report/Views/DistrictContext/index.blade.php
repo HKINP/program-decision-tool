@@ -8,7 +8,7 @@
                     <a href="{{ route('steplist.create', ['did' => $districtprofile->id]) }}"
                         class="flex items-center justify-center border border-gray-200 transition duration-300">
                         <div class="w-1/3 bg-[#844a8a] flex items-center justify-center h-16 rounded-l-lg">
-                            <i class="text-white fa-2x fa-solid fa-arrow-left"></i>
+                            <i class="text-white fa-lg fa-solid fa-arrow-left"></i>
                         </div>
                         <div class="w-2/3 bg-white h-16 flex flex-col items-center justify-center px-1 rounded-r-lg body-step">
                             <h2 class="font-bold text-sm">Step List</h2>
@@ -28,7 +28,7 @@
                         @endif
                         class="flex items-center justify-center border border-gray-200 transition duration-300">
                         <div class="w-1/3 bg-[#844a8a] flex items-center justify-center h-16 rounded-l-lg">
-                            <i class="text-white fa-2x fa-solid fa-arrow-right"></i>
+                            <i class="text-white fa-lg fa-solid fa-arrow-right"></i>
                         </div>
                         <div class="w-2/3 bg-white h-16 flex flex-col items-center justify-center px-2 rounded-r-lg">
                             <h2 class="font-bold text-sm">Step 2</h2>
@@ -45,7 +45,7 @@
         <!-- Heading and Edit Button -->
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">Step 1. District Context</h2>
-            <a href="http://localhost:8000/thematicarea/edit"
+            <a href="#"
                 class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
                 <i class="fas fa-edit"></i>
                 <span class="max-xs:sr-only">Edit</span>
