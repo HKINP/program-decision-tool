@@ -74,9 +74,10 @@ class PrioritizedActivities extends Model
     {
         return $this->belongsTo(Indicators::class);
     }
-    public function platforms()
+    public function getPlatformsAttribute()
     {
-        return $this->belongsTo(Platforms::class);
+        $platformsIds = explode(',', $this->attributes['platforms_id']);
+        return Platforms::whereIn('id', $platformsIds)->get();
     }
 
 }

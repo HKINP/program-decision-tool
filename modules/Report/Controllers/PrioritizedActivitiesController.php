@@ -68,10 +68,16 @@ class PrioritizedActivitiesController extends Controller
 
             // Fetch prioritized activities
             $prioritizedActivities = $this->prioritizedactivities
-                ->with(['targetGroup', 'thematicArea', 'indicator', 'platforms'])
+                ->with(['targetGroup', 'thematicArea', 'indicator'])
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
                 ->get();
+            foreach ($prioritizedActivities as $activity) {
+                    $activity->platforms; // This will trigger the accessor and load related platforms
+                
+                }
+              
+
 
             // Group activities by 'targeted_for'
             $groupedActivities = $prioritizedActivities->groupBy('targeted_for');
@@ -144,18 +150,21 @@ class PrioritizedActivitiesController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
-        dd($data);
+      
         $proposed_activities = $data['proposed_activities'];
         $targeted_for = $data['targeted_for'];
         $platforms_id = $data['platforms_id'];
         $remarksdata = $data['remarks'];
         $did = $data['district_id'];
         $stageid = $data['stage_id'];
-
-        $stepremarks = $this->stepRemarks->where('stage_id', '=', $stageid)->first();
-
-        if ($stepremarks) {
+        $indicator_id=$data['indicator_id'];     
+ 
+        $groupedPlatforms = [];
+        foreach ($platforms_id as $key => $platformsArray) {
+            array_push($groupedPlatforms, $platformsArray); 
+        }
+         $stepremarks = $this->stepRemarks->where('stage_id', '=', $stageid)->first();
+            if ($stepremarks) {
             // Update existing record
             $inputs = [
                 'district_id' => $did,
@@ -163,7 +172,7 @@ class PrioritizedActivitiesController extends Controller
                 'key_barriers' => $data['key_barriers'],
                 'province_id' => $data['province_id'],
             ];
-
+    
             $this->stepRemarks->update($stepremarks->id, $inputs);
         } else {
             // Create a new record if no existing record is found
@@ -175,32 +184,34 @@ class PrioritizedActivitiesController extends Controller
                 'stage_id' => $data['stage_id'] // Ensure stage_id is set for new records
             ]);
         }
-
-
         for ($i = 0; $i < count($data['proposed_activities']); $i++) {
-
+            // Convert platforms_id array to comma-separated string
+          
+           $platforms = implode(',', $groupedPlatforms[$i]);
+                  
             $inputs = [
                 'province_id' => $data['province_id'],
                 'district_id' => $data['district_id'],
                 'stage_id' => $data['stage_id'],
                 'target_group_id' => $data['target_group_id'] ?? null,
                 'thematic_area_id' => $data['thematic_area_id'] ?? null,
-                'indicator_id' => $data['indicator_id'] ?? null,
+                'indicator_id' => $indicator_id[$i] ?? null,
                 'proposed_activities' => $proposed_activities[$i],
                 'targeted_for' => $targeted_for[$i],
-                'platforms_id' => $platforms_id[$i],
+                'platforms_id' => $platforms, 
                 'remarks' => $remarksdata[$i],
             ];
 
+      
+    
             $this->prioritizedactivities->create($inputs);
         }
-        // Redirect or return response
+    
         // Redirect or return response
         return redirect()->route('prioritizedActivities.index', ['stageId' => $stageid, 'did' => $did])
             ->with('success', 'Activities added successfully!');
     }
-
-
+    
 
     public function compiledReport(Request $request)
     {
