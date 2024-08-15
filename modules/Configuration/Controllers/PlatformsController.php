@@ -39,7 +39,7 @@ class PlatformsController extends Controller
     public function index()
     {
         
-       $platforms=$this->platforms->with(['parents'])->orderby('id', 'asc')->where('id','!=',1)->get();
+       $platforms=$this->platforms->orderby('platforms', 'asc')->get();
              return view('Configuration::Platforms.index')
             ->withplatforms($platforms);
     }

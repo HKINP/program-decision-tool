@@ -17,20 +17,13 @@
                 :method="'PUT'" 
                 :values="$platforms"
                 :fields="[
-                    [
-                        'name' => 'stage_id',
-                        'label' => 'Stages',
-                        'type' => 'select',
-                        'required' => true,
-                        'width' => 12,
-                        'options' => $stages,
-                    ],
+                   
                     [
                         'name' => 'platforms',
                         'label' => 'Platform Name',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 6,
+                        'width' => 'w-1/2',
                     ],
                     
                     
