@@ -99,10 +99,7 @@
                             </th>
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Caste/Ethnicity
-                            </th>
-                            {{-- <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                                Geography (municipalities)
-                            </th> --}}
+                            </th>                           
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Food insecurity
                             </th>
@@ -115,9 +112,7 @@
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
                                 Remark
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
-                                Actions
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody class="rounded-lg" id="priority-table-body">
@@ -190,10 +185,7 @@
                                     <input type="hidden" name="caste_ethnicity_status[]" value="0">
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
                                 </td>
-                                <td class="p-2 text-center">
-                                    <input type="hidden"  value="0">
-                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                                </td>
+                               
                                 <td class="p-2 text-center">
                                     <input type="hidden" name="food_security_status[]" value="0">
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">

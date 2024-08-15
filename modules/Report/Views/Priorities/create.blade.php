@@ -35,7 +35,7 @@
 
             <div class="overflow-x-auto mt-6">
 
-                <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80% for recommended behaviors (e.g., breastfeeding) and red >20% for discouraged behaviors (e.g., consumption of unhealthy foods)</p>
+                <p class="bg-white p-4 rounded-lg font-bold w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80% for recommended behaviors (e.g., breastfeeding) and red >20% for discouraged behaviors (e.g., consumption of unhealthy foods)</p>
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
                         <tr>
