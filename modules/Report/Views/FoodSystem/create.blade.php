@@ -10,7 +10,7 @@
                 </div>
 
                 <!-- Step Description -->
-                <p class="font-semibold text-[24px]">Step 5. Food Systems Activities</p>
+                <p class="font-semibold text-[24px]">Step 5. Food Systems Activities (IR3)</p>
             </div>
         </div>
         <div class="bg-white p-4 rounded-lg w-full mb-5">

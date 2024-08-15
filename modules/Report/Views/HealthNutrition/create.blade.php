@@ -10,7 +10,7 @@
                 </div>
 
                 <!-- Step Description -->
-                <p class="font-semibold text-[24px]">Step 4. Health and Nutrition Service Activities</p>
+                <p class="font-semibold text-[24px]">Step 4. Health and Nutrition Service Activities (IR2)</p>
             </div>
         </div>
         <div class="bg-white p-4 rounded-lg w-full mb-5">
