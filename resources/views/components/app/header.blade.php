@@ -4,7 +4,7 @@
 
             <!-- Header: Left side -->
             <div class="flex">
-                <h1 class="text-base font-semibold">USAID Integrated Nutrition Multisectoral Internation Design Decision Tool
+                <h1 class="text-base font-semibold">USAID Integrated Nutrition Multisectoral Intervention Design Decision Tool
                 </h1>
                 <!-- Hamburger button -->
                 <button

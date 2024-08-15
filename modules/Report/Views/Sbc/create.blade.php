@@ -9,7 +9,7 @@
                     </svg>
                 </a>
                 <!-- Step Description -->
-                <p class="font-semibold text-[24px]">Step 3. SBC Activities
+                <p class="font-semibold text-[24px]">Step 3. Social Behavior Change (SBC) Activities
                 </p>
             </div>
         </div>

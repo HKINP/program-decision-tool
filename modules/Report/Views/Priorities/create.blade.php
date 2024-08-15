@@ -22,11 +22,12 @@
 
             <div class="space-y-2 text-base italic">
                 <p>1) Take a few minutes to explain the indicators below. Any recommended behavior practiced by fewer than 80% of the target population is considered inadequate and will be highlighted as orange (practiced by 50%-79%) or red (practiced by fewer than 50% of the population). Any discouraged behavior (e.g., consuming unhealthy foods) practiced by more than 20% of the population will turn red.</p>
-                <p class="mb-2">2) 2) Ask participants to prioritize 3-5 indicators to focus on in their district in the first year of USAID Integrated Nutrition. Please note that the year 1  implementation duration for each district is about 4-6 months. As participants select indicators to focus on consider at least
-                <strong>1 related to children, 1 adolescent girls or women, and 1 WASH</strong>.</p>
+                <p class="mb-2">2) Ask participants to prioritize 3-5 indicators to focus on in their district in the first year of USAID Integrated Nutrition. Please note that the year 1 implementation duration for each district is about 4-6 months. As participants select indicators to focus on consider at least
+                    <strong>1 related to children, 1 adolescent girls or women, and 1 WASH</strong>.
+                </p>
             </div>
         </div>
-      <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
+        <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
         <form action="{{ route('priority.store') }}" method="POST">
             @csrf
             <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
@@ -65,15 +66,21 @@
                             <td class="border text-sm text-black border-gray-200 px-2">{{ $question->question }}</td>
                             @php
                             $value = $question->indicator->provinceProfiles[0]->all_value;
+                            $source=$question->indicator->provinceProfiles[0]->source;
                             $color = '';
 
                             if ($value < 50) { $color='bg-red-600 text-white' ; } elseif ($value>= 50 && $value < 80) { $color='bg-orange-700 text-white' ; } elseif ($value>= 80) {
                                     $color = 'bg-green-600 text-white';
                                     }
                                     @endphp
-                                    <td class="border text-sm text-black border-gray-200 text-center px-2 {{ $color }}">
+                                    <td class="relative border text-sm text-black border-gray-200 text-center px-2 {{ $color }} group">
                                         {{ $value }}
+                                        <!-- Hidden text displayed on hover -->
+                                        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 w-max bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        {{ $source }}
+                                        </div>
                                     </td>
+
                                     <td class="border text-xs text-black border-gray-200 p-1 text-center">
                                         <select name="priority[]" class="mt-1 block w-full text-sm border-gray-300 rounded-lg shadow-sm priority-select">
                                             <option value="0">Priority</option>
@@ -113,7 +120,7 @@
                         // Remove red highlight from all rows
                         row.classList.remove('highlight-red');
                     });
-                 
+
                     // Highlight the row if 'Yes' is selected
                     if (this.value === '1') {
                         this.closest('tr').classList.add('bg-gray-300');

@@ -37,7 +37,7 @@
                         <div
                             class="w-2/3 bg-white h-16 flex flex-col items-center justify-center px-1 rounded-r-lg body-step">
                             <h2 class="font-bold text-sm">Step 3.</h2>
-                            <p class="text-xs text-gray-600">SBC Activities</p>
+                            <p class="text-xs text-gray-600">Social Behavior Change (SBC) Activities</p>
                         </div>
                     </a>
                 </div>
