@@ -62,12 +62,11 @@ class ActivitiesController extends Controller
         
         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
         $ir=[
-            1=>'IR1. Activities',
-            2=>'IR2. Activities',
-            3=>'IR3. Activities',
-            4=>'IR4. Activities',            
-            ] ;
-            
+            1=>'Intermediate Result 1. Improved Household Nutrition Practices',
+            2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
+            3=>'Intermediate Result 3: Improved access to safe, diverse, and nutritious foods ',
+            4=>'Intermediate Result 4: Strengthened national and subnational government capacity for multi-sectoral nutrition programming',            
+            ];
         return view('Configuration::Activities.create')
         ->withIr($ir)
         ->withOutcomes($outcomes);
@@ -115,10 +114,10 @@ class ActivitiesController extends Controller
         // $this->authorize('manage-account-code');
         $activities = $this->activities->all()->pluck('activities', 'id')->toArray();
         $ir=[
-            1=>'IR1. Activities',
-            2=>'IR2. Activities',
-            3=>'IR3. Activities',
-            4=>'IR4. Activities',            
+            1=>'Intermediate Result 1. Improved Household Nutrition Practices',
+            2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
+            3=>'Intermediate Result 3: Improved access to safe, diverse, and nutritious foods ',
+            4=>'Intermediate Result 4: Strengthened national and subnational government capacity for multi-sectoral nutrition programming',            
             ];
             
         return view('Configuration::Activities.edit')
