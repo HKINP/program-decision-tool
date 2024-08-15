@@ -19,7 +19,7 @@
                 <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
                 <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
-            <div class="space-y-2 text-xs italic">
+            <div class="space-y-2 text-base italic">
                 <p>1) Ask participants what barriers related to the enabling environment contribute to the indicators selected. Then identify platforms and how they can strengthen the platforms to help overcome the barriers.</p>
                 <p class="mb-2">2) Once participants have identified activities for everyone in their district, consider how they might change for vulnerable populations. Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this IR.</p>
             </div>
@@ -38,7 +38,7 @@
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">05</p>
                     <p class="font-semibold text-md text-blue-600">Key Barriers</p>
                 </div>
-                <textarea id="key_barriers" name="key_barriers" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
+                <textarea id="key_barriers" required name="key_barriers" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
             </div>
 
             <div class="bg-white p-4 rounded-lg w-full mb-5">
@@ -63,7 +63,7 @@
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">07</p>
                     <p class="font-semibold text-md text-blue-600">Notes</p>
                 </div>
-                <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
+                <textarea id="notes" required name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
             </div>
 
             <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>

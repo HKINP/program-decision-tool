@@ -87,7 +87,7 @@
                         </tr>
                         @foreach ($allActivities as $activity)
                         <tr>
-                            <td class="border border-gray-300 p-2 text-sm">{{ $activity->activities }}</td>
+                            <td class="border border-gray-300 p-2 text-sm">{{ $activity->activity->activities }}</td>
                             <td class="border border-gray-300 p-2 text-sm">
                                 <ul class="list-none space-y-1">
                                     @foreach($activity->platforms as $platform)
@@ -109,7 +109,7 @@
                         @foreach ($vulnerableActivities as $activity)
                         
                             <tr>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->activities }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $activity->activity->activities }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">
                                     <ul class="list-none space-y-1">
                                         @foreach($activity->platforms as $platform)

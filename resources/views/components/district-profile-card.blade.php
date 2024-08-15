@@ -2,7 +2,7 @@
     <!-- Province Section -->
     <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
         <div class="flex items-center mb-4">
-            <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
+            <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">02</p>
 
             <p class="font-semibold text-md ml-4">
                 <span class="text-blue-600"> Province: </span>
@@ -13,7 +13,7 @@
     <!-- District Section -->
     <div class="bg-white p-4 mb-4 rounded-lg border border-[#D8DAE5] flex-1">
         <div class="flex items-center mb-4">
-            <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">02</p>
+            <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">03</p>
             <p class="font-semibold text-md ml-4">
                 <span class="text-blue-600"> District: </span>
                 <span class="text-black">{{ $districtprofile->district }}</span>

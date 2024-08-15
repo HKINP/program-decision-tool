@@ -81,7 +81,7 @@ class PrioritizedActivities extends Model
         $platformsIds = explode(',', $this->attributes['platforms_id']);
         return Platforms::whereIn('id', $platformsIds)->get();
     }
-    public function activities()
+    public function activity()
     {
         return $this->belongsTo(Activities::class);
     }

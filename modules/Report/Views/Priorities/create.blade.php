@@ -20,19 +20,10 @@
                 <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
 
-            <div class="space-y-2 text-xs italic">
-                <p>1) Use the menu below to design community-level activities. To support women and caregivers to adopt
-                    the selected behaviors, consider what barriers they would need to overcome. These barriers may be
-                    individual (e.g., knowledge, self-confidence, time, cost) or social (family support, cultural
-                    practices, gender norms), or structural (health system, food system). We will address health system
-                    barriers under IR 2 and food system barriers under IR 3.</p>
-                <p class="mb-2">2) For each platform/program determine what you would need to do: conduct IPC,
-                    organize community events (e.g., street theater), refer or link with another program e.g., social
-                    protection. Complete the who and how columns to determine further who needs to be involved and how.
-                    Then describe your activity in as much detail as possible. Once you have completed identifying
-                    activities for everyone in the district, consider how it might change for underserved populations.
-                    Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7
-                    for this IR.</p>
+            <div class="space-y-2 text-base italic">
+                <p>1) Take a few minutes to explain the indicators below. Any recommended behavior practiced by fewer than 80% of the target population is considered inadequate and will be highlighted as orange (practiced by 50%-79%) or red (practiced by fewer than 50% of the population). Any discouraged behavior (e.g., consuming unhealthy foods) practiced by more than 20% of the population will turn red.</p>
+                <p class="mb-2">2) 2) Ask participants to prioritize 3-5 indicators to focus on in their district in the first year of USAID Integrated Nutrition. Please note that the year 1  implementation duration for each district is about 4-6 months. As participants select indicators to focus on consider at least
+                <strong>1 related to children, 1 adolescent girls or women, and 1 WASH</strong>.</p>
             </div>
         </div>
       <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
@@ -44,7 +35,7 @@
 
             <div class="overflow-x-auto mt-6">
 
-                <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80%</p>
+                <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80% for recommended behaviors (e.g., breastfeeding) and red >20% for discouraged behaviors (e.g., consumption of unhealthy foods)</p>
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
                         <tr>

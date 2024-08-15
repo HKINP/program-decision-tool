@@ -19,19 +19,12 @@
                 <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
 
-            <div class="space-y-2 text-xs italic">
-                <p>1) Spend time discussing why the selected indicators are at the level they are. Consider what
-                    barriers they would need to overcome. These barriers may be individual (e.g., knowledge,
-                    self-confidence, time, cost) or social (family support, cultural practices, gender norms), or
-                    structural (availability, health system, food system). We will address health system barriers under
-                    IR 2 and food system barriers under IR 3.
+            <div class="space-y-2 text-base italic">
+                <p>1) Spend time discussing why the selected indicators are at the level they are. Consider what barriers they would need to overcome. These barriers may be individual (e.g., knowledge, self-confidence, time, cost) or social (family support, cultural practices, gender norms), or structural (availability, health system, food system). We will address health system barriers under <strong>Step 4</strong>
+                    and food system barriers under <strong>Step 5</strong>.
 
                 </p>
-                <p class="mb-2">2) Ask participants to beign by identifying the program or platform they would like to
-                    strengthen. Reference the district profile sheet as necessary. Then ask participants to describe
-                    their activity in as much detail as possible. Once they have completed identifying activities for
-                    everyone in the district, consider how it might change for vulnerable populations. Given the year 1
-                    implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this IR.
+                <p class="mb-2">2) Ask participants to <strong>begin</strong> by identifying the program or platform they would like to strengthen. Reference the district profile sheet as necessary. Then ask participants to describe their activity in as much detail as possible. Once they have completed identifying activities for everyone in the district, consider how it might change for vulnerable populations. Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this IR.
                 </p>
             </div>
         </div>
@@ -41,5 +34,5 @@
 
 
     </div>
-    
+
 </x-app-layout>

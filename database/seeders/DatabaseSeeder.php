@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ProvincesTableSeeder::class,
             TargetGroupsTableSeeder::class,
             ThematicAreasTableSeeder::class,
-            DistrictsTableSeeder::class,
+            // DistrictsTableSeeder::class,
             IndicatorsTableSeeder::class,
             QuestionsTableSeeder::class,
             StagesTableSeeder::class,

@@ -19,15 +19,13 @@
                 <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
 
-            <div class="space-y-2 text-xs italic">
+            <div class="space-y-2 text-base italic">
                 <p>1) Ask participants what health systems-level barriers contribute to the indicators selected. Then identify platforms and how they can strengthen the platforms to help overcome the barriers.
 
 
                 </p>
-                <p class="mb-2">2) Once participants have identified activities for everyone in their district, 
-                    consider how they might change for vulnerable populations. Given the year 1 implementation 
-                    duration of 4-6 months, try to limit the number of activities to 5-7 for this IR. Select management-level activities as necessary.
-                </p>
+                <p class="mb-2">2) Once participants have identified activities for everyone in their district, consider how they might change for vulnerable populations. Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this
+step. Select management-level activities as necessary.</p>
             </div>
         </div>
        

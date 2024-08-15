@@ -69,7 +69,13 @@
                     @foreach ($activitiesList as $activity)
                     <tr class="bg-gray-100 border-b">
                         <td class="p-3">{{ $serialNumber++ }}</td>
-                        <td class="p-3">{{ $activity->proposed_activities }}</td>
+                        <td class="p-3">
+                            @if ($stageId == 6)
+                            {{ $activity->activity->activities }}
+                            @else
+                            {{ $activity->proposed_activities }}
+                            @endif
+                        </td>
                         <td class="p-3">{{ $activity->remarks }}</td>
                         <td class="p-3">
                             <a href="#" class="open-modal" data-activity-id="{{ $activity->id }}">

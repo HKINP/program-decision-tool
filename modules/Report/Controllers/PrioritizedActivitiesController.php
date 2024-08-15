@@ -68,10 +68,12 @@ class PrioritizedActivitiesController extends Controller
 
             // Fetch prioritized activities
             $prioritizedActivities = $this->prioritizedactivities
-                ->with(['targetGroup', 'thematicArea', 'indicator','activities'])
+                ->with(['targetGroup', 'thematicArea', 'indicator','activity'])
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
                 ->get();
+
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($prioritizedActivities as $activity) {
                 $activity->platforms; // This will trigger the accessor and load related platforms
 

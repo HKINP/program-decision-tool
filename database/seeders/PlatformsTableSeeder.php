@@ -1,50 +1,47 @@
 <?php
 
 namespace Database\Seeders;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PlatformsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        $platforms = [
-            ['platforms' => 'ANC', 'updated_by' => 1],
-            ['platforms' => 'ASF production (livestock, fishery)', 'updated_by' => 1],
-            ['platforms' => 'CF seal', 'updated_by' => 1],
-            ['platforms' => 'Climate-smart HFP (fruit & veg)', 'updated_by' => 1],
-            ['platforms' => 'CLTS', 'updated_by' => 1],
-            ['platforms' => 'CNSI', 'updated_by' => 1],
-            ['platforms' => 'Digital', 'updated_by' => 1],
-            ['platforms' => 'ECDC', 'updated_by' => 1],
-            ['platforms' => 'EPI', 'updated_by' => 1],
-            ['platforms' => 'Gender integration', 'updated_by' => 1],
-            ['platforms' => 'GMP', 'updated_by' => 1],
-            ['platforms' => 'GoN input subsidies, insurance', 'updated_by' => 1],
-            ['platforms' => 'Health facilities', 'updated_by' => 1],
-            ['platforms' => 'Health facility', 'updated_by' => 1],
-            ['platforms' => 'HMG', 'updated_by' => 1],
-            ['platforms' => 'Home', 'updated_by' => 1],
-            ['platforms' => 'IMAM', 'updated_by' => 1],
-            ['platforms' => 'IMNCI', 'updated_by' => 1],
-            ['platforms' => 'Indigenous crop-based foods', 'updated_by' => 1],
-            ['platforms' => 'MBFHI', 'updated_by' => 1],
-            ['platforms' => 'NFSSC (local)', 'updated_by' => 1],
-            ['platforms' => 'NFSSC (ward)', 'updated_by' => 1],
-            ['platforms' => 'NSA curriculum', 'updated_by' => 1],
-            ['platforms' => 'PNC', 'updated_by' => 1],
-            ['platforms' => 'Post-harvest management', 'updated_by' => 1],
-            ['platforms' => 'Private facility', 'updated_by' => 1],
-            ['platforms' => 'Private sector', 'updated_by' => 1],
-            ['platforms' => 'Producer groups', 'updated_by' => 1],
-            ['platforms' => 'School', 'updated_by' => 1],
-            ['platforms' => 'Social protection', 'updated_by' => 1],
-            ['platforms' => 'VSLAs', 'updated_by' => 1],
-        ];
-
-        DB::table('platforms')->insert($platforms);
+        DB::table('platforms')->insert([
+            ['parent_id' => null, 'platforms' => 'Antenatal Care (ANC)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'ASF production (livestock, fishery)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'CF seal', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Climate-smart HFP (fruit & veg)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'CLTS', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'CNSI', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Digital', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Early Childhood Development Center (ECDC)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Expanded Program on Immunization (EPI)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Gender integration', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Growth Monitoring and Promotion (GMP)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'GoN input subsidies, insurance', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Health facilities', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Health facility', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Health Mothers Group (HMG)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Home', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Integrated Management of Acute Malnutrition (IMAM)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Integrated Management of Newborn and Childhood Illness (IMNCI)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Indigenous crop-based foods', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'MBFHI', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'NFSSC (local)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'NFSSC (ward)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'NSA curriculum', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Postnatal Care (PNC)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Post-harvest management', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Private facility', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Private sector', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Producer groups', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'School', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Social protection', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Village Savings and Loan Association (VSLAs)', 'updated_by' => 1],
+            ['parent_id' => null, 'platforms' => 'Others', 'updated_by' => 1],
+        ]);
     }
 }
