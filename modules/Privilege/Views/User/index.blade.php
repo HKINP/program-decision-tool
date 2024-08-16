@@ -1,34 +1,40 @@
 <x-app-layout>
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-
-        <!-- Dashboard actions -->
-        <div class="sm:flex sm:justify-between sm:items-center mb-8">
-
-            <!-- Left: Title -->
-            <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Dashboard</h1>
-            </div>
-
-            <!-- Right: Actions -->a
-            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-
-                <!-- Filter button -->
-                <x-dropdown-filter align="right" />
-
-                <!-- Datepicker built with flatpickr -->
-                <x-datepicker />
-
-                <!-- Add view button -->
-                <button class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                    <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
-                        <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                  </svg>
-                  <span class="max-xs:sr-only">Add View</span>
-                </button>
-                
-            </div>
-
-        </div>
-        
-        
+    <x-table-listing
+    :headers="['S.N', 'User Name', 'User Email', 'Actions']" 
+    :title="'Users'" 
+    :useAddModal="true" 
+    :name="'user'" 
+    :addRoute="route('user.store')">
+    
+        @forelse ($users as $index => $user)
+        <tr>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $user->name }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $user->email }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="flex space-x-4">
+                    <a href="{{ route('user.get.change.password', $user->id) }}" class="text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-key"></i>
+                    </a>
+                    <a href="{{ route('user.edit', $user->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('user.destroy', $user->id) }}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="3" class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
+                No data available
+            </td>
+        </tr>
+        @endforelse
+    </x-table-listing>
 </x-app-layout>

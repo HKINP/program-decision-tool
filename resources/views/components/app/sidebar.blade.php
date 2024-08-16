@@ -26,7 +26,7 @@
                 </svg>
             </button>
             <!-- Logo -->
-            <a class="block" href="{{ route('dashboard') }}">
+            <!-- <a class="block" href="{{ route('dashboard') }}">
                 <svg width="auto" height="128" viewBox="0 0 82 128" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0)">
                         <path d="M0 -0.00127178V12.4516C4.82053 12.4516 9.44362 14.3692 12.8523 17.7827C16.2609 21.1961 18.1758 25.8257 18.1758 30.653C18.1758 35.4804 16.2609 40.11 12.8523 43.5234C9.44362 46.9368 4.82053 48.8545 0 48.8545V61.2999C4.05962 61.3633 8.09128 60.6174 11.8603 59.1055C15.6292 57.5937 19.0603 55.3461 21.9535 52.4936C24.8468 49.6412 27.1444 46.2408 28.7128 42.4906C30.2812 38.7404 31.0889 34.7151 31.0889 30.6493C31.0889 26.5835 30.2812 22.5583 28.7128 18.808C27.1444 15.0578 24.8468 11.6574 21.9535 8.80496C19.0603 5.9525 15.6292 3.70492 11.8603 2.19306C8.09128 0.681207 4.05962 -0.0647211 0 -0.00127178Z" fill="white"></path>
@@ -52,7 +52,7 @@
                         </clipPath>
                     </defs>
                 </svg>
-            </a>
+            </a> -->
         </div>
 
         <!-- Links -->
@@ -85,38 +85,38 @@
                             </div>
                         </a>
                     </li>
-                    <!-- E-Commerce -->
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['ecommerce'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['ecommerce']) ? 1 : 0 }} }">
-                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['ecommerce'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                    <!-- User Configuration -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['user','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
+                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['ecommerce'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['user','role','permission'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                         <path d="M9 6.855A3.502 3.502 0 0 0 8 0a3.5 3.5 0 0 0-1 6.855v1.656L5.534 9.65a3.5 3.5 0 1 0 1.229 1.578L8 10.267l1.238.962a3.5 3.5 0 1 0 1.229-1.578L9 8.511V6.855ZM6.5 3.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm4.803 8.095c.005-.005.01-.01.013-.016l.012-.016a1.5 1.5 0 1 1-.025.032ZM3.5 11c.474 0 .897.22 1.171.563l.013.016.013.017A1.5 1.5 0 1 1 3.5 11Z" />
                                     </svg>
                                     <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">User Configuration</span>
                                 </div>
                                 <!-- Icon -->
                                 <div class="flex shrink-0 ml-2 mr-2  lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(in_array(Request::segment(1), ['ecommerce'])){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(in_array(Request::segment(1), ['user','role','permission'])){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
                                         <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                     </svg>
                                 </div>
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['ecommerce'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
+                            <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('thematicarea.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('thematicarea.index') }}">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('user.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('user.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Users</span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('thematicarea.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('thematicarea.index') }}">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('role.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('role.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Roles</span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('thematicarea.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('thematicarea.index') }}">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Permissions</span>
                                     </a>
                                 </li>
