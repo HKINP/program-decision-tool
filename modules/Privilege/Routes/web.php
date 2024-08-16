@@ -20,7 +20,7 @@ use Modules\Privilege\Controllers\UserPasswordChangeController;
 |
 */
 
-// Route::middleware(['web','auth', [logger'])->namespace('Modules\Privilege\Controllers')->group(function(){
+Route::middleware(['web','auth','logger'])->namespace('Modules\Privilege\Controllers')->group(function(){
 
     // Route::middleware('can:manage-permission')->prefix('privilege')->group(function(){
         Route::get('permission', [PermissionController::class, 'index'])->name('permission.index');
@@ -85,4 +85,4 @@ use Modules\Privilege\Controllers\UserPasswordChangeController;
     // Route::get('guidelines', [UserGuidelineController::class, 'index'])->name('guideline.index');
     // Route::get('guidelinescheck', [UserGuidelineController::class, 'guidelinescheck'])->name('guideline.guidelinescheck');
     // Route::get('guidelines/{guideline}', [UserGuidelineController::class, 'show'])->name('guideline.show');
-// });
+});
