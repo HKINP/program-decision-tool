@@ -39,7 +39,7 @@
         </div>
           <!-- Heading and Edit Button -->
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold">Step 6. Enabling Environment Activities </h2>
+            <h2 class="text-lg font-bold">Step 6. Enabling Environment Activities (IR4) </h2>
             <a href="http://localhost:8000/thematicarea/edit"
                 class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
                 <i class="fas fa-edit"></i>

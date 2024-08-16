@@ -98,7 +98,7 @@
                     </div>
                     <div class="flex flex-col w-full">
                         <label for="platform-option-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Platform</label>
-                        <select id="platform-option-${questionId}-${activityCount}" multiple name="platforms_id[${questionId}-${activityCount}][]"
+                        <select id="platform-option-${questionId}-${activityCount}" required multiple name="platforms_id[${questionId}-${activityCount}][]"
                             class="bg-white border border-gray-300 multipleselect rounded-lg p-2 text-sm w-full">
                             ${platformOptionsHtml}
                         </select>

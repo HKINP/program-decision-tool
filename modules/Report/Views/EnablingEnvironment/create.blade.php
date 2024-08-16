@@ -10,7 +10,7 @@
                     </svg>
                 </div>
                 <!-- Step Description -->
-                <p class="font-semibold text-[24px]">Step 6. Enabling Environment Activities</p>
+                <p class="font-semibold text-[24px]">Step 6. Enabling Environment Activities (IR4)</p>
             </div>
         </div>
 

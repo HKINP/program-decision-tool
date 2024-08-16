@@ -13,20 +13,13 @@
             <div
                 class="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b px-6 py-6 bg-white border-gray-200">
                 <x-form-component :action="route('platform.store')" :method="'POST'" :fields="[
-                    [
-                        'name' => 'parent_id',
-                        'label' => 'Parent Platform',
-                        'type' => 'select',
-                        'required' => true,
-                        'width' => 'w-1/2',
-                        'options' => $platforms,
-                    ],
+                    
                     [
                         'name' => 'platforms',
                         'label' => 'Platform Name',
                         'type' => 'text',
                         'required' => true,
-                        'width' => 'w-1/2',
+                        'width' => 'w-full',
                     ],
                     
                     

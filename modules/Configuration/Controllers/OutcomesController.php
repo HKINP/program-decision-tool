@@ -35,12 +35,13 @@ class OutcomesController extends Controller
      */
     public function index()
     {
-       $ir=[
-        1=>'IR1. Activities',
-        2=>'IR2. Activities',
-        3=>'IR3. Activities',
-        4=>'IR4. Activities',        
-        ] ;
+        $ir=[
+            1=>'Intermediate Result 1. Improved Household Nutrition Practices',
+            2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
+            3=>'Intermediate Result 3: Improved access to safe, diverse, and nutritious foods ',
+            4=>'Intermediate Result 4: Strengthened national and subnational government capacity for multi-sectoral nutrition programming',            
+            ];
+            
        $outcomes=$this->outcomes->orderby('id', 'asc')->get();
        return view('Configuration::outcomes.index')
             ->withIr($ir)
@@ -57,12 +58,12 @@ class OutcomesController extends Controller
         
         $outcomes = $this->outcomes->all()->pluck('activities', 'id')->toArray();
         $ir=[
-            1=>'IR1. Activities',
-            2=>'IR2. Activities',
-            3=>'IR3. Activities',
-            4=>'IR4. Activities',
-            
-            ] ;
+            1=>'Intermediate Result 1. Improved Household Nutrition Practices',
+            2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
+            3=>'Intermediate Result 3: Improved access to safe, diverse, and nutritious foods ',
+            4=>'Intermediate Result 4: Strengthened national and subnational government capacity for multi-sectoral nutrition programming',            
+            ];
+
         return view('Configuration::outcomes.create')
         ->withIr($ir)
         ->withOutcomes($outcomes);
@@ -124,10 +125,10 @@ class OutcomesController extends Controller
         // $this->authorize('manage-account-code');
         $outcomes = $this->outcomes->all()->pluck('outcomes', 'id')->toArray();
         $ir=[
-            1=>'IR1. Activities',
-            2=>'IR2. Activities',
-            3=>'IR3. Activities',
-            4=>'IR4. Activities',            
+            1=>'Intermediate Result 1. Improved Household Nutrition Practices',
+            2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
+            3=>'Intermediate Result 3: Improved access to safe, diverse, and nutritious foods ',
+            4=>'Intermediate Result 4: Strengthened national and subnational government capacity for multi-sectoral nutrition programming',            
             ];
             
         return view('Configuration::outcomes.edit')
