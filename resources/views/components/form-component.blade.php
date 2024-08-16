@@ -37,7 +37,8 @@
             </div>
             @elseif ($field['type'] === 'select')
             <select style="width: 100%" data-placeholder="{{ $field['placeholder'] ?? 'Please select an option' }}" data-allow-clear="false" title="Select city..." id="{{ $field['name'] }}" name="{{ $field['name'] }}{{ isset($field['multiple']) && $field['multiple'] ? '[]' : '' }}" class="{{ isset($field['multiple']) && $field['multiple'] ? 'multipleselect' : '' }} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ $field['required'] ? 'required' : '' }} {{ isset($field['multiple']) && $field['multiple'] ? 'multiple' : '' }}>
-                @foreach ($field['options'] as $value => $label)
+               <option value="{{$field['valuefirst'] ?? ''}}">{{$field['labelfirst'] ?? ''}}</option>
+            @foreach ($field['options'] as $value => $label)
                     <option value="{{ $value }}" 
                         @if(isset($field['multiple']) && $field['multiple'])
                             {{ in_array($value, old($field['name'], $values->{$field['name']} ?? [])) ? 'selected' : '' }}

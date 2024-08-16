@@ -1,31 +1,49 @@
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-    </button>
-    <h4 class="modal-title" id="myModalLabel">Edit Permission</h4>
-</div>
-<div class="modal-body">
-    <div class="form-group">
-        <label for="moduleName">Parent Permission</label>
-        <select name="parent_id" class="form-control parent_id select_search">
-            <option value="0">Parent Itself</option>
-            @foreach($permissions as $id=>$child)
-                <option value="{{ $id }}" @if($id == $permission->parent_id) selected="selected" @endif>{{ $child }}</option>
-            @endforeach
-        </select>
+
+
+<x-app-layout>
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+        <div class="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Edit Permission</h1>
+            </div>
+
+        </div>
+
+        <div class="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 ">
+            <div
+                class="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b px-6 py-6 bg-white border-gray-200">
+                <x-form-component 
+                :action="route('permission.update', $permission->id)" 
+                :method="'PUT'" 
+                :values="$permission"
+                :fields="[
+                    [
+                        'name' => 'parent_id',
+                        'label' => 'Parent Permission',
+                        'type' => 'select',
+                        'required' => true,
+                        'width' => 'w-1/2',
+                        'labelfirst'=>'Parent itself',
+                        'valuefirst'=> 0,
+                        'options' => $permissions, // Assumes $provinces is an array of options for the select field
+                    ],
+                    [
+                        'name' => 'permission_name',
+                        'label' => 'Permission Name',
+                        'type' => 'text',
+                        'required' => true,
+                        'width' => 'w-1/2',
+                    ],
+                    [
+                        'name' => 'guard_name',
+                        'label' => 'Guard Name',
+                        'type' => 'text',
+                        'required' => false, // Adjust based on your requirements
+                        'width' => 'w-1/2',
+                    ]
+                ]" />
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="moduleName">Permission Name</label>
-        <input type="text" name="permission_name" class="form-control" value="{!! $permission->permission_name !!}"
-               placeholder="Enter permission name"/>
-    </div>
-    <div class="form-group">
-        <label for="moduleSlug">Guard Name</label>
-        <input type="text" name="guard_name" class="form-control" value="{!! $permission->guard_name !!}"
-               placeholder="Enter guard name"/>
-    </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <input type="hidden" name="id" value="{!! $permission->id !!}" />
-</div>
+
+</x-app-layout>

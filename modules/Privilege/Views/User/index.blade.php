@@ -2,7 +2,7 @@
     <x-table-listing
     :headers="['S.N', 'User Name', 'User Email', 'Actions']" 
     :title="'Users'" 
-    :useAddModal="true" 
+    :useAddModal="false" 
     :name="'user'" 
     :addRoute="route('user.store')">
     

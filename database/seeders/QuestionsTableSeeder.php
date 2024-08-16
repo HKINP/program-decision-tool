@@ -33,7 +33,8 @@ class QuestionsTableSeeder extends Seeder
             ['target_group_id' => 1, 'thematic_area_id' => 4, 'question' => 'What proportion of children 0-59 months are screened for wasting?', 'indicator_id' => 16],
             ['target_group_id' => 2, 'thematic_area_id' => 5, 'question' => 'What proportion of adolescent girls 15-19 years take iron-folic acid (IFA) supplementation?', 'indicator_id' => 17],
             ['target_group_id' => 2, 'thematic_area_id' => 5, 'question' => 'What proportion of adolescent girls 15-19 years take iron-folic acid (IFA) for 13 weeks?', 'indicator_id' => 18],
-            ['target_group_id' => 2, 'thematic_area_id' => 5, 'question' => 'What proportion of adolescent girls 15-19 years take iron-folic acid (IFA) for 26 weeks?', 'indicator_id' => 19],
+            ['target_group_id' => 2, 'thematic_area_id' => 5, 'question' => 'What proportion of adolescent girls 15-19 years use a modern contraceptive method?
+', 'indicator_id' => 19],
             ['target_group_id' => 3, 'thematic_area_id' => 6, 'question' => 'What proportion of pregnant women complete 4+ antenatal care (ANC) visits?', 'indicator_id' => 20],
             ['target_group_id' => 3, 'thematic_area_id' => 6, 'question' => 'What proportion of pregnant women take 180+ days of IFA?', 'indicator_id' => 21],
             ['target_group_id' => 3, 'thematic_area_id' => 6, 'question' => 'What proportion of pregnant women deliver at a health facility?', 'indicator_id' => 22],
@@ -41,7 +42,7 @@ class QuestionsTableSeeder extends Seeder
             ['target_group_id' => 3, 'thematic_area_id' => 5, 'question' => 'What proportion of women (15-49 years) have minimum dietary diversity (4+ food groups)?', 'indicator_id' => 24],
             ['target_group_id' => 3, 'thematic_area_id' => 5, 'question' => 'What proportion of women (15-49 years) consume sweet beverages?', 'indicator_id' => 25],
             ['target_group_id' => 3, 'thematic_area_id' => 5, 'question' => 'What proportion of women (15-49 years) consume unhealthy foods?', 'indicator_id' => 26],
-            ['target_group_id' => 3, 'thematic_area_id' => 8, 'question' => 'What proportion of women (15-19 years) use a modern contraceptive method?', 'indicator_id' => 27],
+            ['target_group_id' => 3, 'thematic_area_id' => 8, 'question' => 'What proportion of women (15-49 years) use a modern contraceptive method?', 'indicator_id' => 27],
             ['target_group_id' => 4, 'thematic_area_id' => 9, 'question' => 'What proportion of family members drink safe (treated) drinking water?', 'indicator_id' => 28],
             ['target_group_id' => 4, 'thematic_area_id' => 10, 'question' => 'What proportion of households have a fixed handwashing facility?', 'indicator_id' => 29],
             ['target_group_id' => 4, 'thematic_area_id' => 11, 'question' => 'What proportion of households have a latrine?', 'indicator_id' => 20],

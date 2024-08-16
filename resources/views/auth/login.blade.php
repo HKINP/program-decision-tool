@@ -2,7 +2,8 @@
    
 <div class="border border-gray-300 rounded-lg p-6 ">
        
-<h1 class="text-base text-white align-left dark:text-gray-100 font-bold mb-6">Sign In</h1>
+<h1 class="text-sm text-white text-center dark:text-gray-100 font-semibold mb-10">USAID Integrated Nutrition Multisectoral Intervention Design Decision Tool
+</h1>
         
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">

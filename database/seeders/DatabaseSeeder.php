@@ -16,16 +16,16 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            UserSeeder::class,
-            ProvincesTableSeeder::class,
-            TargetGroupsTableSeeder::class,
-            ThematicAreasTableSeeder::class,
+            // UserSeeder::class,
+            // ProvincesTableSeeder::class,
+            // TargetGroupsTableSeeder::class,
+            // ThematicAreasTableSeeder::class,
             // DistrictsTableSeeder::class,
-            IndicatorsTableSeeder::class,
+            // IndicatorsTableSeeder::class,
             QuestionsTableSeeder::class,
-            StagesTableSeeder::class,
-            ThematicAreaTargetGroupSeeder::class,
-            PlatformsTableSeeder::class
+            // StagesTableSeeder::class,
+            // ThematicAreaTargetGroupSeeder::class,
+            // PlatformsTableSeeder::class
         ]);
     }
 }

@@ -17,8 +17,12 @@ class CreatePermissionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('parent_id')->default(0);
             $table->string('permission_name');
-            $table->string('guard_name');
-            $table->nullableTimestamps();
+            $table->string('guard_name');           
+            $table->integer('updated_by')->unsigned();
+            $table->softDeletes(); 
+            $table->timestamps();
+            
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

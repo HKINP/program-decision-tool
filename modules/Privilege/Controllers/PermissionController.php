@@ -37,7 +37,7 @@ class PermissionController extends Controller
     public function index()
     {
         return view('Privilege::Permission.index')
-                ->withPermissions($this->permissions->all());
+            ->withPermissions($this->permissions->all());
     }
 
     /**
@@ -60,13 +60,11 @@ class PermissionController extends Controller
     public function store(StoreRequest $request)
     {
         $permission = $this->permissions->create($request->all());
-        if($permission){
-            return response()->json(['status' => 'ok',
-                'permission' => $permission,
-                'message' => 'Permission is successfully added.'], 200);
+       
+        if ($permission) {
+            return redirect()->route('permission.index')->with('success', 'Permission is successfully added.');
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Permission can not be added.'], 422);
+        return redirect()->route('permission.index')->with('error', 'Permission can not be added.');
     }
 
     /**
@@ -78,7 +76,7 @@ class PermissionController extends Controller
     public function show($id)
     {
         $permission = $this->permissions->find($id);
-        return response()->json(['status'=>'ok','permission'=>$permission], 200);
+        return response()->json(['status' => 'ok', 'permission' => $permission], 200);
     }
 
     /**
@@ -103,14 +101,12 @@ class PermissionController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $permission = $this->permissions->update($request->get('id'), $request->except('id'));
-        if($permission){
-            return response()->json(['status' => 'ok',
-                'permission' => $permission,
-                'message' => 'Permission is successfully updated.'], 200);
+        $permission = $this->permissions->update($id, $request->except('id'));
+       
+        if ($permission) {
+            return redirect()->route('permission.index')->with('success', 'Permission is successfully updated.');
         }
-        return response()->json(['status'=>'error',
-            'message'=>'Permission can not be updated.'], 422);
+        return redirect()->route('permission.index')->with('error', 'Permission can not be updated.');
     }
 
     /**
@@ -122,16 +118,12 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         $flag = $this->permissions->destroy($id);
-        if($flag){
-            return response()->json([
-                'type'=>'success',
-                'message'=>'Permission is successfully deleted.',
-            ], 200);
+       
+        if ($flag) {
+            return redirect()->route('permission.index')->with('success', 'Permission is successfully deleted.');
         }
-        return response()->json([
-            'type'=>'error',
-            'message'=>'Permission can not deleted.',
-        ], 422);
+        return redirect()->route('permission.index')->with('error', 'Permission cannot be deleted.');
+
     }
 
     /**
