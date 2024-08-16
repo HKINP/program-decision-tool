@@ -1,5 +1,6 @@
 <x-authentication-layout>
-    <h1 class="text-3xl text-white dark:text-gray-100 font-bold mb-6">{{ __('Welcome back!') }}</h1>
+    <h1 class="text-base text-black align-left  dark:text-gray-100 font-bold mb-6">USAID Integrated Nutrition Multisectoral Intervention Design Decision Tool
+    </h1>
     @if (session('status'))
         <div class="mb-4 font-medium text-sm text-green-600">
             {{ session('status') }}
@@ -8,13 +9,14 @@
     <!-- Form -->
     <form method="POST" action="{{ route('login') }}">
         @csrf
-        <div class="space-y-4">
+        <div class="space-y-4 text-left ">
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
+                <label for="email" class="block text-black text-sm ">Username or Email</label>
                 <x-input id="email" type="email" name="email" :value="old('email')" required autofocus />                
             </div>
             <div>
-                <x-label for="password" value="{{ __('Password') }}" />
+               
+                <label for="password" class="block text-black text-base text-sm ">Password</label>
                 <x-input id="password" type="password" name="password" required autocomplete="current-password" />                
             </div>
         </div>
@@ -26,7 +28,7 @@
                     </a>
                 </div>
             @endif            
-            <x-button class="ml-3">
+            <x-button class="ml-3 bg-[#7a4183]">
                 {{ __('Sign in') }}
             </x-button>            
         </div>
