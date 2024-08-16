@@ -34,51 +34,71 @@
 
 <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400">
 
-    <main class="relative flex items-center justify-center min-h-screen">
+    <main class="bg-[#7d3c80] dark:bg-gray-900">
 
-        <!-- Full-width Background Image -->
-        <img class="absolute inset-0 object-cover w-full h-full z-0" src="{{ asset('images/login-banner.jpg') }}" alt="Authentication image" />
+        <div class="relative flex">
 
-        <!-- Content Section -->
-        <div class="relative z-10 p-8 bg-white rounded-lg shadow-lg text-white max-w-lg w-full mx-auto text-center">
+            <!-- Content -->
+            <div class="h-full md:w-1/2">
 
-            <!-- Header with Logos -->
-            <div class="flex justify-center space-x-4 mb-8">
-                <img class="h-10 object-cover" src="{{ asset('images/USAID.jpg') }}" alt="USAID Logo" />
-                <img class="h-8 object-cover" src="{{ asset('images/HKIntl.jpg') }}" alt="Helen Keller Intl Logo" />
-            </div>
+                <div class="min-h-[100dvh] h-full flex flex-col justify-between">
 
-            <!-- Main Content (Slot) -->
-            <div class="text-lg mb-8">
-                {{ $slot }}
-            </div>
+                    <!-- Header -->
+                    <div class="flex-1">
+                        <div class="flex items-center justify-evenly h-16 px-4 py-12 sm:px-6 lg:px-8 bg-white">
+                            <!-- Logos -->
+                            <img class="object-cover object-center h-20" src="{{ asset('images/USAID.jpg') }}" alt="USAID Logo" />
+                            <img class="object-cover object-center h-16" src="{{ asset('images/HKIntl.jpg') }}" alt="Helen Keller Intl Logo" />
+                        </div>
+                    </div>
 
-            <!-- Footer with Additional Logos -->
-            <div class="flex justify-center space-x-4">
-                <img class="h-10 object-cover" src="{{ asset('images/FHI360.jpg') }}" alt="FHI360 Logo" />
-                <img class="h-10 object-cover" src="{{ asset('images/CEAPRED.jpg') }}" alt="CEAPRED Logo" />
-                <img class="h-10 object-cover" src="{{ asset('images/ENPHO.jpg') }}" alt="ENPHO Logo" />
-                <img class="h-10 object-cover" src="{{ asset('images/NTAG.jpg') }}" alt="NTAG Logo" />
-                <img class="h-6 object-cover" src="{{ asset('images/Kaboom.jpg') }}" alt="Kaboom Logo" />
-            </div>
-            
-        </div>
+                    <div class="max-w-sm mx-auto w-full px-4 py-8 grow">
+                        {{ $slot }}
+                    </div>
 
-        <div class="absolute inset-x-0 bottom-0 flex flex-col justify-end p-4 text-white bg-black bg-opacity-50 text-sm">
-            <!-- Disclaimer -->
-            <p class="text-center mb-2">
-                This System is made possible by the generous support of the American people through the United States Agency for International Development (USAID). The contents are the responsibility of Helen Keller Intl and do not necessarily reflect the views of USAID or the United States government.
-            </p>
+                    <div>
+                        <div class="flex items-center justify-evenly h-16 px-4 py-12 sm:px-6 lg:px-8 bg-white">
+                            <img class="object-cover object-center h-16" src="{{ asset('images/FHI360.jpg') }}" alt="FHI360 Logo" />
+                            <img class="object-cover object-center h-16" src="{{ asset('images/CEAPRED.jpg') }}" alt="CEAPRED Logo" />
+                            <img class="object-cover object-center h-16" src="{{ asset('images/ENPHO.jpg') }}" alt="ENPHO Logo" />
+                            <img class="object-cover object-center h-16" src="{{ asset('images/NTAG.jpg') }}" alt="NTAG Logo" />
+                            <img class="object-cover object-center h-8" src="{{ asset('images/Kaboom.jpg') }}" alt="Kaboom Logo" />
+                        </div>
+                    </div>
 
-            <!-- Copyright and Links -->
-            <div class="flex justify-between items-center text-center">
-                <p>&copy; {{ date('Y') }} Helen Keller Intl. All rights reserved.</p>
-                <div class="space-x-4">
-                    <a href="#" class="hover:underline">Terms of Service</a>
-                    <a href="#" class="hover:underline">Privacy Policy</a>
-                    <a href="#" class="hover:underline">Contact Us</a>
                 </div>
+
             </div>
+
+            <!-- Image Section with Overlay -->
+            <div class="hidden md:block relative md:w-1/2">
+                <img class="object-cover object-center w-full h-full" src="{{ asset('images/login-banner.jpg') }}" width="760" height="1024" alt="Authentication image" />
+                <div class="absolute inset-0 flex flex-col justify-between p-8 text-white bg-black bg-opacity-50">
+                    <!-- Title (top) -->
+                    <h1 class="text-xl font-bold">USAID Integrated Nutrition Multisectoral Intervention Design Decision Tool
+                    </h1>
+                  
+                </div>
+                <!-- Footer Section with Copyright and Terms -->
+                <div class="absolute inset-x-0 bottom-0 flex flex-col justify-end p-4 text-white bg-black bg-opacity-50 text-sm">
+                    <!-- Disclaimer -->
+                    <p class="text-left text-xs mb-4  ">
+                        This System is made possible by the generous support of the American people through the United States Agency for International Development (USAID). The contents are the responsibility of Helen Keller Intl and do not necessarily reflect the views of USAID or the United States government.
+                    </p>
+
+                    <!-- Copyright and Links -->
+                    <div class="flex justify-between items-center  text-center">
+                        <p>&copy; {{ date('Y') }} Helen Keller Intl. All rights reserved.</p>
+                        <div class="space-x-4">
+                            <a href="#" class="hover:underline">Terms of Service</a>
+                            <a href="#" class="hover:underline">Privacy Policy</a>
+                            <a href="#" class="hover:underline">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
         </div>
 
     </main>
