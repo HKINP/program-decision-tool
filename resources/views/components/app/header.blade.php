@@ -27,7 +27,7 @@
             <div class="flex items-center space-x-3">
 
                 <!-- Search Button with Modal -->
-                <x-modal-search />
+                
 
                 <!-- Notifications button -->
                 <x-dropdown-notifications align="right" />
