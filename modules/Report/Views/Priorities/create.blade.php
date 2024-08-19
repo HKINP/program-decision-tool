@@ -52,7 +52,26 @@
                         <!-- Existing rows rendered by server-side logic -->
                         @php $index = 1; @endphp
                         @foreach ($questions as $question)
-                        <tr class="priority-row ">
+                        @php
+                        // Determine color based on value
+                        $value = $question->indicator->provinceProfiles[0]->all_value;
+                        $source = $question->indicator->provinceProfiles[0]->source;
+                        $color = '';
+                    
+                        if ($value < 50) {
+                            $color = 'bg-red-600 text-white';
+                        } elseif ($value >= 50 && $value < 80) {
+                            $color = 'bg-orange-700 text-white';
+                        } elseif ($value >= 80) {
+                            $color = 'bg-green-600 text-white';
+                        }
+                    
+                        // Check if the current question has priority set to 1 in the given district
+                        $isPrioritized = $priorities->contains(function($priority) use ($question) {
+                            return $priority->question_id == $question->id && $priority->priority == 1;
+                        });
+                        @endphp
+                        <tr class="priority-row @if ($isPrioritized) bg-gray-300  @endif">
                             <td class="border text-sm text-black border-gray-200 px-2">
                                 <input type="number" name="target_group_id[]" value="{{ $question->targetGroup->id }}" hidden>
                                 {{ $question->targetGroup->target_group }}
@@ -64,15 +83,7 @@
                             <td class="border text-sm text-black border-gray-200 px-2">{{ $index++ }}</td>
                             <input type="number" name="question_id[]" value="{{$question->id}}" hidden>
                             <td class="border text-sm text-black border-gray-200 px-2">{{ $question->question }}</td>
-                            @php
-                            $value = $question->indicator->provinceProfiles[0]->all_value;
-                            $source=$question->indicator->provinceProfiles[0]->source;
-                            $color = '';
-
-                            if ($value < 50) { $color='bg-red-600 text-white' ; } elseif ($value>= 50 && $value < 80) { $color='bg-orange-700 text-white' ; } elseif ($value>= 80) {
-                                    $color = 'bg-green-600 text-white';
-                                    }
-                                    @endphp
+                           
                                     <td class="relative border text-sm text-black border-gray-200 text-center px-2 {{ $color }} group">
                                         {{ $value }}
                                         <!-- Hidden text displayed on hover -->
@@ -83,8 +94,8 @@
 
                                     <td class="border text-xs text-black border-gray-200 p-1 text-center">
                                         <select name="priority[]" class="mt-1 block w-full text-sm border-gray-300 rounded-lg shadow-sm priority-select">
-                                            <option value="0">Priority</option>
-                                            <option value="1">Yes</option>
+                                            <option value="0" {{ !$isPrioritized ? 'selected' : '' }}>Priority</option>
+                                            <option value="1" {{ $isPrioritized ? 'selected' : '' }}>Yes</option>
                                         </select>
                                     </td>
                         </tr>
@@ -101,11 +112,13 @@
                 </div>
 
                 <div class="space-y-2 text-xs italic">
-                    <textarea id="notes" name="notes" rows="4" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
+                    <textarea id="notes" name="notes" rows="4" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here...">{{ $stepRemarks->notes ?? null }}</textarea>
 
                 </div>
             </div>
-            <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
+            <div class="text-right mb-4">
+                <button type="submit" class="mt-4 p-2 bg-purple-800 text-white rounded">Save and Next</button>
+                </div>
     </div>
 
     </form>

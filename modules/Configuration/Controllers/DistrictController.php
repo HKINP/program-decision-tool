@@ -45,6 +45,16 @@ class DistrictController extends Controller
              return view('Configuration::District.index')
             ->withdistricts($districts);
     }
+    public function getdistrictbyprovince(Request $request)
+    {
+        $provinceIds = $request->provinceIds;
+
+        // Fetch districts based on selected provinces
+        $districts = $this->districts->whereIn('province_id', $provinceIds)->get();
+    
+        // Return districts as JSON response
+        return response()->json(['districts' => $districts]);
+    }
 
     /**
      * Show the form for creating a new account head.
@@ -57,8 +67,8 @@ class DistrictController extends Controller
             return [$province->id => $province->province];
         })->toArray();
 
-        return view('Configuration::District.create')
-        ->withProvinces($provinces);
+        return response()->json(['status'=>'success',"data"=>$provinces,
+            'message'=>'District Loaded Successfully'], 200);
     }
 
     /**

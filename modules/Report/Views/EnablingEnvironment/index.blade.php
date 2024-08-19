@@ -49,7 +49,7 @@
        
         <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
 
-            <div class="bg-white p-4 rounded-lg w-full mb-5">
+            {{-- <div class="bg-white p-4 rounded-lg w-full mb-5">
                 <div class="flex gap-2 items-center mb-4">
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">05
                     </p>
@@ -62,7 +62,7 @@
                         placeholder="Write your notes here...">{{ $stepRemarks->key_barriers }}</textarea>
 
                 </div>
-            </div>
+            </div> --}}
 
 
             <div class="bg-white p-4 rounded-lg w-full mb-5">

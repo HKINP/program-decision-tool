@@ -3,9 +3,13 @@
         <div class="mb-8 rounded-lg w-full mb-5">
             <div class="flex items-center gap-4 text-2xl">
                 <!-- First Arrow with Anchor Link -->
-                <a href="{{ route('steplist.create', ['did' => $districtprofile->id]) }}" class="border bg-white p-2 rounded-full ml-2 inline-flex items-center">
-                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path>
+                <a href="{{ route('steplist.create', ['did' => $districtprofile->id]) }}"
+                    class="border bg-white p-2 rounded-full ml-2 inline-flex items-center">
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="24"
+                        width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
+                        </path>
                     </svg>
                 </a>
 
@@ -49,7 +53,7 @@
                 <p>1) Please begin by asking participants to complete the district profile section. Discuss how they
                     would define vulnerability based on caset/ethnicity, geography, food insecurity, and wealth.
                 </p>
-                
+
             </div>
         </div>
         <div class="bg-white p-4 rounded-lg w-full mb-5">
@@ -63,14 +67,23 @@
                 <div class="flex flex-wrap -mx-2">
                     <!-- Column 1 -->
                     <div class="w-1/2 px-2 mb-6">
-                        <label for="municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Municipality</label>
-                        <input type="text" id="municipality-count" value="{{count($districtprofile->locallevel)}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
+                        <label for="municipality-count"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of
+                            Municipality</label>
+                        <input type="text" id="municipality-count" value="{{ count($districtprofile->locallevel) }}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" required="">
                     </div>
 
                     <!-- Column 2 -->
                     <div class="w-1/2 px-2 mb-6">
-                        <label for="vulnerable-municipality-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable Municipality</label>
-                        <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality" value="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">
+                        <label for="vulnerable-municipality-count"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Vulnerable
+                            Municipality</label>
+                        <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality"
+                            value=""
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="" required="">
                     </div>
 
                     {{-- <!-- Column 3 -->
@@ -91,28 +104,39 @@
                 <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
                     <thead class="rounded-lg">
                         <tr>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Municipality
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Remote
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Caste/Ethnicity
-                            </th>                           
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
+                               Religion
+                            </th>
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Food insecurity
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Wealth
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Climatic Change
                             </th>
-                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">
+                            <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top"
+                                style="line-height: 1.2;">
                                 Remark
                             </th>
-                            
+
                         </tr>
                     </thead>
                     <tbody class="rounded-lg" id="priority-table-body">
@@ -131,12 +155,15 @@
             </div>
 
             <div class="space-y-2 text-xs italic">
-                <textarea id="notes" required name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..."></textarea>
+                <textarea id="notes" required name="notes" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write your notes here..."></textarea>
 
             </div>
         </div>
-
-        <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
+        <div class="text-right mb-4">
+        <button type="submit" class="mt-4 p-2 bg-purple-800 text-white rounded">Save and Next</button>
+        </div>
         </form>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -185,6 +212,10 @@
                                     <input type="hidden" name="caste_ethnicity_status[]" value="0">
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
                                 </td>
+                                <td class="p-2 text-center">
+                                    <input type="hidden" name="religion_status[]" value="0">
+                                    <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
+                                </td>
                                
                                 <td class="p-2 text-center">
                                     <input type="hidden" name="food_security_status[]" value="0">
@@ -199,7 +230,7 @@
                                     <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
                                 </td>
                                 <td class="p-2 text-center">
-                                    <input type="text" name="remark[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <textarea id="remark" required name="remark[]" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..." style="resize: vertical;"></textarea>
                                 </td>
                                 <td class="p-2 text-center">
                                     <button type="button" class="remove-row-btn text-red-500 hover:text-red-700">
@@ -209,7 +240,6 @@
                                     </button>
                                 </td>
                             `;
-
                             priorityTableBody.appendChild(row);
                         }
                     } else if (count < existingRows) {
@@ -234,7 +264,8 @@
                     const dropdowns = priorityTableBody.querySelectorAll('select.municipality-select');
                     dropdowns.forEach(dropdown => {
                         const currentValue = dropdown.value;
-                        dropdown.innerHTML = `<option value="">Select Municipality</option>${createMunicipalityOptions(selectedValues)}`;
+                        dropdown.innerHTML =
+                            `<option value="">Select Municipality</option>${createMunicipalityOptions(selectedValues)}`;
                         if (currentValue && !selectedValues.includes(currentValue)) {
                             dropdown.value = ''; // Clear if not included in options
                         } else {

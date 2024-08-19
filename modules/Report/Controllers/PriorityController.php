@@ -61,7 +61,7 @@ class PriorityController extends Controller
     {
         $did = $request->query('did');
         
-        $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
+        $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->where('stage_status', '=', 1)->first();
         // Fetch district profile
         $districtprofile = $this->districts->with(['province'])->find($did);
         $districtVulnerability = $this->vulnerability->where('district_id', $did)->get();
@@ -70,7 +70,10 @@ class PriorityController extends Controller
         if ($districtVulnerability->isEmpty()) {
             return redirect()->route('dataentrystage.create', ['stageId' => 1, 'did' => $did]); // Replace 'another.route.name' with the actual route name
         }
-        $province_id = $districtprofile->province->id;
+        if($statuses['prioritystatus']!=1){
+            return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]); // Replace 'another.route.name' with the actual route name}
+         }
+          $province_id = $districtprofile->province->id;
 
         // Fetch questions
         $questions = $this->questions->with([
@@ -137,39 +140,34 @@ class PriorityController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->all();
-
         $targetGroups = $data['target_group_id'];
         $thematicAreas = $data['thematic_area_id'];
         $questions = $data['question_id'];
         $priorities = $data['priority'];
+    
+        // Check for existing step remarks
+        $stepremarks = $this->stepRemarks->where('stage_id','=', 2)->where('district_id','=',$data['district_id'])->first();
 
-
-        $stepremarks = $this->stepRemarks->where('stage_id', '=', 2)->first();
         if ($stepremarks) {
-        // Update existing record
-        $inputs = [
-                  'notes' => $data['notes'],           
-        ];
-
-        $this->stepRemarks->update($stepremarks->id, $inputs);
-    } else {
-        // Create a new record if no existing record is found
-        $remarks = $this->stepRemarks->create([
-            'district_id' => $data['district_id'],
-            'notes' => $data['notes'],
-            'province_id' => $data['province_id'],
-            'stage_id' => 2
-        ]);
-    }
-
-
-        $remarks = $this->stepRemarks->create([
-            'district_id' => $data['district_id'],
-            'notes' => $data['notes'],
-            'province_id' => $data['province_id'],
-            'stage_id' => 2
-        ]);
-
+            // Update existing record
+            $inputs = [
+                'notes' => $data['notes'],
+                'stage_status' => 1,
+            ];
+    
+            $stepremarks->update($stepremarks->id,$inputs);
+        } else {
+            // Create a new record if no existing record is found
+            $this->stepRemarks->create([
+                'district_id' => $data['district_id'],
+                'notes' => $data['notes'],
+                'province_id' => $data['province_id'],
+                'stage_id' => 2,
+                'stage_status' => 1
+            ]);
+        }
+    
+        // Loop through target groups to update or create priorities
         for ($i = 0; $i < count($targetGroups); $i++) {
             $inputs = [
                 'province_id' => $data['province_id'],
@@ -179,12 +177,26 @@ class PriorityController extends Controller
                 'question_id' => $questions[$i],
                 'priority' => $priorities[$i],
             ];
-
-            $this->priorities->create($inputs);
+    
+            // Check if the record exists
+            $existingRecord = $this->priorities
+                ->where('district_id','=', $data['district_id'])
+                ->where('question_id','=', $questions[$i])
+                ->first(); // Use `first()` to get a single record
+    
+            if ($existingRecord) {
+                // Update the existing record
+                $existingRecord->update($inputs);
+            } else {
+                // Create a new record if it doesn't exist
+                $this->priorities->create($inputs);
+            }
         }
-
-        return redirect()->back()->with('success', 'Priorities has been successfully saved.');
+    
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Priorities have been successfully saved.');
     }
+    
 
     /**
      * Display the specified account head.

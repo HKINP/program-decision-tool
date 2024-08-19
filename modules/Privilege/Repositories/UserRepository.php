@@ -4,17 +4,19 @@ namespace Modules\Privilege\Repositories;
 
 use App\Repositories\Repository;
 use Modules\Privilege\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Modules\Staff\ECF\Models\ECFRequest;
 
 class UserRepository extends Repository
 {
+
+    protected $permissions;
+    
     public function __construct(
         User $user,
         PermissionRepository $permissions
-    )
-    {
+    ) {
         $this->model = $user;
         $this->permissions = $permissions;
     }
@@ -39,22 +41,21 @@ class UserRepository extends Repository
     {
         DB::beginTransaction();
         try {
+
+
             $user = $this->model->create($data);
+
             if (!empty($data['roles'])) {
-                $user->roles()->sync($data['roles']);
+                $roles = $data['roles'];
+                // Prepare permissions with updated_by field
+                $rolesWithUpdatedBy = [];
+                foreach ($roles as $rolesId) {
+                    $rolesWithUpdatedBy[$rolesId] = ['updated_by' => Auth::user()->id];
+                }
+
+                $user->roles()->sync($rolesWithUpdatedBy);
             }
-            if (!empty($data['account_codes'])) {
-                $user->accountCodes()->sync($data['account_codes']);
-            }
-            if (!empty($data['award_codes'])) {
-                $user->awardCodes()->sync($data['award_codes']);
-            }
-            if (!empty($data['budget_codes'])) {
-                $user->budgetCodes()->sync($data['budget_codes']);
-            }
-            if (!empty($data['monitoring_codes'])) {
-                $user->monitoringCodes()->sync($data['monitoring_codes']);
-            }
+
             DB::commit();
             return $user;
         } catch (\Illuminate\Database\QueryException $e) {
@@ -70,20 +71,15 @@ class UserRepository extends Repository
             $user = $this->model->findOrFail($id);
             $user->fill($data)->save();
             if (!empty($data['roles'])) {
-                $user->roles()->sync($data['roles']);
+                $roles = $data['roles'];
+                $rolesWithUpdatedBy = [];
+                foreach ($roles as $rolesId) {
+                    $rolesWithUpdatedBy[$rolesId] = ['updated_by' => Auth::user()->id];
+                }
+
+                $user->roles()->sync($rolesWithUpdatedBy);
             }
-            if (!empty($data['account_codes'])) {
-                $user->accountCodes()->sync($data['account_codes']);
-            }
-            if (!empty($data['award_codes'])) {
-                $user->awardCodes()->sync($data['award_codes']);
-            }
-            if (!empty($data['budget_codes'])) {
-                $user->budgetCodes()->sync($data['budget_codes']);
-            }
-            if (!empty($data['monitoring_codes'])) {
-                $user->monitoringCodes()->sync($data['monitoring_codes']);
-            }
+            
             DB::commit();
             return $user;
         } catch (\Illuminate\Database\QueryException $e) {
@@ -116,11 +112,10 @@ class UserRepository extends Repository
             }
             return $users->whereHas('roles', function ($query) use ($roles) {
                 $query->whereIn('id', $roles);
-            })->whereDoesntHave('roles', function($query){
+            })->whereDoesntHave('roles', function ($query) {
                 $query->where('id', 1);
             })->orderby('full_name', 'asc')->get();
         }
         return [];
     }
-
 }

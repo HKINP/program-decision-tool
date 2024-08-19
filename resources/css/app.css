@@ -26,3 +26,9 @@
     color: white !important;
     font-size: 0.875rem !important;
 }
+.select2-results__option--selectable{
+    font-size: 0.875rem !important;
+}
+span.select2-selection.select2-selection--multiple {
+    font-size: 0.875rem !important ;
+}

@@ -5,8 +5,11 @@
             <div class="flex items-center gap-4 text-2xl">
                 <!-- First Arrow -->
                 <div class="border bg-white p-2 rounded-full ml-2">
-                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path>
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="24"
+                        width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M872 474H286.9l350.2-304c5.6-4.9 2.2-14-5.2-14h-88.5c-3.9 0-7.6 1.4-10.5 3.9L155 487.8a31.96 31.96 0 0 0 0 48.3L535.1 866c1.5 1.3 3.3 2 5.2 2h91.5c7.4 0 10.8-9.2 5.2-14L286.9 550H872c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z">
+                        </path>
                     </svg>
                 </div>
                 <!-- Step Description -->
@@ -20,27 +23,31 @@
                 <p class="font-semibold text-md text-blue-600">Instructions</p>
             </div>
             <div class="space-y-2 text-base italic">
-                <p>1) Ask participants what barriers related to the enabling environment contribute to the indicators selected. Then identify platforms and how they can strengthen the platforms to help overcome the barriers.</p>
-                <p class="mb-2">2) Once participants have identified activities for everyone in their district, consider how they might change for vulnerable populations. Given the year 1 implementation duration of 4-6 months, try to limit the number of activities to 5-7 for this IR.</p>
+                <p>1) Ask participants what barriers related to the enabling environment contribute to the indicators
+                    selected. Then identify platforms and how they can strengthen the platforms to help overcome the
+                    barriers.</p>
+                <p class="mb-2">2) Once participants have identified activities for everyone in their district,
+                    consider how they might change for vulnerable populations. Given the year 1 implementation duration
+                    of 4-6 months, try to limit the number of activities to 5-7 for this IR.</p>
             </div>
         </div>
 
         <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
 
-        <form action="{{ route('prioritizedActivities.index') }}" method="post">
-            @csrf
-            <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
-            <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
-            <input type="number" name="stage_id" value="6" hidden>
 
-            <div class="bg-white p-4 rounded-lg w-full mb-5">
+
+        {{-- <div class="bg-white p-4 rounded-lg w-full mb-5">
                 <div class="flex gap-2 items-center mb-4">
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">05</p>
                     <p class="font-semibold text-md text-blue-600">Key Barriers</p>
                 </div>
                 <textarea id="key_barriers" required name="key_barriers" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
-            </div>
-
+            </div> --}}
+        <form action="{{ route('prioritizedActivities.index') }}" method="post">
+            @csrf
+            <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
+            <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+            <input type="number" name="stage_id" value="6" hidden>
             <div class="bg-white p-4 rounded-lg w-full mb-5">
                 <div class="flex gap-2 items-center mb-4">
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">06</p>
@@ -49,42 +56,60 @@
                 <div class="border border-gray-200 rounded-lg p-4 mb-4">
                     <div id="activities-container" class="space-y-4"></div>
                     <!-- Button to add more activity sections -->
-                    <button type="button" class="mt-2 bg-blue-500 text-white p-2 rounded flex items-center gap-2" onclick="addActivity()">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    <button type="button" class="mt-2 bg-blue-500 text-white p-2 rounded flex items-center gap-2"
+                        onclick="addActivity()">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
                         </svg>
                         <span class="sr-only">Add More</span>
                     </button>
                 </div>
+                <div class="text-right">                       
+                    <button type="submit" class="mt-4 p-2 bg-purple-900 text-white  rounded">Submit </button>
+                </div>
             </div>
+           
+        </form>
 
+
+        <form action="{{ route('stepremarks.add') }}" method="post">
+            @csrf
+            <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
+            <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+            <input type="number" name="stage_id" value="6" hidden>
             <div class="bg-white p-4 rounded-lg w-full mb-5">
                 <div class="flex gap-2 items-center mb-4">
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">07</p>
                     <p class="font-semibold text-md text-blue-600">Notes</p>
                 </div>
-                <textarea id="notes" required name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300" placeholder="Write your notes here..."></textarea>
+                <textarea id="notes" required name="notes" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+                    placeholder="Write your notes here..."></textarea>
             </div>
-
-            <button type="submit" class="mt-4 p-2 bg-green-500 text-white rounded">Submit</button>
+            <div class="text-right">                       
+                <button type="submit" class="mt-4 p-2 bg-purple-900 text-white  rounded">Save Notes and Next  </button>
+            </div>
         </form>
     </div>
 
     <script>
         // Ensure correct JSON encoding and format
-        const platformsOptions = @json($platforms->map(function($platform) {
-            return ['id' => $platform->id, 'name' => $platform->platforms];
-        }));
-    
+        const platformsOptions = @json(
+            $platforms->map(function ($platform) {
+                return ['id' => $platform->id, 'name' => $platform->platforms];
+            }));
+
         function addActivity() {
             const container = document.getElementById('activities-container');
             const activityCount = container.children.length + 1;
-            
+
             let platformOptionsHtml = '<option value="">Select</option>';
             platformsOptions.forEach(platform => {
                 platformOptionsHtml += `<option value="${platform.id}">${platform.name}</option>`;
             });
-    
+
             const activityDiv = document.createElement('div');
             activityDiv.className = 'border border-gray-300 rounded-lg p-4 bg-gray-50 mb-4';
             activityDiv.innerHTML = `
@@ -129,13 +154,13 @@
                     </button>
                 </div>
             `;
-             $(container.appendChild(activityDiv)).find('.multipleselect').select2();
+            $(container.appendChild(activityDiv)).find('.multipleselect').select2();
         }
-    
+
         function removeActivity(button) {
             button.closest('div').remove();
         }
     </script>
-    
-    
+
+
 </x-app-layout>

@@ -1,90 +1,44 @@
-@extends('layout.containerlist')
-@section('title', 'Roles')
-@section('footer_js')
-<script type="text/javascript">
-    $(document).ready(function() {
-        ScmDatatable.init();
-        $('#sidebar li').removeClass('active');
-        $('#sidebar a').removeClass('active');
-        $('#sidebar').find('#privilege').addClass('active');
-        $('#sidebar').find('#role').addClass('active');
-    });
-</script>
-@endsection
-@section('dynamicdata')
-
-<div class="row">
-    <div class="col-sm-12">
-        <section class="panel">
-            <header class="panel-heading">
-                Roles
-            </header>
-            <div class="panel-body">
-                @include('layout.alert')
-                <div class="adv-table editable-table ">                	
-                	<div class="btn-group">
-                        <a href="{{ route('role.create') }}" class="btn btn-primary btn-lg" data-toggle="modal">
-                          Add New <i class="fa fa-plus"></i>
-                        </a>
-                    </div>
-                    <table class="table-hover table table-bordered table-striped scm-datatable" id="role-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    S N
-                                </th>
-                                <th>
-                                    Role Name
-                                </th>
-                                <th>
-                                    Updated By
-                                </th>  
-                                <th>
-                                    Options
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="tablebody">
-                            @foreach($roles as $index=>$role)
-                            <tr class="gradeX" id="row_{{ $role->id }}" >
-                                <td class="index">
-                                    {{ ++$index }}
-                                </td>
-                                <td class="name">
-                                    {{ $role->role }}
-                                </td>                                
-                                <td class="updated_at">
-                                        {!! $role->updatedBy ? ($role->updatedBy->full_name .' on ' . $role->updated_at) : 'NA' !!}
-                                    </td>                               
-                                <td>
-                                    <a href="{{ route('role.view', $role->id) }}" title="View Role">
-                                        <i class="fa fa-lg fa-eye"></i></a>&nbsp;
-                                	<a class="edit-role" href="{{ route('role.edit', $role->id) }}" id="{{ $role->id }}" title="Edit Role"><i class="fa fa-lg fa-edit"></i></a>&nbsp;
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>
-                                    S N
-                                </th>
-                                <th>
-                                    Role Name
-                                </th>                               
-                                <th>
-                                    Updated By
-                                </th>                               
-                                <th>
-                                    Options
-                                </th>
-                            </tr>
-                        </tfoot>
-                    </table>
-
+<x-app-layout>
+    <x-table-listing
+    :headers="['S.N', 'Role Name', 'Updated By','Actions']" 
+    :title="'Roles'" 
+    :useAddModal="false" 
+    :name="'roles'" 
+    :addRoute="route('role.create')">
+    
+    @forelse($roles as $index=>$role)
+        <tr>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900"> {{ $role->role }}</div>
+            </td>
+            
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">  {!! $role->updatedBy ? ($role->updatedBy->full_name .' on ' . $role->updated_at) : 'NA' !!}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="flex space-x-4">
+                    <a href="{{ route('role.view', $role->id) }}" class="text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{{ route('role.edit', $role->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('role.destroy', $role->id) }}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </div>
-            </div>
-        </section>
-    </div>
-</div>
-@stop
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4" class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
+                No data available
+            </td>
+        </tr>
+        @endforelse
+    </x-table-listing>
+</x-app-layout>
+
+
+

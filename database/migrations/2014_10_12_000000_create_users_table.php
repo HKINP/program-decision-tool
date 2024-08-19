@@ -15,12 +15,20 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('status')->nullable();
+            $table->string('assignedProvince')->nullable();
+            $table->string('assignedDistrict')->nullable();
+            $table->string('assignedLocallevel')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('updated_by')->unsigned();
             $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+           
+            $table->softDeletes(); 
             $table->timestamps();
+            
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

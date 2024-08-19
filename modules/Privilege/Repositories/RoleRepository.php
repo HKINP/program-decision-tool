@@ -3,6 +3,7 @@ namespace Modules\Privilege\Repositories;
 
 use App\Repositories\Repository;
 use Modules\Privilege\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class RoleRepository extends Repository
 {
@@ -27,7 +28,14 @@ class RoleRepository extends Repository
 
     public function syncPermissions($role, $permissions)
     {
-        return $role->permissions()->sync($permissions);
+        // Prepare permissions with updated_by field
+        $permissionsWithUpdatedBy = [];
+        foreach ($permissions as $permissionId) {
+            $permissionsWithUpdatedBy[$permissionId] = ['updated_by' => Auth::user()->id];
+        }
+    
+        // Sync the permissions with the additional updated_by field
+        return $role->permissions()->sync($permissionsWithUpdatedBy);
     }
 
     public function all()

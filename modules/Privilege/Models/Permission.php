@@ -3,10 +3,13 @@
 namespace Modules\Privilege\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UpdatedBy;
+use App\Traits\ModelEventLogger;
+
 class Permission extends Model
 {
-    use UpdatedBy;
+    use ModelEventLogger, UpdatedBy,SoftDeletes;
     /**
      * The database table used by the model.
      *

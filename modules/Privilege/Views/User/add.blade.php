@@ -1,322 +1,170 @@
-@extends('layout.containerform')
-@section('title', 'Add User')
-@section('footer_js')
-<script type="text/javascript">
-    $(document).ready(function() {
-    	$('#sidebar li').removeClass('active');
-        $('#sidebar a').removeClass('active');
-        $('#sidebar').find('#privilege').addClass('active');
-        $('#sidebar').find('#user').addClass('active');
-
-        $("#role_ids").select2();
-        $("#account_code_ids").select2();
-        $("#award_code_ids").select2();
-        $("#budget_code_ids").select2();
-        $("#monitoring_code_ids").select2();
-        $(".join_date").datepicker({
-            format: 'yyyy-mm-dd',
-            endDate: '+0d',
-            autoclose: true
-        });
-
-        $('#UserAddForm').formValidation({
-            framework: 'bootstrap',
-            excluded: ':disabled',
-            icon: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                full_name: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The full name is required.'
-                        }
-                    }
-                },
-                office_id: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The office is required.'
-                        }
-                    }
-                },
-
-                email_address: {
-                    verbose: false,
-                    validators: {
-                        notEmpty: {message: 'The email address is required'},
-                        emailAddress: {message: 'The value is not a valid email address'},
-                        stringLength: {max: 512, message: 'Cannot exceed 512 characters'},
-                        remote: {
-                            message: 'The email address is already used.',
-                            url: rootUrl+'/api/v1/privilege/validate/email',
-                            type: 'POST'
-                        },
-                    }
-                },
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The password is required'
-                        },
-                        stringLength: {
-                            min: 6,
-                            message: 'The password must be more than 6 characters'
-                        }
-                    }
-                },
-                confirm_password: {
-                    validators: {
-                        identical: {
-                            field: 'password',
-                            message: 'The confirm password did not match with password'
-                        }
-                    }
-                },
-                designation: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The designation is required'
-                        },
-                    }
-                },
-                employee_code:{
-                    validators:{
-                        notEmpty:{
-                            message: 'The Employee code is required'
-                        }
-                    }
-                },
-                join_date: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The joining date is required'
-                        },
-                        date: {
-                            format: 'YYYY-MM-DD',
-                            message: 'The date is not a valid'
-                        }
-                    }
-                },
-            }
-        }).on('change', '.join_date', function (e) {
-            $('#UserAddForm').formValidation('revalidateField', 'join_date');
-        }).on('change', '.office_id', function(e){
-            e.preventDefault();
-            $object = $(this);
-            var id = $object.val().replace(/^\D+/g, '');
-            $.ajax({
-                type: "GET",
-                url: rootUrl + "/api/configuration/office/"+id+"/users/with/parents",
-                dataType: 'json',
-                success: function(response){
-                    if(Object.keys(response.users).length > 0){
-                        htmlToReplace = '<option value="">Select User</option>';
-                        for (var key in response.users) {
-                            if (response.users.hasOwnProperty(key)) {
-                                htmlToReplace += '<option value="' + key + '">' + response.users[key] + '</option>';
-                            }
-                        }
-                    } else {
-                        htmlToReplace = '<option value="">Users Not Found</option>';
-                    }
-                    $($object).closest('form').find('.first_supervisor_id').html(htmlToReplace);
-                    $($object).closest('form').find('.second_supervisor_id').html(htmlToReplace);
-                },
-                error: function(e){
-                    $($object).closest('form').find('.first_supervisor_id').html(htmlToReplace);
-                    $($object).closest('form').find('.second_supervisor_id').html(htmlToReplace);
-                }
-            });
-        }).on('change', '.award_code_id', function (e) {
-                e.preventDefault();
-                $object = $(this);
-                var awardcodes = $object.val();
-
-                if(awardcodes.length){
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/configuration/awardcode/multiple',
-                        dataType: 'json',
-                        data: {'award_codes':awardcodes,'_token':'{{csrf_token()}}'},
-                        success: function(response){
-                            if(Object.keys(response.budgetCodes).length > 0){
-                                htmlToReplace = '';
-                                response.budgetCodes.forEach(function (budgetCode) {
-                                    htmlToReplace += '<option value="' + budgetCode.id + '">' + budgetCode.code +' ('+ budgetCode.description +')</option>';
-                                });
-                            } else {
-                                htmlToReplace = '<option value="">Budget Code Not Found</option>';
-                            }
-                            $($object).closest('form').find('.budget_code_id').html(htmlToReplace);
-
-                            if(Object.keys(response.monitoringCodes).length > 0){
-                                htmlToReplace = '';
-                                response.monitoringCodes.forEach(function (monitoringCode) {
-                                    htmlToReplace += '<option value="' + monitoringCode.id + '">' + monitoringCode.code +' ('+ monitoringCode.description +')</option>';
-                                });
-                            } else {
-                                htmlToReplace = '<option value="">Monitoring Code Not Found</option>';
-                            }
-                            $($object).closest('form').find('.monitoring_code_id').html(htmlToReplace);
-
-                            $($object).closest('form').find('select.budget_code_id').select2();
-                            $($object).closest('form').find('select.monitoring_code_id').select2();
-                        },
-                        error: function(e){
-                            console.log(e);
-                            $($object).closest('form').find('.monitoring_code_id').html('<option value="">Select Code</option>');
-                            $($object).closest('form').find('.budget_code_id').html('<option value="">Select Budget Code</option>');
-                        }
-                    });
-                }
-            });
-
-
-    });
-</script>
-@endsection
-@section('dynamicdata')
-
-    <div class="row">
-        <div class="col-md-12">
-
-            <div data-collapsed="0" class="panel">
-
-                <header class="panel-heading">
-                    Add User
-                </header>
-
-                <div class="panel-body">
-
-                    @include('layout.alert')
-
-                    <form action="{{ route('user.store') }}" id="UserAddForm" method="post" enctype="multipart/form-data">
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Full Name *</label>
-                            <input type="text" name="full_name" class="form-control full_name" value="{!! old('full_name') !!}" />
-                        </div>
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Email Address *</label>
-                            <input type="email" name="email_address" class="form-control email_address" value="{!! old('email_address') !!}" />
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Password *</label>
-                            <input type="password" name="password" class="form-control password" />
-                        </div>
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Confirm Password *</label>
-                            <input type="password" name="confirm_password" class="form-control confirm_password" />
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label class="col-md-4">Roles *</label>
-                            <select multiple name="roles[]" id="role_ids" style="width:300px" class="populate select_search">
-                                @foreach($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->role }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Office *</label>
-                            <select name="office_id" class="form-control office_id select_search">
-                                <option value="">Select Office</option>
-                                @foreach($offices as $office)
-                                    <option value="{{ $office->id }}">{{ $office->office_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Department *</label>
-                            <select name="department_id" class="form-control select_search" >
-                                @foreach($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->department_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Join Date *</label>
-                            <input type="text" name="join_date" class="form-control join_date" value="{!! old('join_date') !!}" />
-                        </div>
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Phone Number *</label>
-                            <input type="text" name="phone_number" class="form-control phone_number" value="{!! old('phone_number') !!}" />
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Designation *</label>
-                            <input type="text" name="designation" class="form-control designation" value="{!! old('designation') !!}"/>
-                        </div>
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Employee Code *</label>
-                            <input type="text" name="employee_code" class="form-control employee_code" value="{!! old('employee_code') !!}"/>
-                        </div>
-                        <div class="clearfix"></div>
-
-
-                        {{-- <div class="form-group col-md-12 col-xs-11">
-                            <label class="col-md-4">Award Codes *</label>
-                            <select multiple name="award_codes[]" id="award_code_ids" style="width:40vw;" class="select_search populate award_code_id">
-                                @foreach($awardCodes as $awardCode)
-                                    <option value="{{ $awardCode->id }}">{{ $awardCode->getCodeWithDescription() }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-12 col-xs-11">
-                            <label class="col-md-4">Budget Codes *</label>
-                            <select multiple name="budget_codes[]" id="budget_code_ids" style="width:40vw;" class="select_search populate budget_code_id">
-                                
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        <div class="form-group col-md-12 col-xs-11">
-                            <label class="col-md-4">Account Codes *</label>
-                            <select multiple name="account_codes[]" id="account_code_ids" style="width:40vw;" class="select_search populate">
-                                @foreach($accountCodes as $accountCode)
-                                    <option value="{{ $accountCode->id }}">{{ $accountCode->getCodeWithDescription() }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="form-group col-md-12 col-xs-11">
-                            <label class="col-md-4">Monitoring Codes *</label>
-                            <select multiple name="monitoring_codes[]" id="monitoring_code_ids" style="width:40vw;" class="select_search populate monitoring_code_id">
-                               
-                            </select>
-                        </div>
-                        <div class="clearfix"></div> --}}
-
-                        <div class="form-group col-md-6 col-xs-11">
-                            <label for="">Status</label>
-                            <select name="is_active" class="select_search form-control">
-                                <option value="1">Active</option>
-                                <option value="0">Deactive</option>
-                            </select>
-                        </div>
-                        <div class="clearfix"></div>
-
-                        {!! csrf_field() !!}
-                        <button type="submit" class="btn btn-info">Submit</button>
-                    </form>
-
+<x-app-layout>
+    <div class="max-w-full mt-6 mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Create User</h2>
+        
+        <form action="{{ route('user.store') }}" method="post" class="space-y-6">
+            {!! csrf_field() !!}
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" id="name" value="{{ old('name') }}" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- Phone -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <!-- Roles -->
+                <div>
+                    <label for="roles" class="block text-sm font-medium text-gray-700">Roles</label>
+                    <select name="roles[]" multiple id="roles" class="w-full mt-1 border border-gray-300 multipleselect rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Roles</option>
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->id }}" {{ in_array($role->id, old('roles', [])) ? 'selected' : '' }}>{{ $role->role }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <!-- Assigned Province -->
+                <div>
+                    <label for="assignedProvince" class="block text-sm font-medium text-gray-700">Assigned Province</label>
+                    <select name="assignedProvince[]" multiple id="assignedProvince" class="w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Province</option>
+                        @foreach ($provinces as $province)
+                            <option value="{{ $province->id }}" {{ in_array($province->id, old('assignedProvince', [])) ? 'selected' : '' }}>{{ $province->province }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
+                <!-- Assigned District -->
+                <div>
+                    <label for="assignedDistrict" class="block text-sm font-medium text-gray-700">Assigned District</label>
+                    <select name="assignedDistrict[]" multiple id="assignedDistrict" class="w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select District</option>
+                        @foreach ($districts as $district)
+                            <option value="{{ $district->id }}" {{ in_array($district->id, old('assignedDistrict', [])) ? 'selected' : '' }}>{{ $district->district }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <!-- Password -->
+                <div class="relative">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10" placeholder="Password">
+                    <button type="button" id="togglePassword" style="margin-top:-4%" class="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                    </button>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="relative">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pr-10" placeholder="Confirm Password">
+                    <button type="button" id="toggleConfirmPassword" style="margin-top:-4%"  class="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer">
+                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                    </button>
+                </div>
+                
             </div>
-
-        </div>
+            
+            <!-- Status -->
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select name="status" id="status" class="w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Select Status</option>
+                    <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
+            <div class="mt-6">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                    Submit
+                </button>
+            </div>
+        </form>
     </div>
-@stop
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('#assignedProvince').select2({
+                placeholder: 'Select Province',
+                allowClear: true
+            });
+            
+            $('#assignedDistrict').select2({
+                placeholder: 'Select District',
+                allowClear: true
+            });
+    
+            // Fetch districts based on selected provinces
+            $('#assignedProvince').on('change', function() {
+                var provinceIds = $(this).val(); // Get selected province IDs
+                
+                // AJAX request to fetch districts
+                $.ajax({
+                    url: '{{ route("district.getdistrictbyprovince") }}', // Route to your controller method
+                    type: 'POST',
+                    data: {
+                        provinceIds: provinceIds,
+                        _token: '{{ csrf_token() }}' // Include CSRF token
+                    },
+                    success: function(response) {
+                        // Check if response has districts data
+                        if (response.districts && response.districts.length > 0) {
+                            var districtsDropdown = $('#assignedDistrict');
+                            districtsDropdown.empty(); // Clear current options
+                            
+                            $.each(response.districts, function(key, district) {
+                                districtsDropdown.append('<option value="' + district.id + '">' + district.district + '</option>');
+                            });
+                            
+                            // Trigger change event to update the Select2
+                            districtsDropdown.trigger('change');
+                        } else {
+                            // Handle case where no districts are found
+                            $('#assignedDistrict').empty().append('<option value="">No districts available</option>');
+                            $('#assignedDistrict').trigger('change');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        $('#assignedDistrict').empty().append('<option value="">Error loading districts</option>');
+                        $('#assignedDistrict').trigger('change');
+                    }
+                });
+            });
+    
+            function togglePasswordVisibility(passwordFieldId, toggleButtonId) {
+                document.getElementById(toggleButtonId).addEventListener('click', function () {
+                    const passwordField = document.getElementById(passwordFieldId);
+                    const icon = this.querySelector('i');
+                    if (passwordField.type === 'password') {
+                        passwordField.type = 'text';
+                        
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        passwordField.type = 'password';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                });
+            }
+    
+            // Apply toggle functionality to both password fields
+            togglePasswordVisibility('password', 'togglePassword');
+            togglePasswordVisibility('password_confirmation', 'toggleConfirmPassword');
+        });
+    </script>
+</x-app-layout>

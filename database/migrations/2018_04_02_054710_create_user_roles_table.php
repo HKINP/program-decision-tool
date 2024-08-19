@@ -28,6 +28,11 @@ class CreateUserRolesTable extends Migration
                 ->onDelete('cascade');
 
             $table->primary(['role_id', 'user_id']);
+            $table->integer('updated_by')->unsigned();
+            $table->softDeletes(); 
+            $table->timestamps();
+            
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

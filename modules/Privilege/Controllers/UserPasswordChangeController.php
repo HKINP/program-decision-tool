@@ -60,12 +60,12 @@ class UserPasswordChangeController extends Controller
             Mail::to($user->email_address)
                 ->send(new PasswordChanged($user, $request->password));
             }
-            return response()->json(['status'=>'ok',
-                'message'=>'Password of the selected user is changed successfully.'], 200);
+            
+            return redirect()->route('user.index')
+            ->with('success', 'Password of the selected user is changed successfully.');
         } else {
-            return response()->json(['status'=>'ok',
-                'message'=>'Password of the selected user can not be changed.'], 422);
-        }
+            return redirect()->route('user.index')
+            ->with('error', 'Unable to change password of the selected user.');
 
     }
 }

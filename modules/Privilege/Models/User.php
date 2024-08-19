@@ -24,11 +24,13 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Modules\Configuration\Models\District;
+use Modules\Configuration\Models\Province;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, ModelEventLogger, Notifiable, UpdatedBy;
-    
+
     /**
      * The database table used by the model.
      *
@@ -42,21 +44,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'role_id',
-        'office_id',
-        'department_id',
-        'full_name',
-        'email_address',
-        'phone_number',
+        'name',
+        'email',
+        'phone',
+        'assignedProvince',
+        'assignedDistrict',
+        'assignedLocallevel',
         'password',
-        'employee_code',
-        'designation',
-        'profile_pic',
-        'signature',
-        'reset_token',
-        'join_date',
-        'is_active',
-        'support_staff',
+        'status',
         'updated_by'
     ];
 
@@ -90,193 +85,68 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /*
      * Get logs of the user
      */
-    public function logs(){
+    public function logs()
+    {
         return $this->hasMany('App\Log', 'user_id');
     }
 
-    public function updatedBy(){
+    public function updatedBy()
+    {
         return $this->belongsTo('Modules\Privilege\Models\User', 'updated_by');
     }
 
     /*
      * Get roles of the user
      */
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany('Modules\Privilege\Models\Role', 'user_roles');
     }
 
     /**
-    * Check one role
-    * @param string $role
-    */
+     * Check one role
+     * @param string $role
+     */
     public function hasRole($role)
     {
-      return null !== $this->roles()->where('role', $role)->first();
+        return null !== $this->roles()->where('role', $role)->first();
     }
 
     /**
-    * Check multiple roles
-    * @param array $roles
-    */
+     * Check multiple roles
+     * @param array $roles
+     */
     public function hasAnyRole($roles)
     {
-      return null !== $this->roles()->whereIn('role', $roles)->first();
+        return null !== $this->roles()->whereIn('role', $roles)->first();
     }
 
-    /*
-     * Get departments of the user
-     */
-    public function departments(){
-        return $this->belongsToMany('Modules\Configuration\Models\Department', 'user_departments');
-    }
-
-    /*
-     * Get office of the user
-     */
-    public function office(){
-        return $this->belongsTo('Modules\Configuration\Models\Office', 'office_id');
-    }
-
-    /*
-     * Get department of the user
-     */
-    public function department(){
-        return $this->belongsTo('Modules\Configuration\Models\Department', 'department_id');
-    }
-
-    /*
-     * Get guidelines of the user
-     */
-    public function guidelines()
-    {
-        return $this->belongsToMany(Guideline::class, 'user_guidelines', 'user_id', 'guideline_id');
-    }
-
-    /**
-     * Get the supervisor1 that owns the user.
-     */
-    public function supervisor1(){
-        return $this->belongsTo('Modules\Privilege\Models\User', 'first_supervisor_id');
-    }
-
-    /**
-     * Get the supervisor2 that owns the user.
-     */
-    public function supervisor2(){
-        return $this->belongsTo('Modules\Privilege\Models\User', 'second_supervisor_id');
-    }
-
-    /**
-     * Get the first associates for the user.
-     */
-    public function firstAssociates(){
-        return $this->hasMany('Modules\Privilege\Models\User', 'first_supervisor_id');
-    }
-
-    /**
-     * Get the second associates for the user.
-     */
-    public function secondAssociates(){
-        return $this->hasMany('Modules\Privilege\Models\User', 'second_supervisor_id');
-    }
-
-    /**
-     * Get assets of the user
-     */
-    public function assetAllocations()
-    {
-        return $this->hasMany(AssetAllocation::class, 'assigned_user_id')
-            ->orderby('allocation_date', 'desc');
-    }
-
-    /**
-     * Get award codes of the user
-     */
-    public function awardCodes()
-    {
-        return $this->belongsToMany(AwardCode::class, 'user_award_codes','user_id', 'award_code_id');
-    }
-
-    /**
-     * Get account codes of the user
-     */
-    public function accountCodes()
-    {
-        return $this->belongsToMany(AccountCode::class, 'user_account_codes', 'user_id', 'account_code_id');
-    }
-
-    /**
-     * Get budget codes of the user
-     */
-    public function budgetCodes()
-    {
-        return $this->belongsToMany(BudgetCode::class, 'user_budget_codes','user_id', 'budget_code_id');
-    }
-
-    /**
-     * Get monitoring codes of the user
-     */
-    public function monitoringCodes()
-    {
-        return $this->belongsToMany(MonitoringCode::class, 'user_monitoring_codes','user_id', 'monitoring_code_id');
-    }
-
-    public function leaves()
-    {
-        return $this->hasMany(UserLeave::class, 'user_id');
-    }
-
-    public function approvedLeaves($param)
-    {
-        $fiscal_year = FiscalYear::where('start_date', '<=', date('Y-m-d'))
-                    ->where('end_date', '>=', date('Y-m-d'))
-                    ->first();
-
-        if(isset($param['fiscal_year_id'])){
-            $fiscal_year = FiscalYear::find($param['fiscal_year_id']);
-        }
-
-        $leaves = $this->hasMany(LeaveRequest::class, 'requester_id')->where('start_date','>=',$fiscal_year->start_date)->where('end_date','<=',$fiscal_year->end_date)->where('status',6)
-        ->when(isset($param['leave_type_id']),function($query) use($param){
-            $query->where('leave_type_id',$param['leave_type_id']);
-        })
-        ->pluck('start_date','end_date');
-        
-        return $leaves;
-    }
 
     public function isDeveloperOrSuperAdmin()
     {
         return in_array(1, $this->roles()->pluck('role_id')->toArray()) || in_array(2, $this->roles()->pluck('role_id')->toArray());
     }
+    
+   // Convert province_ids CSV to an array
+   public function getProvincesArray($provincesCsv = null)
+   {
+       if ($provincesCsv) {
+           return array_map('intval', explode(',', $provincesCsv));
+       }
 
-    public function getName()
-    {
-        return $this->full_name;
-    }
+       // Fallback to CSV from model property
+       return $this->province_id ? array_map('intval', explode(',', $this->province_id)) : [];
+   }
 
-    public function getDesignation()
-    {
-        return $this->designation;
-    }
+   // Convert district_ids CSV to an array
+   public function getDistrictsArray($districtsCsv = null)
+   {
+       if ($districtsCsv) {
+           return array_map('intval', explode(',', $districtsCsv));
+       }
 
-    public function getDepartmentName()
-    {
-        return $this->department ? $this->department->department_name : "";
-    }
+       // Fallback to CSV from model property
+       return $this->district_id ? array_map('intval', explode(',', $this->district_id)) : [];
+   }
 
-    public function getOfficeName()
-    {
-        return $this->office ? $this->office->office_name : "";
-    }
-
-    public function getGuidelineReadStatus($guideline)
-    {
-        return $this->guidelines()->where('id', $guideline->id)->first()  ? 'read' : 'unread';
-    }
-
-    public function isFromCO()
-    {
-        return $this->office->isCO() ? true : false;   
-    }
 }

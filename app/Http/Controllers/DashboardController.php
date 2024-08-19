@@ -16,13 +16,14 @@ use Modules\Report\Repositories\PrioritizedActivitiesRepository;
 use Modules\Report\Repositories\StepRemarksRepository;
 use App\Traits\StageStatus;
 use Modules\Configuration\Repositories\ActivitiesRepository;
+use Modules\Report\Repositories\KeyBarrierRepository;
 
 class DashboardController extends Controller
 {
 
     protected $districts, $stages, $provinces,
         $priorities, $questions, $thematicgroups,
-        $tags, $locallevel, $vulnerability, $stepRemarks,$activities, $platforms, $prioritizedActivities;
+        $tags, $locallevel, $vulnerability, $stepRemarks, $activities, $platforms, $prioritizedActivities, $keybarriers;
     use StageStatus;
 
     public function __construct(
@@ -38,6 +39,7 @@ class DashboardController extends Controller
         StepRemarksRepository $stepRemarks,
         PrioritizedActivitiesRepository $prioritizedActivities,
         ActivitiesRepository $activities,
+        KeyBarrierRepository $keybarriers,
 
     ) {
         $this->provinces = $provinces;
@@ -49,8 +51,9 @@ class DashboardController extends Controller
         $this->vulnerability = $vulnerability;
         $this->stepRemarks = $stepRemarks;
         $this->platforms = $platforms;
+        $this->keybarriers = $keybarriers;
         $this->prioritizedActivities = $prioritizedActivities;
-        $this->activities=$activities;
+        $this->activities = $activities;
     }
 
     public function index()
@@ -73,7 +76,7 @@ class DashboardController extends Controller
                     $this->getStageInfo($stage->id, $did) // Get route and tick status
                 );
             });
-     
+           
             return view('pages/dashboard/toolscreate')
                 ->withStageInfo($stageInfo)
                 ->withDistrictID($did);
@@ -106,7 +109,7 @@ class DashboardController extends Controller
 
 
         if ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 2) {
-          
+
 
             $did = $request->query('did');
             $datastatus = $this->getStatuses($did);
@@ -114,18 +117,18 @@ class DashboardController extends Controller
             if ($datastatus['prioritystatus'] == 1) {
                 return redirect()->route('priority.index', ['stageId' => 2, 'did' => $did]);
             }
-          
 
-            $districtprofile = $this->districts->with(['province','province.provinceProfiles', 'locallevel'])->find($did);
-        
-            
+
+            $districtprofile = $this->districts->with(['province', 'province.provinceProfiles', 'locallevel'])->find($did);
+
+
             if (count($districtprofile->province->provinceProfiles) === 0) {
-                             return redirect()->route('provinceprofile.create')->with('error', 'Please create a province profile for '.$districtprofile->province->province);
+                return redirect()->route('provinceprofile.create')->with('error', 'Please create a province profile for ' . $districtprofile->province->province);
             }
-            
-          
-            
-            
+
+
+
+
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
             // Check if district_vulnerability is empty
             if ($districtVulnerability->isEmpty()) {
@@ -146,12 +149,16 @@ class DashboardController extends Controller
                 },
                 'targetGroup'
             ])->get();
+            $priorities=$this->priorities->where('district_id', '=', $did)->get();
 
             // Return the view with additional data
             return view('Report::Priorities.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
+                ->withStepRemarks($stepRemarks)
+                ->withPriorities($priorities)
                 ->withQuestions($questions);
+
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
 
             $did = $request->query('did');
@@ -176,12 +183,36 @@ class DashboardController extends Controller
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
+            // Fetch prioritized activities
+            $subactivities = $this->prioritizedActivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
+                ->where('district_id', $did)
+                ->where('stage_id', 3)
+                ->get();
+
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
+            $keybarriers = $this->keybarriers
+                ->where('district_id', '=', $did)
+                ->where('stage_id', 3)
+                ->get()
+                ->groupBy('indicator_id');
+
+
             // Return the view with additional data
             return view('Report::Sbc.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
+                ->withSubactivities($subactivities)
+                ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
+
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
 
             $did = $request->query('did');
@@ -203,6 +234,26 @@ class DashboardController extends Controller
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
+
+            $keybarriers = $this->keybarriers
+                ->where('district_id', '=', $did)
+                ->where('stage_id', $stageId)
+                ->get()
+                ->groupBy('indicator_id');
+
+            $subactivities = $this->prioritizedActivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
+                ->where('district_id', $did)
+                ->where('stage_id', $stageId)
+                ->get();
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
+
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -211,7 +262,11 @@ class DashboardController extends Controller
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
+                ->withSubactivities($subactivities)
+                ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
+
+
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 5) {
 
             $did = $request->query('did');
@@ -226,6 +281,24 @@ class DashboardController extends Controller
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
+            $keybarriers = $this->keybarriers
+                ->where('district_id', '=', $did)
+                ->where('stage_id', $stageId)
+                ->get()
+                ->groupBy('indicator_id');
+
+            $subactivities = $this->prioritizedActivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
+                ->where('district_id', $did)
+                ->where('stage_id', $stageId)
+                ->get();
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
             // Fetch district profile
             $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
@@ -236,12 +309,33 @@ class DashboardController extends Controller
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
+            $keybarriers = $this->keybarriers
+                ->where('district_id', '=', $did)
+                ->where('stage_id', $stageId)
+                ->get()
+                ->groupBy('indicator_id');
+
+            $subactivities = $this->prioritizedActivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
+                ->where('district_id', $did)
+                ->where('stage_id', $stageId)
+                ->get();
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
             // Return the view with additional data
             return view('Report::FoodSystem.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
+                ->withSubactivities($subactivities)
+                ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
+
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 6) {
 
             $did = $request->query('did');
@@ -253,9 +347,27 @@ class DashboardController extends Controller
                 return redirect()->route('prioritizedActivities.index', ['stageId' => $stageId, 'did' => $did]);
             }
 
+            $keybarriers = $this->keybarriers
+                ->where('district_id', '=', $did)
+                ->where('stage_id', $stageId)
+                ->get()
+                ->groupBy('indicator_id');
+
+            $subactivities = $this->prioritizedActivities
+                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
+                ->where('district_id', $did)
+                ->where('stage_id', $stageId)
+                ->get();
+            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
             // Fetch district profile
             $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
-            $activities=$this->activities->where('ir_id','=','4')->get();            
+            $activities = $this->activities->where('ir_id', '=', '4')->get();
 
             // Fetch priorities with associated relationships
             $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
@@ -271,7 +383,11 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withActivities($activities)
                 ->withPlatforms($platforms)
+                ->withSubactivities($subactivities)
+                ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
+
+
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 7) {
 
             $did = $request->query('did');

@@ -4,12 +4,13 @@ namespace Modules\Privilege\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Traits\ModelEventLogger;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\UpdatedBy;
+use App\Traits\ModelEventLogger;
 
 class Role extends Model
 {
-    use ModelEventLogger, UpdatedBy;
+    use ModelEventLogger, UpdatedBy,SoftDeletes;
     
     /**
      * The database table used by the model.
@@ -25,10 +26,6 @@ class Role extends Model
      */
     protected $fillable = [
         'role',
-        'pr_review_limit',
-        'pr_approve_limit',
-        'po_approve_limit',
-        'pi_approve_limit',
         'updated_by',
     ];
 

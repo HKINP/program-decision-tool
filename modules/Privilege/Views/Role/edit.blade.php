@@ -1,127 +1,96 @@
-@extends('layout.containerform')
-@section('title', 'Edit Role')
-@section('footer_js')
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sidebar li').removeClass('active');
-        $('#sidebar a').removeClass('active');
-        $('#sidebar').find('#privilege').addClass('active');
-        $('#sidebar').find('#role').addClass('active');
-
-        $('.check-permission').on('change', function (e) {
-            if ($('.check-permission:checked').length == $('.check-permission').length) {
-                $(this).closest('table').find('.check-all').prop('checked', true);
-            } else {
-                $(this).closest('table').find('.check-all').prop('checked', false);
-            }
-        });
-
-        $('.check-all').on('change', function (e) {
-            var checked = $(this).is(':checked');
-            if (checked) {
-                $(this).closest('table').find('.check-permission').prop('checked', true);
-            } else {
-                $(this).closest('table').find('.check-permission').prop('checked', false);
-            }
-        });
-    });
-</script>
-@endsection
-@section('dynamicdata')
-
-<div class="row">
-            <div class="col-md-12">
-
-                <div data-collapsed="0" class="panel">
-
-					<header class="panel-heading">
-						Edit Role
-					</header>
-
-                    <div class="panel-body">
-                    	
-                    	@include('layout.alert')
-
-                    	<form action="{{ route('role.update', $role->id) }}" method="post">
-                    		<input type="hidden" name="_method" value="PUT">
-                            <div class="form-group col-md-6 col-xs-11">
-                                <label for="">Role Name *</label>
-                                <input class="form-control form-control-inline input-medium" name="role" type="text" value="{!! $role->role !!}" placeholder="Enter Role Name" />
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <table class="table-hover table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th colspan="2">
-                                        Permissions
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tablebody">
-                                <tr>
-                                    <td colspan="2">
-                                        <input type="checkbox" name="modules[]" class="check-all" value="all" />
-                                        Give All Permissions
-                                    </td>
-                                </tr>
-                                @foreach($permissions as $permission)
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" name="permissions[]" class="check-permission" value="{{ $permission->id }}"
-                                                   @if(in_array($permission->id, $rolePermissions)) checked="checked" @endif />
-                                            {{ $permission->permission_name }}
-                                        </td>
-                                        <td>
-                                            @if($permission->childrens)
-                                                <table>
-                                                    @foreach($permission->childrens->chunk(3) as $chunks)
-                                                        <tr>
-                                                            @foreach($chunks as $child)
-                                                                <td>
-                                                                    <input type="checkbox" name="permissions[]" class="check-permission" value="{{ $child->id }}"
-                                                                           @if(in_array($child->id, $rolePermissions)) checked="checked" @endif  />
-                                                                    {{ $child->permission_name }}
-                                                                </td>
-                                                            @endforeach
-                                                        </tr>
-                                                    @endforeach
-                                                </table>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                            <div class="clearfix"></div>
-
-                            <div class="form-group col-md-3 col-xs-11">
-                                <label for="">PR Review Limit *</label>
-                                <input class="form-control" name="pr_review_limit" type="number" min="0" value="{!! $role->pr_review_limit !!}" />
-                            </div>
-                            <div class="form-group col-md-3 col-xs-11">
-                                <label for="">PR Approve Limit *</label>
-                                <input class="form-control" name="pr_approve_limit" type="number" min="0" value="{!! $role->pr_approve_limit !!}" />
-                            </div>
-                            <div class="form-group col-md-3 col-xs-11">
-                                <label for="">PO Approve Limit *</label>
-                                <input class="form-control" name="po_approve_limit" type="number" min="0" value="{!! $role->po_approve_limit !!}" />
-                            </div>
-                            <div class="form-group col-md-3 col-xs-11">
-                                <label for="">PI Approve Limit *</label>
-                                <input class="form-control" name="pi_approve_limit" type="number" min="0" value="{!! $role->pi_approve_limit !!}" />
-                            </div>
-                            <div class="clearfix"></div>
-
-		                    {!! csrf_field() !!}
-		                    <button type="submit" class="btn btn-info">Submit</button>
-	                    </form>
-
-                    </div>
-
-                </div>
-
+<x-app-layout>
+    <div class="max-w-full mt-6 mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Edit Role</h2>
+        
+        <form action="{{ route('role.update', $role->id) }}" method="post" class="space-y-6">
+            <input type="hidden" name="_method" value="PUT">
+            
+            <div class="md:w-1/2 w-full">
+                <label for="role" class="block text-sm font-medium text-gray-700">Role Name *</label>
+                <input 
+                    id="role" 
+                    name="role" 
+                    type="text" 
+                    value="{!! $role->role !!}" 
+                    placeholder="Enter Role Name" 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
             </div>
-        </div>
-@stop
+            
+            <table class="min-w-full bg-white border rounded-lg shadow overflow-hidden">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th colspan="2" class="py-3 px-4 text-left text-sm font-medium text-gray-700">
+                            Permissions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tablebody">
+                    <tr>
+                        <td colspan="2" class="py-3 px-4">
+                            <input type="checkbox" id="check-all" class="check-all mr-2" value="all" />
+                            Give All Permissions
+                        </td>
+                    </tr>
+                    @foreach($permissions as $permission)
+                        <tr>
+                            <td class="py-3 px-4">
+                                <input type="checkbox" name="permissions[]" class="check-permission parent-permission mr-2" value="{{ $permission->id }}"
+                                       @if(in_array($permission->id, $rolePermissions)) checked="checked" @endif />
+                                {{ $permission->permission_name }}
+                            </td>
+                            <td class="py-3 px-4">
+                                @if($permission->childrens)
+                                <table class="min-w-full child-table">
+                                    @foreach($permission->childrens->chunk(3) as $chunks)
+                                        <tr>
+                                            @foreach($chunks as $child)
+                                            <td class="py-2 px-4">
+                                                <input type="checkbox" name="permissions[]" class="check-permission child-permission mr-2" data-parent-id="{{ $permission->id }}" value="{{ $child->id }}"
+                                                       @if(in_array($child->id, $rolePermissions)) checked="checked" @endif />
+                                                {{ $child->permission_name }}
+                                            </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </table>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+          
+            {!! csrf_field() !!}
+            
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                Submit
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        // Handle the "Give All Permissions" checkbox
+        document.getElementById('check-all').addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.querySelectorAll('.check-permission').forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        // Handle parent permission checkboxes
+        document.querySelectorAll('.parent-permission').forEach(function(parentCheckbox) {
+            parentCheckbox.addEventListener('change', function() {
+                const isChecked = this.checked;
+                const parentId = this.value;
+                
+                // Check or uncheck all child permissions
+                document.querySelectorAll(`.child-permission[data-parent-id="${parentId}"]`).forEach(function(childCheckbox) {
+                    childCheckbox.checked = isChecked;
+                });
+            });
+        });
+    </script>
+    
+</x-app-layout>

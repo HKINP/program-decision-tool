@@ -19,9 +19,8 @@ class UserSeeder extends Seeder
             'email' => "PPoudel@hki.org",
             'email_verified_at' => Carbon::now(),
             'password' => bcrypt('password'),
-            'remember_token' => Str::random(10),
-            'current_team_id' => null,
-            'profile_photo_path' => null,
+            'updated_by' =>1,
+            'remember_token' => Str::random(10),         
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

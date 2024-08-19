@@ -22,7 +22,9 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::put('priority/update/{did}', [PriorityController::class, 'updateBydistrict'])->name('priority.updatebydistrict');
         Route::resource('districtvulnerability', DistrictVulnerabilityController::class);
         Route::resource('prioritizedActivities', PrioritizedActivitiesController::class);
+       
         Route::get('compiledreport', [PrioritizedActivitiesController::class, 'compiledReport'])->name('compiledreport.district');
         Route::post('activiymapping', [PrioritizedActivitiesController::class, 'activityMapping'])->name('activityMapping.district');
+        Route::post('stepremarks', [PrioritizedActivitiesController::class, 'stepRemarksadd'])->name('stepremarks.add');
         Route::get('compiledreport/province/{provinceid}', [PrioritizedActivitiesController::class, 'compiledReportProvince'])->name('compiledreport.province');
 });

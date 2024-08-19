@@ -31,7 +31,7 @@ class StepRemarks extends Model
         'district_id',
         'stage_id',
         'notes',
-        'key_barriers',
+        'stage_status',
         'updated_by',
     ];
 

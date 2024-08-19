@@ -28,6 +28,11 @@ class CreateRolePermissionsTable extends Migration
                 ->onDelete('cascade');
 
             $table->primary(['permission_id', 'role_id']);
+            $table->integer('updated_by')->unsigned();
+            $table->softDeletes(); 
+            $table->timestamps();
+            
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

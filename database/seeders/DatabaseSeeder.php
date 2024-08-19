@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             // ThematicAreasTableSeeder::class,
             // DistrictsTableSeeder::class,
             // IndicatorsTableSeeder::class,
-            QuestionsTableSeeder::class,
+            // QuestionsTableSeeder::class,
             // StagesTableSeeder::class,
             // ThematicAreaTargetGroupSeeder::class,
             // PlatformsTableSeeder::class

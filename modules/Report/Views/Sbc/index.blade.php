@@ -56,10 +56,27 @@
                 </div>
 
                 <div class="space-y-2 text-xs italic">
-                    <textarea id="key_barriers" name="key_barriers" rows="4"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Write your notes here...">{{ $stepRemarks->key_barriers }}</textarea>
-
+                    <table class="min-w-full border-collapse bg-white border-gray-200 rounded-lg overflow-hidden">
+                        <thead class="rounded-lg">
+                            <tr>
+                                <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">S.N.</th>
+                                <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Indicator</th>
+                                <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Key Barriers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($keybarriers as $index => $kb)
+                            <tr>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $index + 1 }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $kb->key_barriers }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $kb->indicator->indicator_name }}</td>
+                               
+                            </tr>
+                            @endforeach
+                            
+                        </tbody>
+                    </table>
+                  
                 </div>
             </div>
 
@@ -82,10 +99,12 @@
                             <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top">Notes</th>
                         </tr>
                     </thead>
+                    
                     <tbody>
                         <tr>
-                            <td colspan="6" class="border border-gray-300 p-2 font-bold">All Children</td>
+                            <td colspan="6" class="border border-gray-300 p-2 font-bold">All </td>
                         </tr>
+                       
                         @foreach ($allActivities as $activity)
                       
                             <tr>

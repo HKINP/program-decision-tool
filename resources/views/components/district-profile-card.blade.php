@@ -56,6 +56,7 @@
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Vulnerability Count</th>
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Remote</th>
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Caste/Ethnicity</th>
+                <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Religion</th>
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Food insecurity</th>
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Wealth</th>
                 <th class="bg-gray-500 text-white text-xs p-2 whitespace-normal align-top" style="line-height: 1.2;">Climatic Change</th>
@@ -74,6 +75,10 @@
                     </td>
                     <td class="p-2 text-center">
                         <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1" {{ $data->caste_ethnicity_status == 1 ? 'checked' : '' }}>
+                    </td>
+                  
+                    <td class="p-2 text-center">
+                        <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1" {{ $data->religion_status == 1 ? 'checked' : '' }}>
                     </td>
                   
                     <td class="p-2 text-center">

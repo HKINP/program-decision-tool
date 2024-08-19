@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
 use Modules\Configuration\Models\District;
-use Modules\Configuration\Models\LocalLevel;
+use Modules\Configuration\Models\Indicators;
 use Modules\Configuration\Models\Province;
 use Modules\Configuration\Models\Question;
-use Modules\Configuration\Models\TargetGroup;
-use Modules\Configuration\Models\ThematicArea;
+use Modules\Configuration\Models\Stages;
 
-class DistrictVulnerability extends Model
+class KeyBarrier extends Model
 {
     use ModelEventLogger, UpdatedBy, SoftDeletes;
     
@@ -23,7 +22,7 @@ class DistrictVulnerability extends Model
      *
      * @var string
      */
-    protected $table = 'district_vulnerability';
+    protected $table = 'key_barriers';
 
     /**
      * The attributes that are mass assignable.
@@ -31,17 +30,14 @@ class DistrictVulnerability extends Model
      * @var array
      */
     protected $fillable = [
-        'district_id',
-        'lgid',
-        'remote_status',
-        'caste_ethnicity_status',
-        'religion_status',
-        'geography_status',
-        'food_security_status',
-        'wealth_status',
-        'climatic_change_status',
-        'remarks',
+        'province_id', 
+        'district_id', 
+        'stage_id', 
+        'indicator_id', 
+        'key_barriers'
     ];
+
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -49,14 +45,22 @@ class DistrictVulnerability extends Model
      */
     protected $hidden = [];
 
-    public function locallevel()
+    public function province()
     {
-        return $this->belongsTo(LocalLevel::class, 'lgid');
+        return $this->belongsTo(Province::class);
     }
 
     public function district()
     {
         return $this->belongsTo(District::class);
     }
-   
+    public function stage()
+    {
+        return $this->belongsTo(Stages::class);
+    }
+    public function indicator()
+    {
+        return $this->belongsTo(Indicators::class);
+    }
+
 }

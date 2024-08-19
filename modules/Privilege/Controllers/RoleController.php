@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 
 use Modules\Privilege\Repositories\PermissionRepository;
 use Modules\Privilege\Repositories\RoleRepository;
-use Modules\Privilege\Repositories\ModuleRepository;
 use Modules\Privilege\Requests\Role\StoreRoleRequest;
 use Modules\Privilege\Requests\Role\UpdateRoleRequest;
 
@@ -50,6 +49,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        
         return view('Privilege::Role.index')
             ->withRoles($this->roles->all());
     }
@@ -152,7 +152,14 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        return $this->roles->destroy($id);
+       $flag = $this->roles->destroy($id);
+       
+        if ($flag) {
+            
+            return redirect()->route('role.index')->with('success', 'Role is successfully deleted.');
+        }
+        return redirect()->route('role.index')->with('error', 'Role cannot be deleted.');
+
     }
 
 
