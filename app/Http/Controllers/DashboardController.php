@@ -76,10 +76,11 @@ class DashboardController extends Controller
                     $this->getStageInfo($stage->id, $did) // Get route and tick status
                 );
             });
-           
+            $district = $this->districts->where('id','=',$did)->first();
             return view('pages/dashboard/toolscreate')
                 ->withStageInfo($stageInfo)
-                ->withDistrictID($did);
+                ->withDistrictID($did)
+                ->withDistrict($district);
         }
 
         $provinces = $this->provinces->with(['districts'])->get();
