@@ -51,7 +51,7 @@
 
             <div class="space-y-2 text-xs italic">
                 <p>1) Please begin by asking participants to complete the district profile section. Discuss how they
-                    would define vulnerability based on caset/ethnicity, geography, food insecurity, and wealth.
+                would define vulnerability based on remoteness, caste/ethnicity, food insecurity, wealth, and climate change.
                 </p>
 
             </div>
