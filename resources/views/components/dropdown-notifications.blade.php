@@ -34,10 +34,10 @@
         <ul>
             <li class="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
                 <a class="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20" href="#0" @click="open = false" @focus="open = true" @focusout="open = false">
-                    <span class="block text-sm mb-2">📣 <span class="font-medium text-gray-800 dark:text-gray-100">Edit your information in a swipe</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
-                    <span class="block text-xs font-medium text-gray-400 dark:text-gray-500">Feb 12, 2024</span>
+                    <span class="block text-sm mb-2">📣 <span class="font-medium text-gray-800 dark:text-gray-100">For Support</span> - contact onw of the IT Team members should you encounter technical issues with this Design Decision Tool.</span>
+                    <span class="block text-xs font-medium text-gray-400 dark:text-gray-500">Aug 20, 2024</span>
                 </a>
-            </li>
+            <!-- </li>
             <li class="border-b border-gray-200 dark:border-gray-700/60 last:border-0">
                 <a class="block py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20" href="#0" @click="open = false" @focus="open = true" @focusout="open = false">
                     <span class="block text-sm mb-2">📣 <span class="font-medium text-gray-800 dark:text-gray-100">Edit your information in a swipe</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
@@ -49,7 +49,7 @@
                     <span class="block text-sm mb-2">🚀<span class="font-medium text-gray-800 dark:text-gray-100">Say goodbye to paper receipts!</span> Sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</span>
                     <span class="block text-xs font-medium text-gray-400 dark:text-gray-500">Jan 24, 2024</span>
                 </a>
-            </li>
+            </li> -->
         </ul>                
     </div>
 </div>

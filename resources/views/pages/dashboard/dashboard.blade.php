@@ -18,16 +18,6 @@
                             following intermediate results (IR) or intermediate objectives:
                         </p>
                     </div>
-                    <div class="mt-4">
-                        <h2 class="text-xl font-bold  text-sm">Background</h2>
-                        <p class="text-gray-600 mt-2">USAID Integrated Nutrition is a five-year award (2024-2029) that
-                            supports the Government of Nepal's Multi-Sectoral Nutrition Plan III and the Ministry of
-                            Health and Population's priorities. The objective of USAID Integrated Nutrition is to
-                            improve the nutritional status of children, adolescent girls, and women in Nepal through a
-                            multi-sectoral approach, while prioritizing underserved populations. The award has the
-                            following intermediate results (IR) or intermediate objectives:
-                        </p>
-                    </div>
                     <div class="mt-8">
                         <h2 class="text-xl font-bold  text-sm">Intervention Results (IRs)</h2>
                         <ul class="list-disc pl-4 mt-2">
@@ -66,14 +56,14 @@
                             <li class="text-gray-600">Step 7. Plan Food Systems Activities (IR 3)</li>
                             <li class="text-gray-600">Step 8. Plan Governance Activities (IR 4)</li>
                             <li class="text-gray-600">Step 9. Compiled Workplan</li>
-                    </div>
+                    </div><p>
                         This web-based software application - Cocreation Decision Support System is developed as a part of cocreation activities for USAID Integrated Nutrition.
                         
                         This application is "made possible by the generous support of the American People through the United States Agency for International Development (USAID)”.
                         
                         The information provided on this portal is not official U.S. Government information and does not represent the views or positions of the U.S. Agency for International Development or the U.S. Government.
                         
-                        Kindly refer to the terms of agreement before using this application.
+                        Kindly refer to the terms of agreement before using this application.</p>
                 </div>
 
             </div>
