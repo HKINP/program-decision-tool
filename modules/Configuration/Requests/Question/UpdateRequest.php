@@ -25,8 +25,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-    dd('here');
-        
+           
         return [
             'question' => 'required|string|max:255',
             'thematic_area_id' => 'nullable|exists:thematic_areas,id',
