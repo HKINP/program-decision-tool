@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\StagesRepository;
 use Modules\Configuration\Requests\Stages\StoreRequest;
 use Modules\Configuration\Requests\Stages\UpdateRequest;
+use Modules\Report\Repositories\StepRemarksRepository;
 
 class StagesController extends Controller
 {
@@ -16,14 +17,16 @@ class StagesController extends Controller
      * @param  StagesRepository $stages
      * @return void
      */
-    protected $stages;
+    protected $stages,$stepRemarks;
     
 
     public function __construct(
-        StagesRepository $stages
+        StagesRepository $stages,
+        StepRemarksRepository $stepRemarks
     )
     {
         $this->stages = $stages;
+        $this->stepRemarks = $stepRemarks;
     }
     
     /**
@@ -67,6 +70,20 @@ class StagesController extends Controller
         }
         return response()->json(['status'=>'error',
             'message'=>'Account Code can not be added.'], 422);
+    }
+
+    public function resetStageStatus(Request $request)
+    {
+        $data=$request->all();
+        $did=$data['district_id'];
+        $stageId=$data['stage_id'];
+        $resetStatus=$this->stepRemarks->where('stage_id','=', $stageId)->where('district_id','=', $did)->update(['stage_status' => 0]);
+       if($resetStatus){
+        return redirect()->back()->with('success', 'Enabled edit access successfully!');
+       }else{
+        return redirect()->back()->with('error', 'Failed to enable edit access!');
+       }
+
     }
 
     /**

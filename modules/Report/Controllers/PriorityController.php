@@ -154,8 +154,8 @@ class PriorityController extends Controller
                 'notes' => $data['notes'],
                 'stage_status' => 1,
             ];
-    
-            $stepremarks->update($stepremarks->id,$inputs);
+            
+            $stepremarks->update($inputs);
         } else {
             // Create a new record if no existing record is found
             $this->stepRemarks->create([
@@ -322,8 +322,7 @@ class PriorityController extends Controller
 
     public function updateBydistrict(UpdateRequest $request, $id)
     {
-               
-       
+                
    
         // Retrieve the priority being updated
         $priorityToUpdate = $this->priorities->find($id);

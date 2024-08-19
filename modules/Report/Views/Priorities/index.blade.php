@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-        
-          <div class="mt-10">
+
+        <div class="mt-10">
             <div class="flex justify-between">
                 <!-- Step 1 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
@@ -19,20 +19,16 @@
                     </a>
                 </div>
                 <!-- Step 1 End -->
-                
+
 
                 <!-- Step 3 -->
                 <div class="w-1/3 text-center pr-6 mb-6">
-                    <a
-                    @if ($ir1status) href="{{ route('prioritizedActivities.index', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
+                    <a @if ($ir1status) href="{{ route('prioritizedActivities.index', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
                         @else
-                       href="{{ route('dataentrystage.create', ['stageId' => 3, 'did' => $districtprofile->id]) }}"
-                            @endif
-                    
-                    
+                       href="{{ route('dataentrystage.create', ['stageId' => 3, 'did' => $districtprofile->id]) }}" @endif
                         class="flex items-center justify-center border border-gray-200 transition duration-300">
                         <div class="w-1/3 bg-[#844a8a] flex items-center justify-center h-16 rounded-l-lg">
-                           <i class="text-white fa-2x fa-solid fa-arrow-right"></i>
+                            <i class="text-white fa-2x fa-solid fa-arrow-right"></i>
                         </div>
                         <div
                             class="w-2/3 bg-white h-16 flex flex-col items-center justify-center px-1 rounded-r-lg body-step">
@@ -44,14 +40,19 @@
                 <!-- Step 3 End -->
             </div>
         </div>
-          <!-- Heading and Edit Button -->
-          <div class="flex items-center justify-between mb-4">
+        <!-- Heading and Edit Button -->
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">Step 2. Prioritize Indicators for Year 1</h2>
-            <a href="{{ route('priority.show', $districtprofile->id) }}"
-                class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
-                <i class="fas fa-edit"></i>
-                <span class="max-xs:sr-only">Edit</span>
-            </a>
+            <form action="{{ route('stages.resetStatus') }}" method="Post">
+                @csrf
+                <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+                <input type="number" name="stage_id" value="2" hidden>
+                <button type="submit"
+                    class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
+                    <i class="fas fa-edit"></i>
+                    <span class="max-xs:sr-only">Edit</span>
+                </button>
+            </form>
         </div>
         <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
 
@@ -81,7 +82,8 @@
                                 {{ $priority->thematicArea->thematic_area }}
                             </td>
                             <td class="border text-sm border-gray-600 text-black p-2">{{ $index++ }}</td>
-                            <td class="border text-sm border-gray-600 text-black p-2">{{ $priority->question->question }}
+                            <td class="border text-sm border-gray-600 text-black p-2">
+                                {{ $priority->question->question }}
                             </td>
                             @php
                                 $value = $priority->question->indicator->provinceProfiles[0]->all_value;
@@ -99,8 +101,8 @@
                             <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $color }}">
                                 {{ $value }}
                             </td>
-                            
-                           
+
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -114,7 +116,9 @@
             </div>
 
             <div class="space-y-2 text-xs italic">
-                <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here...">{{ $stepRemarks->notes ?? 'NA' }}</textarea>
+                <textarea id="notes" name="notes" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write your notes here...">{{ $stepRemarks->notes ?? 'NA' }}</textarea>
             </div>
         </div>
     </div>

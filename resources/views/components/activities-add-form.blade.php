@@ -47,6 +47,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @dd($activities[$question->question_id])
                             @if (isset($activities[$question->question_id]))
                                 @foreach ($activities[$question->question_id] as $activity)
                              

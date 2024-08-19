@@ -75,6 +75,7 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('stages', [StagesController::class, 'index'])->name('stages.index');
     Route::get('stages/create', [StagesController::class, 'create'])->name('stages.create');
     Route::post('stages', [StagesController::class, 'store'])->name('stages.store');
+    Route::post('stages/reset', [StagesController::class, 'resetStageStatus'])->name('stages.resetStatus');
     Route::get('stages/{thematicarea}/edit', [StagesController::class, 'edit'])->name('stages.edit');
     Route::put('stages/{thematicarea}', [StagesController::class, 'update'])->name('stages.update');
     Route::delete('stages/{thematicarea}', [StagesController::class, 'destroy'])->name('stages.destroy');

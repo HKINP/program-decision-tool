@@ -102,8 +102,10 @@ class DashboardController extends Controller
             if ($datastatus['districtvulnerability'] == 1) {
                 return redirect()->route('districtvulnerability.index', ['stageId' => 1, 'did' => $did]);
             }
+            $districtVulnerability=$this->vulnerability->where('district_id','=', $did)->get();
             return view('Report::DistrictContext.create')
-                ->withDistrictprofile($districtprofile);
+                ->withDistrictprofile($districtprofile)
+                ->withDistrictVulnerability($districtVulnerability);
         }
 
 
@@ -189,6 +191,7 @@ class DashboardController extends Controller
                 ->where('district_id', $did)
                 ->where('stage_id', 3)
                 ->get();
+           
 
             //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($subactivities as $activity) {
@@ -196,13 +199,11 @@ class DashboardController extends Controller
 
             }
             $subactivities = $subactivities->groupBy('indicator_id');
-
             $keybarriers = $this->keybarriers
                 ->where('district_id', '=', $did)
                 ->where('stage_id', 3)
                 ->get()
                 ->groupBy('indicator_id');
-
 
             // Return the view with additional data
             return view('Report::Sbc.create')
