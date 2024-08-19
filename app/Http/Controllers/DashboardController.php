@@ -205,13 +205,15 @@ class DashboardController extends Controller
                 ->where('stage_id', 3)
                 ->get()
                 ->groupBy('indicator_id');
-
+            $stepRemarks=$this->stepRemarks->where('stage_id','=',3)->get()->first();
+           
             // Return the view with additional data
             return view('Report::Sbc.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -242,6 +244,7 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
+                $stepRemarks=$this->stepRemarks->where('stage_id','=',4)->get()->first();
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -265,6 +268,7 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -288,6 +292,7 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
+            $stepRemarks=$this->stepRemarks->where('stage_id','=',5)->get()->first();
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -311,23 +316,6 @@ class DashboardController extends Controller
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
-            $keybarriers = $this->keybarriers
-                ->where('district_id', '=', $did)
-                ->where('stage_id', $stageId)
-                ->get()
-                ->groupBy('indicator_id');
-
-            $subactivities = $this->prioritizedActivities
-                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
-                ->where('district_id', $did)
-                ->where('stage_id', $stageId)
-                ->get();
-            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
-            foreach ($subactivities as $activity) {
-                $activity->platforms; // This will trigger the accessor and load related platforms
-
-            }
-            $subactivities = $subactivities->groupBy('indicator_id');
 
             // Return the view with additional data
             return view('Report::FoodSystem.create')
@@ -335,6 +323,7 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -354,6 +343,7 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
+            $stepRemarks=$this->stepRemarks->where('stage_id','=',3)->get()->first();
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -376,6 +366,7 @@ class DashboardController extends Controller
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
+                
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -386,6 +377,7 @@ class DashboardController extends Controller
                 ->withActivities($activities)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 

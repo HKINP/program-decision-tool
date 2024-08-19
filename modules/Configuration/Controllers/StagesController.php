@@ -79,7 +79,9 @@ class StagesController extends Controller
         $stageId=$data['stage_id'];
         $resetStatus=$this->stepRemarks->where('stage_id','=', $stageId)->where('district_id','=', $did)->update(['stage_status' => 0]);
        if($resetStatus){
-        return redirect()->back()->with('success', 'Enabled edit access successfully!');
+        
+        return redirect()->route('dataentrystage.create', ['stageId' => $stageId, 'did' => $did])
+        ->with('success', 'Enabled edit access successfully!');
        }else{
         return redirect()->back()->with('error', 'Failed to enable edit access!');
        }

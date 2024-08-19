@@ -40,11 +40,16 @@
           <!-- Heading and Edit Button -->
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">Step 4. Health and Nutrition Service Activities (IR2)  </h2>
-            <a href="http://localhost:8000/thematicarea/edit"
-                class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
-                <i class="fas fa-edit"></i>
-                <span class="max-xs:sr-only">Edit</span>
-            </a>
+            <form action="{{ route('stages.resetStatus') }}" method="Post">
+                @csrf
+                <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
+                <input type="number" name="stage_id" value="4" hidden>
+                <button type="submit"
+                    class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
+                    <i class="fas fa-edit"></i>
+                    <span class="max-xs:sr-only">Edit</span>
+                </button>
+            </form>
         </div>
        
   <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />

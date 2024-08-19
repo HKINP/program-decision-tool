@@ -116,11 +116,10 @@
             <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">06</p>
             <p class="font-semibold text-md text-blue-600">Notes</p>
         </div>
-
         <div class="space-y-2 text-xs italic">
             <textarea id="notes" name="notes" rows="4"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Write your notes here..."></textarea>
+                placeholder="Write your notes here...">{{ $stepRemarks->notes ?? ""}}</textarea>
         </div>
         <div class="text-right">
                        
