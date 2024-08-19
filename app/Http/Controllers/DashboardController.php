@@ -205,7 +205,11 @@ class DashboardController extends Controller
                 ->where('stage_id', 3)
                 ->get()
                 ->groupBy('indicator_id');
-            $stepRemarks=$this->stepRemarks->where('stage_id','=',3)->get()->first();
+
+            $stepRemarks=$this->stepRemarks
+            ->where('district_id', '=', $did)
+            ->where('stage_id','=',3)
+            ->get()->first();
            
             // Return the view with additional data
             return view('Report::Sbc.create')
@@ -244,7 +248,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
-                $stepRemarks=$this->stepRemarks->where('stage_id','=',4)->get()->first();
+
+            $stepRemarks=$this->stepRemarks
+            ->where('district_id', '=', $did)
+            ->where('stage_id','=',4)
+            ->get()->first();
+           
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -292,7 +301,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
-            $stepRemarks=$this->stepRemarks->where('stage_id','=',5)->get()->first();
+            
+            $stepRemarks=$this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id','=',5)
+                ->get()->first();
+               
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -343,7 +357,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
-            $stepRemarks=$this->stepRemarks->where('stage_id','=',3)->get()->first();
+            
+            $stepRemarks=$this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id','=',6)
+                ->get()->first();
+               
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
