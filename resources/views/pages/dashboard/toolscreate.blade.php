@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-         <a href="{{ route('steplist.create'}}"
+         <a href="{{ route('steplist.create'}}">
             <div class="flex items-center gap-2 text-2xl p-4">
                 <div class="border p-2 rounded-full ml-2">
                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
