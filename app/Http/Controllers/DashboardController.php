@@ -358,6 +358,8 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('indicator_id');
             
+                // return response()->json(['data'=>'error','data'=>$keybarriers], 422);
+            
             $stepRemarks=$this->stepRemarks
                 ->where('district_id', '=', $did)
                 ->where('stage_id','=',6)
@@ -369,23 +371,22 @@ class DashboardController extends Controller
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
                 ->get();
-            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
-            foreach ($subactivities as $activity) {
-                $activity->platforms; // This will trigger the accessor and load related platforms
-
-            }
-            $subactivities = $subactivities->groupBy('indicator_id');
-
-            // Fetch district profile
-            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
-            $activities = $this->activities->where('ir_id', '=', '4')->get();
-
-            // Fetch priorities with associated relationships
-            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
-                ->where('district_id', '=', $did)
-                ->where('priority', '=', 1)
+                foreach ($subactivities as $activity) {
+                    $activity->platforms; // This will trigger the accessor and load related platforms
+                    
+                }
+                $subactivities = $subactivities->groupBy('indicator_id');
+                
+                // Fetch district profile
+                $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+                $activities = $this->activities->where('ir_id', '=', '4')->get();
+                
+                // Fetch priorities with associated relationships
+                $priorities = $this->questions->with(['thematicArea', 'targetGroup'])
+                ->where('target_group_id', '=', 5) // Assuming 'target_group_id' is the correct column name
                 ->get();
                 
+                return response()->json(['status'=>'ads','data'=>$subactivities], 200);
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
