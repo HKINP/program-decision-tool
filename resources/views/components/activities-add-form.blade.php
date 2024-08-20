@@ -24,7 +24,7 @@
                     </div>
                   
                     <div class="mb-4 ">
-                        <p class="font-semibold text-md text-black">{{ $index + 1 }}.1 Key Barriers </p>
+                        <p class="font-semibold text-md text-black">{{ $index + 1 }}.1 Key Barriers @if($stageId != 5) * @endif</p>
                         <textarea id="key_barriers" name="key_barriers" rows="4"
                             
                         @if($stageId != 5) required @endif
