@@ -91,7 +91,7 @@
                         <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1" {{ $data->climatic_change_status == 1 ? 'checked' : '' }}>
                     </td>
                     <td class="p-2 text-center">
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->remarks }}">
+                        {{ $data->remarks }}
                     </td>
                 </tr>
             @endforeach
