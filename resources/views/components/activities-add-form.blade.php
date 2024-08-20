@@ -26,7 +26,10 @@
                     <div class="mb-4 ">
                         <p class="font-semibold text-md text-black">{{ $index + 1 }}.1 Key Barriers </p>
                         <textarea id="key_barriers" name="key_barriers" rows="4"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            
+                        @if($stageId != 5) required @endif
+
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Write your notes here...">{{ $keybarriers->has($question->question_id) ? $keybarriers->get($question->question_id)->first()->key_barriers : '' }}</textarea>
                         @if ($keybarriers->has($question->question_id))
                         <input type="number" name="key_barriers_id" value="{{ $keybarriers->get($question->question_id)->first()->id }}" hidden>
@@ -203,7 +206,7 @@
             <div class="grid grid-cols-1 gap-4 mb-2">
                 <div class="flex flex-col w-full">
                     <label for="activity-text-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Activity Details</label>
-                    <textarea id="activity-text-${questionId}-${activityCount}" name="proposed_activities[]" rows="3"
+                    <textarea id="activity-text-${questionId}-${activityCount}" name="proposed_activities[]" rows="3" required
                         class="block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Write your activity details here..."></textarea>
                 </div>
