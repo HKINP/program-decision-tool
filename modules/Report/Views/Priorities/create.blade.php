@@ -59,11 +59,11 @@
                         $color = '';
                     
                         if ($value < 50) {
-                            $color = 'bg-red-600 text-white';
+                            $color = 'bg-red-800 text-white';
                         } elseif ($value >= 50 && $value < 80) {
-                            $color = 'bg-orange-700 text-white';
+                            $color = 'bg-orange-400 text-white';
                         } elseif ($value >= 80) {
-                            $color = 'bg-green-600 text-white';
+                            $color = 'bg-green-700 text-white';
                         }
                     
                         // Check if the current question has priority set to 1 in the given district
