@@ -4,23 +4,24 @@
             <p class="font-semibold text-md text-blue-600">Indicators</p>
         </div>
 
-        @foreach ($priorities as $index => $question)
+        @foreach ($priorities as $index => $priority)
+        
             <form action="{{ route('prioritizedActivities.store') }}" method="post">
                 @csrf
                 <input type="number" name="province_id" value="{{ $districtProfile->province->id }}" hidden>
                 <input type="number" name="district_id" value="{{ $districtProfile->id }}" hidden>
                 <input type="number" name="stage_id" value="{{ $stageId }}" hidden>
-                <input type="number" name="indicator_id" value="{{ $question->question_id }}" hidden>
+                <input type="number" name="indicator_id" value="{{ $priority->question->indicator_id }}" hidden>
                 <div class="border border-gray-200 rounded-lg p-4 mb-4">
                     <h2 class="text-md text-blue-600 font-semibold mb-2">{{ $index + 1 }}.
-                        {{ $question->question->question }}</h2>
+                        {{ $priority->question->question }}</h2>
                     <div class="mb-4 flex items-center gap-4">
-                        <input type="number" name="target_group_id" value="{{ $question->target_group_id }}" hidden>
+                        <input type="number" name="target_group_id" value="{{ $priority->target_group_id }}" hidden>
                         <p class="text-sm font-semibold text-gray-600">Target Group: <span
-                                class="font-normal">{{ $question->targetGroup->target_group }}</span></p>
+                                class="font-normal">{{ $priority->targetGroup->target_group }}</span></p>
                         <p class="text-sm font-semibold text-gray-600">Thematic Area: <span
-                                class="font-normal">{{ $question->thematicArea->thematic_area }}</span></p>
-                        <input type="number" name="thematic_area_id" value="{{ $question->thematic_area_id }}" hidden>
+                                class="font-normal">{{ $priority->thematicArea->thematic_area }}</span></p>
+                        <input type="number" name="thematic_area_id" value="{{ $priority->thematic_area_id }}" hidden>
                     </div>
 
                     <div class="mb-4 ">
@@ -30,10 +31,10 @@
                         </p>
                         <textarea id="key_barriers" name="key_barriers" rows="4" @if ($stageId != 5) required @endif
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Write your notes here...">{{ $keybarriers->has($question->question_id) ? $keybarriers->get($question->question_id)->first()->key_barriers : '' }}</textarea>
-                        @if ($keybarriers->has($question->question_id))
+                            placeholder="Write your notes here...">{{ $keybarriers->has($priority->question->indicator_id) ? $keybarriers->get($priority->question->indicator_id)->first()->key_barriers : '' }}</textarea>
+                        @if ($keybarriers->has($priority->question->indicator_id))
                             <input type="number" name="key_barriers_id"
-                                value="{{ $keybarriers->get($question->question_id)->first()->id }}" hidden>
+                                value="{{ $keybarriers->get($priority->question->indicator_id)->first()->id }}" hidden>
                         @endif
                     </div>
                     <p class="font-semibold text-md text-black mb-4">{{ $index + 1 }}.2 Sub Activities</p>
@@ -52,8 +53,8 @@
                         </thead>
                         <tbody>
 
-                            @if (isset($activities[$question->question_id]))
-                                @foreach ($activities[$question->question_id] as $activity)
+                            @if (isset($activities[$priority->question->indicator_id]))
+                                @foreach ($activities[$priority->question->indicator_id] as $activity)
                                     <tr>
                                         <td class="border border-gray-300 p-2 text-sm">
                                             {{ $activity->proposed_activities }}
@@ -93,19 +94,20 @@
 
 
 
-                    <div id="activities-container-{{ $question->question_id }}" class="space-y-4">
+                    <div id="activities-container-{{ $priority->question->indicator_id }}" class="space-y-4">
 
                     </div>
                     <div class="flex items-center justify-between mt-4">
                         <!-- Left side: Text -->
-                        <p class="italic text-sm hidden font-semibold" id="notessubmit">Submit or update before adding a new
+                        <p class="italic text-sm hidden font-semibold" id="notessubmit">Submit or update before adding a
+                            new
                             activities !!</p>
 
                         <!-- Right side: Buttons -->
                         <div class="flex items-center gap-4">
                             <div class="text-right">
                                 <button type="submit" class="p-2 bg-green-500 text-white rounded">
-                                    @if ($keybarriers->has($question->question_id))
+                                    @if ($keybarriers->has($priority->question->indicator_id))
                                         Update
                                     @else
                                         Submit
@@ -114,7 +116,7 @@
                             </div>
 
                             <button type="button" class="p-2 bg-blue-500 text-white rounded flex items-center gap-2"
-                                onclick="addActivity({{ $question->question_id }})">
+                                onclick="addActivity({{ $priority->question->indicator_id }})">
                                 Add +
                             </button>
                         </div>

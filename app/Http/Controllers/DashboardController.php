@@ -76,7 +76,7 @@ class DashboardController extends Controller
                     $this->getStageInfo($stage->id, $did) // Get route and tick status
                 );
             });
-            $district = $this->districts->where('id','=',$did)->first();
+            $district = $this->districts->where('id', '=', $did)->first();
             return view('pages/dashboard/toolscreate')
                 ->withStageInfo($stageInfo)
                 ->withDistrictID($did)
@@ -103,7 +103,7 @@ class DashboardController extends Controller
             if ($datastatus['districtvulnerability'] == 1) {
                 return redirect()->route('districtvulnerability.index', ['stageId' => 1, 'did' => $did]);
             }
-            $districtVulnerability=$this->vulnerability->where('district_id','=', $did)->get();
+            $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
             return view('Report::DistrictContext.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability);
@@ -142,17 +142,24 @@ class DashboardController extends Controller
             $province_id = $districtprofile->province->id;
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
 
-            // Fetch questions
+            // Fetch questions with a specific target group ID
             $questions = $this->questions->with([
                 'thematicArea',
                 'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
                     $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
                         $query->where('province_id', $province_id);
                     }]);
-                },
-                'targetGroup'
-            ])->get();
-            $priorities=$this->priorities->where('district_id', '=', $did)->get();
+                }
+            ])
+                ->whereHas('targetGroup', function ($query) {
+                    $query->where('id','!=', 5); // Check for target_group_id = 5, assuming 'id' is the column in targetGroup
+                })
+                ->get();
+            //  return response()->json(['status'=>'ads','data'=>$questions], 200);
+
+
+
+            $priorities = $this->priorities->where('district_id', '=', $did)->get();
 
             // Return the view with additional data
             return view('Report::Priorities.create')
@@ -161,6 +168,8 @@ class DashboardController extends Controller
                 ->withStepRemarks($stepRemarks)
                 ->withPriorities($priorities)
                 ->withQuestions($questions);
+
+
 
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 3) {
 
@@ -192,7 +201,7 @@ class DashboardController extends Controller
                 ->where('district_id', $did)
                 ->where('stage_id', 3)
                 ->get();
-           
+
 
             //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($subactivities as $activity) {
@@ -206,11 +215,11 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('indicator_id');
 
-            $stepRemarks=$this->stepRemarks
-            ->where('district_id', '=', $did)
-            ->where('stage_id','=',3)
-            ->get()->first();
-           
+            $stepRemarks = $this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id', '=', 3)
+                ->get()->first();
+
             // Return the view with additional data
             return view('Report::Sbc.create')
                 ->withDistrictprofile($districtprofile)
@@ -220,7 +229,6 @@ class DashboardController extends Controller
                 ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
-
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 4) {
 
             $did = $request->query('did');
@@ -242,18 +250,18 @@ class DashboardController extends Controller
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
-
+               
             $keybarriers = $this->keybarriers
                 ->where('district_id', '=', $did)
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
 
-            $stepRemarks=$this->stepRemarks
-            ->where('district_id', '=', $did)
-            ->where('stage_id','=',4)
-            ->get()->first();
-           
+            $stepRemarks = $this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id', '=', 4)
+                ->get()->first();
+
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -280,8 +288,6 @@ class DashboardController extends Controller
                 ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
-
-
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 5) {
 
             $did = $request->query('did');
@@ -301,12 +307,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
-            
-            $stepRemarks=$this->stepRemarks
+
+            $stepRemarks = $this->stepRemarks
                 ->where('district_id', '=', $did)
-                ->where('stage_id','=',5)
+                ->where('stage_id', '=', 5)
                 ->get()->first();
-               
+
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -323,10 +329,11 @@ class DashboardController extends Controller
             // Fetch district profile
             $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
             // Fetch priorities with associated relationships
-            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question'])
+            $priorities = $this->priorities->with(['thematicArea', 'targetGroup', 'question', 'question.indicator'])
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
+
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -340,7 +347,6 @@ class DashboardController extends Controller
                 ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
-
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 6) {
 
             $did = $request->query('did');
@@ -357,36 +363,36 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
-            
-                // return response()->json(['data'=>'error','data'=>$keybarriers], 422);
-            
-            $stepRemarks=$this->stepRemarks
+
+            // return response()->json(['data'=>'error','data'=>$keybarriers], 422);
+
+            $stepRemarks = $this->stepRemarks
                 ->where('district_id', '=', $did)
-                ->where('stage_id','=',6)
+                ->where('stage_id', '=', 6)
                 ->get()->first();
-               
+
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
                 ->get();
-                foreach ($subactivities as $activity) {
-                    $activity->platforms; // This will trigger the accessor and load related platforms
-                    
-                }
-                $subactivities = $subactivities->groupBy('indicator_id');
-                
-                // Fetch district profile
-                $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
-                $activities = $this->activities->where('ir_id', '=', '4')->get();
-                
-                // Fetch priorities with associated relationships
-                $priorities = $this->questions->with(['thematicArea', 'targetGroup'])
+            foreach ($subactivities as $activity) {
+                $activity->platforms; // This will trigger the accessor and load related platforms
+
+            }
+            $subactivities = $subactivities->groupBy('indicator_id');
+
+            // Fetch district profile
+            $districtprofile = $this->districts->with(['province', 'locallevel'])->find($did);
+            $activities = $this->activities->where('ir_id', '=', '4')->get();
+
+            // Fetch priorities with associated relationships
+            $priorities = $this->questions->with(['thematicArea', 'targetGroup'])
                 ->where('target_group_id', '=', 5) // Assuming 'target_group_id' is the correct column name
                 ->get();
-                
-                return response()->json(['status'=>'ads','data'=>$subactivities], 200);
+
+            // return response()->json(['status' => 'ads', 'data' => $subactivities], 200);
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -400,8 +406,6 @@ class DashboardController extends Controller
                 ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
-
-
         } elseif ($request->has('did') && $request->input('did') != '' && $request->has('stageId') && $request->input('stageId') == 7) {
 
             $did = $request->query('did');

@@ -90,7 +90,7 @@ class PrioritizedActivitiesController extends Controller
             // Fetch additional data
             $stepRemarks = $this->stepRemarks
                 ->where('district_id', '=', $did)
-                ->where('stage_id', $stageId)
+                ->where('stage_id','=', $stageId)
                 ->first();
 
             $districtprofile = $this->districts
