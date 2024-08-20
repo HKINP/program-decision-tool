@@ -27,8 +27,7 @@ class UserPasswordChangeController extends Controller
      */
     public function __construct(
         UserRepository $users
-    )
-    {
+    ) {
         $this->users = $users;
     }
 
@@ -52,20 +51,21 @@ class UserPasswordChangeController extends Controller
      */
     public function changePassword(Request $request)
     {
+       
         $user = $this->users->find($request->user_id);
         $data['password'] = bcrypt($request->password);
         $user->update($data);
-        if($user) {
-            if($request->send_email!=null){
-            Mail::to($user->email_address)
-                ->send(new PasswordChanged($user, $request->password));
-            }
-            
+        if ($user) {
+            // if ($request->send_email != null) {
+            //     Mail::to($user->email_address)
+            //         ->send(new PasswordChanged($user, $request->password));
+            // }
+
             return redirect()->route('user.index')
-            ->with('success', 'Password of the selected user is changed successfully.');
+                ->with('success', 'Password of the selected user is changed successfully.');
         } else {
             return redirect()->route('user.index')
-            ->with('error', 'Unable to change password of the selected user.');
-
+                ->with('error', 'Unable to change password of the selected user.');
+        }
     }
 }

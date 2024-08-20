@@ -75,7 +75,7 @@ class PrioritizedActivitiesController extends Controller
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
                 ->get();
-           
+
             //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($prioritizedActivities as $activity) {
                 $activity->platforms; // This will trigger the accessor and load related platforms
@@ -86,7 +86,7 @@ class PrioritizedActivitiesController extends Controller
             $allActivities = $groupedActivities->get('All', collect()); // Default to empty collection
             $vulnerableActivities = $groupedActivities->get('Vulnerable', collect()); // Default to empty collection
 
-            
+
             // Fetch additional data
             $stepRemarks = $this->stepRemarks
                 ->where('district_id', '=', $did)
@@ -99,8 +99,8 @@ class PrioritizedActivitiesController extends Controller
             $districtVulnerability = $this->vulnerability
                 ->where('district_id', '=', $did)
                 ->get();
-            $keybarrier=$this->keyBarriers->with(['indicator'])->where('district_id', '=', $did)->where('stage_id', $stageId)->get();
-        
+            $keybarrier = $this->keyBarriers->with(['indicator'])->where('district_id', '=', $did)->where('stage_id', $stageId)->get();
+
 
             // Return the view with data
             return view($view)
@@ -240,7 +240,7 @@ class PrioritizedActivitiesController extends Controller
             $stageid = $data['stage_id'];
             $keyBarriersAdded = false;
             $activitiesAdded = false;
-    
+
             // Handle Key Barriers
             if (isset($data['key_barriers_id']) && $data['key_barriers_id']) {
                 $id = $data['key_barriers_id'];
@@ -258,7 +258,7 @@ class PrioritizedActivitiesController extends Controller
                 $this->keyBarriers->create($keybarrierInputs);
                 $keyBarriersAdded = true;
             }
-    
+
             // Handle Activities
             if ((isset($data['proposed_activities']) && !empty($data['proposed_activities'])) || (isset($data['activity_id']) && !empty($data['activity_id']))) {
                 // Process specific data based on stage_id
@@ -273,18 +273,18 @@ class PrioritizedActivitiesController extends Controller
                     $platforms_id = $data['platforms_id'];
                     $remarksdata = $data['remarks'];
                 }
-    
+
                 $groupedPlatforms = [];
                 foreach ($platforms_id as $key => $platformsArray) {
                     array_push($groupedPlatforms, $platformsArray);
                 }
-    
+
                 // Determine the count and iterate over activities
                 $activities = $stageid == 6 ? $activity_id : $proposed_activities;
-    
+
                 for ($i = 0; $i < count($activities); $i++) {
                     $platforms = implode(',', $groupedPlatforms[$i]);
-    
+
                     $inputs = [
                         'province_id' => $data['province_id'],
                         'district_id' => $data['district_id'],
@@ -298,7 +298,7 @@ class PrioritizedActivitiesController extends Controller
                         'activity_id' => $activity_id[$i] ?? null,
                         'remarks' => $remarksdata[$i],
                     ];
-    
+
                     try {
                         $this->prioritizedactivities->create($inputs);
                         $activitiesAdded = true;
@@ -308,44 +308,58 @@ class PrioritizedActivitiesController extends Controller
                     }
                 }
             }
-    
+
             // Determine success message based on what was added
             if ($keyBarriersAdded && $activitiesAdded) {
                 return redirect()->back()->with('success', 'Key Barriers and Activities added successfully!');
             } elseif ($keyBarriersAdded) {
                 return redirect()->back()->with('success', 'Key Barriers added successfully!');
-            }elseif($keyBarriersUpdated){
+            } elseif ($keyBarriersUpdated) {
                 return redirect()->back()->with('success', 'Key Barriers Updated successfully!');
-            }elseif ($activitiesAdded) {
+            } elseif ($activitiesAdded) {
                 return redirect()->back()->with('success', 'Activities added successfully!');
             } else {
                 return redirect()->back()->with('success', 'No Key Barriers or Activities were added.');
             }
-    
         } catch (\Exception $e) {
             // Log the error message
             \Log::error('Error in storing activities: ' . $e->getMessage());
-    
+
             // Redirect or return an error response
             return redirect()->back()->with('error', 'An error occurred while adding activities. Please try again.');
         }
     }
-    
+
     public function stepRemarksadd(Request $request)
     {
         try {
             $data = $request->all();
-            $data['stage_status']=1;
-            $stepRemarks=$this->stepRemarks->create($data);
-            return redirect()->route('prioritizedActivities.index', ['stageId' => $data['stage_id'], 'did' => $data['district_id']])
-            ->with('success', 'Activities added successfully!');
-            
-        }
-        catch (\Exception $e) {
-            
+            $data['stage_status'] = 1;
+        
+            // Fetch the step remark for the given district and stage
+            $stepRemark = $this->stepRemarks
+                ->where('district_id','=', $data['district_id'])
+                ->where('stage_id','=', $data['stage_id'])
+                ->first();
+        
+            // If stepRemark exists, update it; otherwise, create a new one
+            if ($stepRemark) {
+                $this->stepRemarks->update($stepRemark->id, $data);
+            } else {
+                $this->stepRemarks->create($data);
+            }
+        
+            return redirect()->route('prioritizedActivities.index', [
+                'stageId' => $data['stage_id'],
+                'did' => $data['district_id']
+            ])->with('success', 'Activities updated successfully!');
+        
+        } catch (\Exception $e) {
+            // Handle the exception (e.g., log it, display an error message)
+            return redirect()->back()->withErrors('An error occurred while adding activities.');
         }
     }
-    
+
 
 
     public function compiledReport(Request $request)

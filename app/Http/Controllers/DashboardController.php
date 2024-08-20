@@ -76,10 +76,11 @@ class DashboardController extends Controller
                     $this->getStageInfo($stage->id, $did) // Get route and tick status
                 );
             });
-           
+            $district = $this->districts->where('id','=',$did)->first();
             return view('pages/dashboard/toolscreate')
                 ->withStageInfo($stageInfo)
-                ->withDistrictID($did);
+                ->withDistrictID($did)
+                ->withDistrict($district);
         }
 
         $provinces = $this->provinces->with(['districts'])->get();
@@ -205,12 +206,18 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('indicator_id');
 
+            $stepRemarks=$this->stepRemarks
+            ->where('district_id', '=', $did)
+            ->where('stage_id','=',3)
+            ->get()->first();
+           
             // Return the view with additional data
             return view('Report::Sbc.create')
                 ->withDistrictprofile($districtprofile)
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -242,6 +249,12 @@ class DashboardController extends Controller
                 ->get()
                 ->groupBy('indicator_id');
 
+            $stepRemarks=$this->stepRemarks
+            ->where('district_id', '=', $did)
+            ->where('stage_id','=',4)
+            ->get()->first();
+           
+
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
                 ->where('district_id', $did)
@@ -264,6 +277,7 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -287,6 +301,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
+            
+            $stepRemarks=$this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id','=',5)
+                ->get()->first();
+               
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -310,23 +330,6 @@ class DashboardController extends Controller
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
-            $keybarriers = $this->keybarriers
-                ->where('district_id', '=', $did)
-                ->where('stage_id', $stageId)
-                ->get()
-                ->groupBy('indicator_id');
-
-            $subactivities = $this->prioritizedActivities
-                ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
-                ->where('district_id', $did)
-                ->where('stage_id', $stageId)
-                ->get();
-            //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
-            foreach ($subactivities as $activity) {
-                $activity->platforms; // This will trigger the accessor and load related platforms
-
-            }
-            $subactivities = $subactivities->groupBy('indicator_id');
 
             // Return the view with additional data
             return view('Report::FoodSystem.create')
@@ -334,6 +337,7 @@ class DashboardController extends Controller
                 ->withDistrictVulnerability($districtVulnerability)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 
@@ -353,6 +357,12 @@ class DashboardController extends Controller
                 ->where('stage_id', $stageId)
                 ->get()
                 ->groupBy('indicator_id');
+            
+            $stepRemarks=$this->stepRemarks
+                ->where('district_id', '=', $did)
+                ->where('stage_id','=',6)
+                ->get()->first();
+               
 
             $subactivities = $this->prioritizedActivities
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
@@ -375,6 +385,7 @@ class DashboardController extends Controller
                 ->where('district_id', '=', $did)
                 ->where('priority', '=', 1)
                 ->get();
+                
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 
@@ -385,6 +396,7 @@ class DashboardController extends Controller
                 ->withActivities($activities)
                 ->withPlatforms($platforms)
                 ->withSubactivities($subactivities)
+                ->withStepRemarks($stepRemarks)
                 ->withKeybarriers($keybarriers)
                 ->withPriorities($priorities);
 

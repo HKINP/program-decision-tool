@@ -45,17 +45,15 @@
         <!-- Heading and Edit Button -->
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">Step 1. District Context</h2>
-            <form action="{{ route('stages.resetStatus') }}" method="Post">
-                @csrf
-                <input type="number" name="district_id" value="{{ $districtprofile->id }}" hidden>
-                <input type="number" name="stage_id" value="1" hidden>
-                <button type="submit"
-                    class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white px-4 py-2 flex items-center space-x-2">
-                    <i class="fas fa-edit"></i>
-                    <span class="max-xs:sr-only">Edit</span>
-                </button>
-            </form>
         </div>
+        <!-- <div class="flex justify-end mb-4">
+            <button
+                class="btn bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg"
+                data-modal-target="addModal"
+                data-modal-toggle="addModal">
+                Add Information
+            </button>
+        </div> -->
         <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
 
         <div class="bg-white p-4 rounded-lg w-full mb-5">
@@ -68,4 +66,7 @@
                 <textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here...">{{ $stepRemarks->notes ?? "" }}</textarea>
             </div>
         </div>
+
+
+       
 </x-app-layout>

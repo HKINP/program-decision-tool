@@ -108,7 +108,7 @@
             <div class="bg-white p-4 rounded-lg w-full mb-4 mt-6">
                 <div class="flex gap-2 items-center mb-4">
                     <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">06</p>
-                    <p class="font-semibold text-md text-blue-600">Notes</p>
+                    <p class="font-semibold text-md text-blue-600">Notes *</p>
                 </div>
 
                 <div class="space-y-2 text-xs italic">

@@ -47,7 +47,7 @@
             @keydown.escape.window="searchOpen = false"
         >   
             <!-- Search form -->
-            <form class="border-b border-gray-200 dark:border-gray-700/60">
+            <!-- <form class="border-b border-gray-200 dark:border-gray-700/60">
                 <div class="relative">
                     <label for="modal-search" class="sr-only">Search</label>
                     <input id="modal-search" class="w-full dark:text-gray-300 bg-white dark:bg-gray-800 border-0 focus:ring-transparent placeholder-gray-400 dark:placeholder-gray-500 appearance-none py-3 pl-10 pr-4" type="search" placeholder="Search Anything…" x-ref="searchInput" />
@@ -58,7 +58,7 @@
                         </svg>  
                     </button>
                 </div>
-            </form>
+            </form> -->
             <div class="py-4 px-2">
                 <!-- Recent searches -->
                 <div class="mb-3 last:mb-0">

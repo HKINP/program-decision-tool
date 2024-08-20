@@ -12,8 +12,9 @@ class ActivitiesAddForm extends Component
     public $platforms;
     public $keybarriers;
     public $activities;
+    public $stepRemarks;
 
-    public function __construct($stageId, $districtProfile, $priorities, $platforms,$keybarriers,$activities)
+    public function __construct($stageId, $districtProfile, $priorities, $platforms,$keybarriers,$activities,$stepRemarks)
     {
         $this->stageId = $stageId;
         $this->districtProfile = $districtProfile;
@@ -21,6 +22,7 @@ class ActivitiesAddForm extends Component
         $this->platforms = $platforms;
         $this->keybarriers = $keybarriers;
         $this->activities = $activities;
+        $this->stepRemarks = $stepRemarks;
     }
 
     public function render()

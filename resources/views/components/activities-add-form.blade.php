@@ -26,7 +26,10 @@
                     <div class="mb-4 ">
                         <p class="font-semibold text-md text-black">{{ $index + 1 }}.1 Key Barriers </p>
                         <textarea id="key_barriers" name="key_barriers" rows="4"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            
+                        @if($stageId != 5) required @endif
+
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Write your notes here...">{{ $keybarriers->has($question->question_id) ? $keybarriers->get($question->question_id)->first()->key_barriers : '' }}</textarea>
                         @if ($keybarriers->has($question->question_id))
                         <input type="number" name="key_barriers_id" value="{{ $keybarriers->get($question->question_id)->first()->id }}" hidden>
@@ -47,7 +50,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @dd($activities[$question->question_id])
+                           
                             @if (isset($activities[$question->question_id]))
                                 @foreach ($activities[$question->question_id] as $activity)
                              
@@ -71,9 +74,9 @@
                                         <td class="border border-gray-300 p-2 text-sm">
                                             <div class="flex space-x-4">
                                               
-                                                <a href="{{ route('activities.edit', $activity->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                                                <!-- <a href="{{ route('activities.edit', $activity->id) }}" class="text-yellow-500 hover:text-yellow-700">
                                                     <i class="fas fa-edit"></i>
-                                                </a>
+                                                </a> -->
                                                 <button type="button" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('prioritizedActivities.destroy', $activity->id) }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -116,11 +119,10 @@
             <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">06</p>
             <p class="font-semibold text-md text-blue-600">Notes</p>
         </div>
-
         <div class="space-y-2 text-xs italic">
-            <textarea id="notes" name="notes" rows="4"
+            <textarea id="notes" name="notes" rows="4" required
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Write your notes here..."></textarea>
+                placeholder="Write your notes here...">{{ $stepRemarks->notes ?? ""}}</textarea>
         </div>
         <div class="text-right">
                        
@@ -204,7 +206,7 @@
             <div class="grid grid-cols-1 gap-4 mb-2">
                 <div class="flex flex-col w-full">
                     <label for="activity-text-${questionId}-${activityCount}" class="text-sm font-medium text-gray-700">Activity Details</label>
-                    <textarea id="activity-text-${questionId}-${activityCount}" name="proposed_activities[]" rows="3"
+                    <textarea id="activity-text-${questionId}-${activityCount}" name="proposed_activities[]" rows="3" required
                         class="block w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Write your activity details here..."></textarea>
                 </div>

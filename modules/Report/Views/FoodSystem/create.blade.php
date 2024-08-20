@@ -27,7 +27,7 @@ step. Select management-level activities as necessary.</p>
             </div>
         </div>
         <x-district-profile-card :districtprofile="$districtprofile" :districtVulnerability="$districtVulnerability" />
-        <x-activities-add-form :stage-id="5" :district-profile="$districtprofile" :priorities="$priorities" :platforms="$platforms" :keybarriers="$keybarriers" :activities="$subactivities" />
+        <x-activities-add-form :stage-id="5" :district-profile="$districtprofile" :priorities="$priorities" :platforms="$platforms" :keybarriers="$keybarriers" :activities="$subactivities" :stepRemarks="$stepRemarks" />
 
     </div>
     

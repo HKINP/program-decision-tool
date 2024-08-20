@@ -82,9 +82,9 @@
                             Municipality</label>
                             
                             <input type="number" id="vulnerable-municipality-count" name="vulnerable_municipality"
-                            value="{{ $districtprofile->vulnerable_municipality ?? '' }}"
+                            value=""
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="{{ $districtprofile->vulnerable_municipality === null ? 'Enter vulnerability count' : '' }}"
+                            placeholder=" Enter vulnerability count"
                             required>
                         
 
@@ -145,51 +145,7 @@
                         </tr>
                     </thead>
                     <tbody class="rounded-lg" id="priority-table-body">
-                        @foreach ($districtVulnerability as $vulnerability) 
-                        <tr>
-                        <td class="p-2 text-center">
-                            <select name="lgid[]" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 municipality-select">
-                                <option value="">Select Municipality</option>
-                                ${createMunicipalityOptions(selectedValues)}
-                            </select>
-                        </td>
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="remote_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="caste_ethnicity_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="religion_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
                        
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="food_security_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="wealth_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
-                        <td class="p-2 text-center">
-                            <input type="hidden" name="climatic_change_status[]" value="0">
-                            <input type="checkbox" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" value="1">
-                        </td>
-                        <td class="p-2 text-center">
-                            <textarea id="remark" required name="remark[]" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your notes here..." style="resize: vertical;"></textarea>
-                        </td>
-                        <td class="p-2 text-center">
-                            <button type="button" class="remove-row-btn text-red-500 hover:text-red-700">
-                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                        @endforeach
                         <!-- Existing rows rendered by server-side logic -->
                     </tbody>
                 </table>
@@ -201,7 +157,7 @@
         <div class="bg-white p-4 rounded-lg w-full mb-5">
             <div class="flex gap-2 items-center mb-4">
                 <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">05</p>
-                <p class="font-semibold text-md text-blue-600">Notes</p>
+                <p class="font-semibold text-md text-blue-600">Notes *</p>
             </div>
 
             <div class="space-y-2 text-xs italic">
