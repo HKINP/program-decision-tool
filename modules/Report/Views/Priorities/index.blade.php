@@ -90,12 +90,13 @@
                                 $color = '';
 
                                 if ($value < 50) {
-                                    $color = 'bg-red-600 text-white';
-                                } elseif ($value >= 50 && $value < 80) {
-                                    $color = 'bg-orange-700 text-white';
-                                } elseif ($value >= 80) {
-                                    $color = 'bg-green-600 text-white';
-                                }
+                            $color = 'bg-red-800 text-white';
+                        } elseif ($value >= 50 && $value < 80) {
+                            $color = 'bg-orange-400 text-white';
+                        } elseif ($value >= 80) {
+                            $color = 'bg-green-700 text-white';
+                        }
+                    
                             @endphp
 
                             <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $color }}">
