@@ -73,8 +73,8 @@
                             @foreach ($keybarriers as $index => $kb)
                             <tr>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $index + 1 }}</td>
-                                <td class="border border-gray-300 p-2 text-sm">{{ $kb->key_barriers }}</td>
                                 <td class="border border-gray-300 p-2 text-sm">{{ $kb->indicator->indicator_name }}</td>
+                                <td class="border border-gray-300 p-2 text-sm">{{ $kb->key_barriers }}</td>
                                
                             </tr>
                             @endforeach
