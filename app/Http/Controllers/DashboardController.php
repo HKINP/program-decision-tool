@@ -392,7 +392,7 @@ class DashboardController extends Controller
                 ->where('target_group_id', '=', 5) // Assuming 'target_group_id' is the correct column name
                 ->get();
 
-            // return response()->json(['status' => 'ads', 'data' => $subactivities], 200);
+            // return response()->json(['status' => 'ads', 'data' => $keybarriers], 200);
             $platforms = $this->platforms->get();
             $districtVulnerability = $this->vulnerability->where('district_id', '=', $did)->get();
 

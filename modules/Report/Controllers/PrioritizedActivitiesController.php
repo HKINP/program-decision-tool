@@ -74,7 +74,7 @@ class PrioritizedActivitiesController extends Controller
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
-                ->get();
+                ->get();      
 
             //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($prioritizedActivities as $activity) {
@@ -90,7 +90,7 @@ class PrioritizedActivitiesController extends Controller
             // Fetch additional data
             $stepRemarks = $this->stepRemarks
                 ->where('district_id', '=', $did)
-                ->where('stage_id','=', $stageId)
+                ->where('stage_id', $stageId)
                 ->first();
 
             $districtprofile = $this->districts
@@ -308,7 +308,7 @@ class PrioritizedActivitiesController extends Controller
                     }
                 }
             }
-
+          
             // Determine success message based on what was added
             if ($keyBarriersAdded && $activitiesAdded) {
                 return redirect()->back()->with('success', 'Key Barriers and Activities added successfully!');

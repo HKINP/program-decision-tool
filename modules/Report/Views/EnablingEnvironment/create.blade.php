@@ -40,6 +40,7 @@
             </div>
 
             @foreach ($priorities as $index => $question)
+            
                 <form action="{{ route('prioritizedActivities.store') }}" method="post">
                     @csrf
                     <input type="number" name="province_id" value="{{ $districtprofile->province->id }}" hidden>
@@ -64,10 +65,10 @@
                             <p class="font-semibold text-md text-black">{{ $index + 1 }}.1 Key Barriers * </p>
                             <textarea id="key_barriers" name="key_barriers" rows="4" required
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Write your notes here...">{{ $keybarriers->has($question->id) ? $keybarriers->get($question->id)->first()->key_barriers : '' }}</textarea>
-                            @if ($keybarriers->has($question->id))
+                                placeholder="Write your notes here...">{{ $keybarriers->has($question->indicator_id) ? $keybarriers->get($question->indicator_id)->first()->key_barriers : '' }}</textarea>
+                            @if ($keybarriers->has($question->indicator_id))
                                 <input type="number" name="key_barriers_id"
-                                    value="{{ $keybarriers->get($question->id)->first()->id }}" hidden>
+                                    value="{{ $keybarriers->get($question->indicator_id)->first()->id }}" hidden>
                             @endif
                         </div>
                         <p class="font-semibold text-md text-black mb-4">{{ $index + 1 }}.2 Sub Activities</p>
@@ -90,11 +91,12 @@
                             </thead>
                             <tbody>
 
-                                @if (isset($activities[$question->id]))
-                                    @foreach ($activities[$question->id] as $activity)
+                                @if (isset($subactivities[$question->indicator_id]))
+                                    @foreach ($subactivities[$question->indicator_id] as $activity)
+                                 
                                         <tr>
                                             <td class="border border-gray-300 p-2 text-sm">
-                                                {{ $activity->proposed_activities }}
+                                                {{ $activity->activity->activities }}
                                             </td>
                                             <td class="border border-gray-300 p-2 text-sm">
                                                 {{ $activity->targeted_for }}
@@ -127,13 +129,8 @@
                                 @endif
 
                             </tbody>
-                        </table>
-
-
-
-                        <div id="activities-container" class="space-y-4"></div>
-
-                    </div>
+                        </table><div id="activities-container-{{ $question->id }}" class="space-y-4"></div>
+                
                     <div class="flex items-center justify-between mt-4">
                         <!-- Left side: Text -->
                         <p class="italic text-sm hidden font-semibold" id="notessubmit">Submit or update before adding a
@@ -253,9 +250,14 @@
                 return ['id' => $platform->id, 'name' => $platform->platforms];
             }));
 
-        function addActivity() {
-            const container = document.getElementById('activities-container');
+        function addActivity(questionId) {
+            const container = document.getElementById(`activities-container-${questionId}`);
             const activityCount = container.children.length + 1;
+            if (activityCount > 0) {
+                document.querySelector('#notessubmit').classList.remove('hidden');
+            } else {
+                document.querySelector('#notessubmit').classList.add('hidden');
+            }
 
             let platformOptionsHtml = '<option value="">Select</option>';
             platformsOptions.forEach(platform => {
@@ -269,7 +271,7 @@
                     <!-- First Row: Activities and Platform -->
                     <div class="flex flex-col">
                         <label class="text-sm font-medium text-gray-700">Activities</label>
-                        <select name="activity_id[]" class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
+                        <select name="activity_id[]" required class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
                             <option value="">Select Activities</option>  
                             @foreach ($activities as $activity) 
                                 <option value="{{ $activity->id }}">{{ $activity->activities }}</option>
@@ -278,7 +280,7 @@
                     </div>
                     <div class="flex flex-col">
                         <label class="text-sm font-medium text-gray-700">Platform</label>
-                        <select multiple name="platforms_id[${activityCount}][]" class="bg-white border border-gray-300 rounded-lg p-2 multipleselect text-sm w-full">
+                        <select multiple name="platforms_id[${activityCount}][]" required class="bg-white border border-gray-300 rounded-lg p-2 multipleselect text-sm w-full">
                             ${platformOptionsHtml}
                         </select>
                     </div>
@@ -312,12 +314,8 @@
             });
         }
 
-        function removeActivity(button) {
-            button.closest('div').remove();
-        }
-
-        function removeActivity(button) {
-            button.parentElement.parentElement.parentElement.remove();
+       function removeActivity(button) {
+            button.parentElement.parentElement.remove();
         }
     </script>
     </div>
