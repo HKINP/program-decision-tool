@@ -290,8 +290,8 @@
                     <div class="flex flex-col">
                         <label class="text-sm font-medium text-gray-700">Targetted For</label>
                         <select name="targeted_for[]" class="bg-white border border-gray-300 rounded-lg p-2 text-sm w-full">
-                            <option value="all">All</option>
-                            <option value="vulnerable">Vulnerable</option>
+                            <option value="All">All</option>
+                            <option value="Vulnerable">Vulnerable</option>
                         </select>
                     </div>
                     <div class="flex flex-col">
