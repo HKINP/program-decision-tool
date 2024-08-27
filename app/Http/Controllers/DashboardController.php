@@ -142,20 +142,21 @@ class DashboardController extends Controller
             $province_id = $districtprofile->province->id;
             $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->first();
 
-            // Fetch questions with a specific target group ID
             $questions = $this->questions->with([
                 'thematicArea',
-                'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
-                    $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
-                        $query->where('province_id', $province_id);
-                    }]);
-                }
-            ])
-                ->whereHas('targetGroup', function ($query) {
-                    $query->where('id','!=', 5); // Check for target_group_id = 5, assuming 'id' is the column in targetGroup
-                })
-                ->get();
-            //  return response()->json(['status'=>'ads','data'=>$questions], 200);
+                'indicator' => function ($query) use ($province_id, $did) {
+                    $query->with([
+                        'provinceProfiles' => function ($query) use ($province_id) {
+                            $query->where('province_id', $province_id);
+                        },
+                        'districtProfiles' => function ($query) use ($did) {
+                            $query->where('district_id', $did);
+                        }
+                    ]);
+                },
+                'targetGroup'
+            ])->get();
+            //  return response()->json(['status'=>'ads','data'=>$questions[0]->indicator->provinceProfiles[0]], 200);
 
 
 

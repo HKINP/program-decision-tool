@@ -58,61 +58,80 @@ class PriorityController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Request $request)
-    {
-        $did = $request->query('did');
-        
-        $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)->where('stage_id', '=', 2)->where('stage_status', '=', 1)->first();
-        // Fetch district profile
-        $districtprofile = $this->districts->with(['province'])->find($did);
-        $districtVulnerability = $this->vulnerability->where('district_id', $did)->get();
-        $statuses = $this->getStatuses($did);
-        // Check if district_vulnerability is empty
-        if ($districtVulnerability->isEmpty()) {
-            return redirect()->route('dataentrystage.create', ['stageId' => 1, 'did' => $did]); // Replace 'another.route.name' with the actual route name
-        }
-        if($statuses['prioritystatus']!=1){
-            return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]); // Replace 'another.route.name' with the actual route name}
-         }
-          $province_id = $districtprofile->province->id;
-
-        // Fetch questions
-        $questions = $this->questions->with([
-            'thematicArea',
-            'indicator' => function ($query) use ($province_id) { // Pass $province_id into the closure
-                $query->with(['provinceProfiles' => function ($query) use ($province_id) { // Pass $province_id into this closure too
-                    $query->where('province_id', $province_id);
-                }]);
-            },
-            'targetGroup'
-        ])->get();
-
-        // Fetch priorities with associated relationships
-        $priorities = $this->priorities->with([
-            'thematicArea',
-            'targetGroup',
-            'question' => function ($query) use ($province_id) {
-                $query->with([
-                    'indicator' => function ($query) use ($province_id) {
-                        $query->with(['provinceProfiles' => function ($query) use ($province_id) {
-                            $query->where('province_id', $province_id);
-                        }]);
-                    }
-                ]);
-            }
-        ])
-            ->where('district_id', '=', $did)
-            ->where('priority', '=', 1)
-            ->get();
-
-        // Return view response if $prioritystatus is not true
-        return view('Report::Priorities.index')
-            ->withDistrictprofile($districtprofile)
-            ->withDistrictVulnerability($districtVulnerability)
-            ->withIr1status($statuses['ir1status'])
-            ->withQuestions($questions)
-            ->withStepRemarks($stepRemarks)
-            ->withPriorities($priorities);
+{
+    $did = $request->query('did');
+    
+    $stepRemarks = $this->stepRemarks->where('district_id', '=', $did)
+                                     ->where('stage_id', '=', 2)
+                                     ->where('stage_status', '=', 1)
+                                     ->first();
+    
+    // Fetch district profile
+    $districtprofile = $this->districts->with(['province'])->find($did);
+    $districtVulnerability = $this->vulnerability->where('district_id', $did)->get();
+    $statuses = $this->getStatuses($did);
+    
+    // Check if district_vulnerability is empty
+    if ($districtVulnerability->isEmpty()) {
+        return redirect()->route('dataentrystage.create', ['stageId' => 1, 'did' => $did]);
     }
+    
+    if ($statuses['prioritystatus'] != 1) {
+        return redirect()->route('dataentrystage.create', ['stageId' => 2, 'did' => $did]);
+    }
+    
+    $province_id = $districtprofile->province->id;
+
+    // Fetch questions including the district profile value filtered by district_id
+    $questions = $this->questions->with([
+        'thematicArea',
+        'indicator' => function ($query) use ($province_id, $did) {
+            $query->with([
+                'provinceProfiles' => function ($query) use ($province_id) {
+                    $query->where('province_id', $province_id);
+                },
+                'districtProfiles' => function ($query) use ($did) {
+                    $query->where('district_id', $did);
+                }
+            ]);
+        },
+        'targetGroup'
+    ])->get();
+    
+
+    // Fetch priorities with associated relationships including the district profile filtered by district_id
+    $priorities = $this->priorities->with([
+        'thematicArea',
+        'targetGroup',
+        'question' => function ($query) use ($province_id, $did) {
+            $query->with([
+                'indicator' => function ($query) use ($province_id, $did) {
+                    $query->with([
+                        'provinceProfiles' => function ($query) use ($province_id) {
+                            $query->where('province_id', $province_id);
+                        },
+                        'districtProfiles' => function ($query) use ($did) {
+                            $query->where('district_id', $did);
+                        }
+                    ]);
+                }
+            ]);
+        }
+    ])
+    ->where('district_id', '=', $did)
+    ->where('priority', '=', 1)
+    ->get();
+    
+
+    // Return view response
+    return view('Report::Priorities.index')
+        ->withDistrictprofile($districtprofile)
+        ->withDistrictVulnerability($districtVulnerability)
+        ->withIr1status($statuses['ir1status'])
+        ->withQuestions($questions)
+        ->withStepRemarks($stepRemarks)
+        ->withPriorities($priorities);
+}
 
 
     /**

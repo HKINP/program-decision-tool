@@ -114,9 +114,9 @@
                                             <td class="border border-gray-300 p-2 text-sm">
                                                 <div class="flex space-x-4">
 
-                                                    <!-- <a href="{{ route('activities.edit', $activity->id) }}" class="text-yellow-500 hover:text-yellow-700">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a> -->
+                                                <a href="{{ route('prioritizedActivities.edit', $activity->id) }}" class="text-yellow-500 hover:text-yellow-700">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
                                                     <button type="button" class="text-red-500 hover:text-red-700"
                                                         onclick="showDeleteModal('{{ route('prioritizedActivities.destroy', $activity->id) }}')">
                                                         <i class="fas fa-trash"></i>

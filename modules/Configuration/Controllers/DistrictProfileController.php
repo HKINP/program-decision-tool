@@ -56,7 +56,7 @@ class DistrictProfileController extends Controller
 
         $indicators = $this->indicators->all();
 
-     return view('Configuration::District.Profile.create')
+        return view('Configuration::District.Profile.create')
             ->withDistricts($district)
             ->withIndicators($indicators);
     }
@@ -70,25 +70,25 @@ class DistrictProfileController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $input = $request->all();
 
-        $input=$request->all();
-        $isChecked = $request->has('displayinreport');
-        if($isChecked){
-            $input['displayinreport']=1;                  
-        }
-       
-        // $this->authorize('manage-account-code');
-        $districtprofile = $this->profile->create($request->all());
-       
-        
+        // dd($input); // Debugging line to see the data structure
 
-        if ($districtprofile) {
-            return redirect()->route('districtprofile.index')->with('success', 'Added District Profile data successfully!');
+      
+        // Assuming you want to create district profiles for each indicator
+        foreach ($input['indicator_id'] as $index => $indicatorId) {
+            $districtProfileData = [
+                'district_id' => $input['district_id'],
+                'indicator_id' => $indicatorId,
+                'all_value' => $input['all_value'][$index] ?? 0,
+                'source' => $input['source'][$index] ?? 'NA',
+            ];
+
+            // Store each district profile data
+            $this->profile->create($districtProfileData);
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Account Code can not be added.'
-        ], 422);
+
+        return redirect()->route('districtprofile.index')->with('success', 'Added District Profile data successfully!');
     }
 
     /**
@@ -138,13 +138,12 @@ class DistrictProfileController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         // $this->authorize('manage-account-code');
-        $input=$request->all();
+        $input = $request->all();
         $isChecked = $request->has('displayinreport');
-        if($isChecked){
-            $input['displayinreport']=1;                  
-        }
-        else{
-            $input['displayinreport']=0;     
+        if ($isChecked) {
+            $input['displayinreport'] = 1;
+        } else {
+            $input['displayinreport'] = 0;
         }
 
         $districtprofile = $this->profile->update($id, $input);

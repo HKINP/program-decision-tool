@@ -40,7 +40,7 @@ class Indicators extends Model
     
     public function districtProfiles()
     {
-        return $this->hasMany(DistrictProfile::class);
+        return $this->hasMany(DistrictProfile::class, 'indicator_id');
     }
 
     public function provinceProfiles()

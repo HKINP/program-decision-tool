@@ -44,51 +44,71 @@
                             <th class="bg-gray-500 text-white text-xs p-2">Thematic area</th>
                             <th class="bg-gray-500 text-white text-xs p-2">#</th>
                             <th class="bg-gray-500 text-white text-xs p-2">Questions (based on MSNP III indicators)</th>
-                            <th class="bg-gray-500 text-white text-xs p-2">Responses (%)<br />Province / District</th>
+                            <th class="bg-gray-500 text-white text-xs p-2">Responses (%)<br />Province</th>
+                            <th class="bg-gray-500 text-white text-xs p-2">Responses (%)<br />District</th>
                             <th class="bg-gray-500 text-white text-xs p-2">Priority for Y1</th>
                         </tr>
+
                     </thead>
+
                     <tbody class="rounded-lg" id="priority-table-body">
                         <!-- Existing rows rendered by server-side logic -->
                         @php $index = 1; @endphp
                         @foreach ($questions as $question)
+
                         @php
                         // Determine color based on value
-                        $value = $question->indicator->provinceProfiles[0]->all_value;
-                        $source = $question->indicator->provinceProfiles[0]->source;
+                        $valueprovince = $question->indicator->provinceProfiles[0]->all_value ?? 0;
+                        $sourceprovince = $question->indicator->provinceProfiles[0]->source ?? '';
+                        $valuedistrict = $question->indicator->districtProfiles[0]->all_value ?? 0;
+                        $sourcedistrict = $question->indicator->districtProfiles[0]->source ?? '';
                         $color = '';
-                    
-                        if ($value < 50) {
-                            $color = 'bg-red-800 text-white';
-                        } elseif ($value >= 50 && $value < 80) {
-                            $color = 'bg-orange-400 text-white';
-                        } elseif ($value >= 80) {
-                            $color = 'bg-green-700 text-white';
-                        }
-                    
-                        // Check if the current question has priority set to 1 in the given district
-                        $isPrioritized = $priorities->contains(function($priority) use ($question) {
-                            return $priority->question_id == $question->id && $priority->priority == 1;
-                        });
-                        @endphp
-                        <tr class="priority-row @if ($isPrioritized) bg-gray-300  @endif">
-                            <td class="border text-sm text-black border-gray-200 px-2">
-                                <input type="number" name="target_group_id[]" value="{{ $question->targetGroup->id }}" hidden>
-                                {{ $question->targetGroup->target_group }}
-                            </td>
-                            <td class="border text-sm text-black border-gray-200 px-2">
-                                <input type="number" name="thematic_area_id[]" value="{{ $question->thematicArea->id }}" hidden>
-                                {{ $question->thematicArea->thematic_area }}
-                            </td>
-                            <td class="border text-sm text-black border-gray-200 px-2">{{ $index++ }}</td>
-                            <input type="number" name="question_id[]" value="{{$question->id}}" hidden>
-                            <td class="border text-sm text-black border-gray-200 px-2">{{ $question->question }}</td>
-                           
-                                    <td class="relative border text-sm text-black border-gray-200 text-center px-2 {{ $color }} group">
-                                        {{ $value }}
+
+                        if ($valueprovince < 50) {
+                            $color='bg-red-800 text-white' ;
+                            } elseif ($valueprovince>= 50 && $valueprovince < 80) {
+                                $colorprovince='bg-orange-400 text-white' ;
+                                } elseif ($valueprovince>= 80) {
+                                $colorprovince = 'bg-green-700 text-white';
+                                }
+                                if ($valuedistrict < 50) {
+                            $color='bg-red-800 text-white' ;
+                            } elseif ($valuedistrict>= 50 && $valuedistrict < 80) {
+                                $colordistrict='bg-orange-400 text-white' ;
+                                } elseif ($valuedistrict>= 80) {
+                                $colordistrict = 'bg-green-700 text-white';
+                                }
+
+                                // Check if the current question has priority set to 1 in the given district
+                                $isPrioritized = $priorities->contains(function($priority) use ($question) {
+                                return $priority->question_id == $question->id && $priority->priority == 1;
+                                });
+                                @endphp
+                                <tr class="priority-row @if ($isPrioritized) bg-gray-300  @endif">
+                                    <td class="border text-sm text-black border-gray-200 px-2">
+                                        <input type="number" name="target_group_id[]" value="{{ $question->targetGroup->id }}" hidden>
+                                        {{ $question->targetGroup->target_group }}
+                                    </td>
+                                    <td class="border text-sm text-black border-gray-200 px-2">
+                                        <input type="number" name="thematic_area_id[]" value="{{ $question->thematicArea->id }}" hidden>
+                                        {{ $question->thematicArea->thematic_area }}
+                                    </td>
+                                    <td class="border text-sm text-black border-gray-200 px-2">{{ $index++ }}</td>
+                                    <input type="number" name="question_id[]" value="{{$question->id}}" hidden>
+                                    <td class="border text-sm text-black border-gray-200 px-2">{{ $question->question }}</td>
+
+                                    <td class="relative border text-sm text-black border-gray-200 text-center px-2 {{ $colorprovince }} group">
+                                        {{ $valueprovince }}
                                         <!-- Hidden text displayed on hover -->
                                         <div class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 w-max bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        {{ $source }}
+                                            {{ $sourceprovince }}
+                                        </div>
+                                    </td>
+                                    <td class="relative border text-sm text-black border-gray-200 text-center px-2 {{ $colordistrict }} group">
+                                        {{ $valuedistrict }}
+                                        <!-- Hidden text displayed on hover -->
+                                        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 w-max bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            {{ $sourcedistrict }}
                                         </div>
                                     </td>
 
@@ -98,8 +118,8 @@
                                             <option value="1" {{ $isPrioritized ? 'selected' : '' }}>Yes</option>
                                         </select>
                                     </td>
-                        </tr>
-                        @endforeach
+                                </tr>
+                                @endforeach
                     </tbody>
                 </table>
 
@@ -118,7 +138,7 @@
             </div>
             <div class="text-right mb-4">
                 <button type="submit" class="mt-4 p-2 bg-purple-800 text-white rounded">Save and Next</button>
-                </div>
+            </div>
     </div>
 
     </form>

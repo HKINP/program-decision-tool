@@ -26,10 +26,9 @@ class StoreRequest extends FormRequest
     public function rules()
     {
             return [
-                'district_id' => 'required|exists:districts,id|integer',
-                'indicator_id' => 'required|exists:indicators,id|integer',
-                'all_value' => 'required|string',
-                'source' => 'required|string',
+                'district_id' => 'required|exists:districts,id',
+                'indicator_id' => 'required|exists:indicators,id',
+                'all_value' => 'required',
             ];
       
     }

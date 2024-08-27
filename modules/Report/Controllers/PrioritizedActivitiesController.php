@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Configuration\Repositories\ActivitiesRepository;
 use Modules\Configuration\Repositories\DistrictRepository;
+use Modules\Configuration\Repositories\PlatformsRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
 use Modules\Report\Repositories\DistrictVulnerabilityRepository;
@@ -28,7 +29,7 @@ class PrioritizedActivitiesController extends Controller
      * @return void
      */
     protected $mapactivities, $districts, $provinces, $priorities,
-        $questions, $prioritizedactivities, $stepRemarks, $vulnerability, $keyBarriers;
+        $questions, $prioritizedactivities, $stepRemarks, $vulnerability, $keyBarriers, $platforms;
 
     public function __construct(
 
@@ -40,7 +41,8 @@ class PrioritizedActivitiesController extends Controller
         StepRemarksRepository $stepRemarks,
         DistrictVulnerabilityRepository $vulnerability,
         ActivitiesRepository $mapactivities,
-        KeyBarrierRepository $keyBarriers
+        KeyBarrierRepository $keyBarriers,
+        PlatformsRepository $platforms,
 
     ) {
         $this->districts = $districts;
@@ -52,6 +54,7 @@ class PrioritizedActivitiesController extends Controller
         $this->stepRemarks = $stepRemarks;
         $this->mapactivities = $mapactivities;
         $this->keyBarriers = $keyBarriers;
+        $this->platforms = $platforms;
     }
 
     /**
@@ -74,7 +77,7 @@ class PrioritizedActivitiesController extends Controller
                 ->with(['targetGroup', 'thematicArea', 'indicator', 'activity'])
                 ->where('district_id', $did)
                 ->where('stage_id', $stageId)
-                ->get();      
+                ->get();
 
             //  return response()->json(['status'=>'ads','data'=>$prioritizedActivities], 200);
             foreach ($prioritizedActivities as $activity) {
@@ -308,7 +311,7 @@ class PrioritizedActivitiesController extends Controller
                     }
                 }
             }
-          
+
             // Determine success message based on what was added
             if ($keyBarriersAdded && $activitiesAdded) {
                 return redirect()->back()->with('success', 'Key Barriers and Activities added successfully!');
@@ -335,25 +338,24 @@ class PrioritizedActivitiesController extends Controller
         try {
             $data = $request->all();
             $data['stage_status'] = 1;
-        
+
             // Fetch the step remark for the given district and stage
             $stepRemark = $this->stepRemarks
-                ->where('district_id','=', $data['district_id'])
-                ->where('stage_id','=', $data['stage_id'])
+                ->where('district_id', '=', $data['district_id'])
+                ->where('stage_id', '=', $data['stage_id'])
                 ->first();
-        
+
             // If stepRemark exists, update it; otherwise, create a new one
             if ($stepRemark) {
                 $this->stepRemarks->update($stepRemark->id, $data);
             } else {
                 $this->stepRemarks->create($data);
             }
-        
+
             return redirect()->route('prioritizedActivities.index', [
                 'stageId' => $data['stage_id'],
                 'did' => $data['district_id']
             ])->with('success', 'Activities updated successfully!');
-        
         } catch (\Exception $e) {
             // Handle the exception (e.g., log it, display an error message)
             return redirect()->back()->withErrors('An error occurred while adding activities.');
@@ -414,6 +416,92 @@ class PrioritizedActivitiesController extends Controller
         $this->prioritizedactivities->update($id, $inputs);
         return redirect()->route('prioritizedActivities.index', ['stageId' => 6, 'did' => $did])
             ->with('success', 'Activities added successfully!');
+    }
+
+    public function edit($id)
+    {
+        $data = $this->prioritizedactivities->find($id);
+        $stageId = $data->stage_id;
+        $platforms = $this->platforms->get();
+        $activities = $this->mapactivities->where('ir_id', '=', 4)->get();
+
+        switch ($stageId) {
+            case 3:
+                $title = "Step 3. SBC Activities (IR1)";
+                break;
+            case 4:
+
+                $title = "Step 4. Health and Nutrition Service Activities (IR2)";
+                break;
+            case 5:
+
+                $title = "Step 5. Food Systems Activities (IR3)";
+                break;
+            case 6:
+
+                $title = "Step 6. Enabling Environment Activities(IR4)";
+                break;
+            default:
+
+                $title = "";
+                break;
+        }
+
+        return view('Report::edit')->withData($data)
+            ->withTitle($title)
+            ->withActivities($activities)
+            ->withPlatforms($platforms);
+    }
+    public function update(Request $request, $id)
+    {
+        // Find the existing prioritized activity by ID
+        $prioritizedActivity = $this->prioritizedactivities->find($id);
+
+        if (!$prioritizedActivity) {
+            return redirect()->back()->with('error', 'Prioritized activity not found.');
+        }
+
+        $did = $prioritizedActivity->district_id;
+        $stageId = $prioritizedActivity->stage_id;
+
+        // Define validation rules based on the stage ID
+        $rules = [
+            'targeted_for' => 'required|string',
+            'platforms_id' => 'required|array',
+            'remarks' => 'nullable|string',
+        ];
+
+        if ($stageId == 6) {
+            $rules['activity_id'] = 'required|integer';
+        } else {
+            $rules['proposed_activities'] = 'required|string';
+        }
+
+        // Validate the incoming data
+        $request->validate($rules);
+
+        // Convert the platforms_id array into a comma-separated string
+        $platforms = implode(',', $request->input('platforms_id'));
+
+        // Prepare data for update
+        $data = [
+            'targeted_for' => $request->input('targeted_for'),
+            'platforms_id' => $platforms,
+            'remarks' => $request->input('remarks'),
+        ];
+
+        if ($stageId == 6) {
+            $data['activity_id'] = $request->input('activity_id');
+        } else {
+            $data['proposed_activities'] = $request->input('proposed_activities');
+        }
+
+        // Update the prioritized activity with the new data
+        $prioritizedActivity->update($data);
+
+        // Redirect back with a success message
+        return redirect()->route('dataentrystage.create', ['stageId' => $stageId, 'did' => $did])
+            ->with('success', 'Prioritized activity updated successfully.');
     }
 
 
