@@ -50,13 +50,29 @@
                     @foreach ($activities as $stageId => $targetedForGroups)
                     <tr class="bg-gray-100 border-b">
                         <td class="p-3 font-bold" colspan="4">
+                            @php
+                            $ir_id = null; // Initialize ir_id
+                            @endphp
+
                             @if ($stageId == 3)
+                            @php
+                            $ir_id = 1;
+                            @endphp
                             <span class="ml-2 text-blue-600">IR 1. Improve household nutrition practices</span>
                             @elseif ($stageId == 4)
+                            @php
+                            $ir_id = 2;
+                            @endphp
                             <span class="ml-2 text-blue-600">IR 2. Improved coverage and quality of nutrition services</span>
                             @elseif ($stageId == 5)
+                            @php
+                            $ir_id = 3;
+                            @endphp
                             <span class="ml-2 text-blue-600">IR 3. Improve access to safe, diverse, and nutritious foods</span>
                             @elseif ($stageId == 6)
+                            @php
+                            $ir_id = 4;
+                            @endphp
                             <span class="ml-2 text-blue-600">IR 4. Strengthen GON capacity for multi-sectoral nutrition programming</span>
                             @endif
                         </td>
@@ -78,7 +94,7 @@
                         </td>
                         <td class="p-3">{{ $activity->remarks }}</td>
                         <td class="p-3">
-                            <a href="#" class="open-modal" data-activity-id="{{ $activity->id }}">
+                            <a href="#" class="open-modal" onclick="openModal({{ $ir_id }})">
                                 <i class="fa-solid fa-link"></i>
                             </a>
                         </td>
@@ -88,21 +104,25 @@
                     @endforeach
                 </tbody>
             </table>
+
         </div>
     </div>
     <!-- Modal Structure -->
     <div id="activityModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-4 rounded-lg w-full max-w-lg">
+        <div class="relative  bg-white p-4 rounded-lg w-full max-w-4xl">
             <h2 class="text-xl font-bold mb-4">Select Activities</h2>
             <form id="updateActivitiesForm" action="{{ route('activityMapping.district') }}" method="POST">
                 @csrf
                 <input type="hidden" name="activity_id" id="activityId">
                 <input type="hidden" name="district_id" value="{{$districtprofile->id}}">
                 <div class="mb-4">
-                    <label for="activitiesSelect" class="block text-gray-700">Select Activities:</label>
-                    <select id="activitiesSelect" name="activities" class="form-select mt-1 block w-full">
-                        @foreach ($mappingActivities as $mactivity)
-                        <option value="{{ $mactivity->id }}">{{ $mactivity->activities }}</option>
+                 
+                <select id="activitiesSelect" name="activities" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option>Select</option>    
+                    @foreach ($mappingActivities as $mactivity)
+                        <option value="{{ $mactivity->id }}" class="w-1/2 max-w-1/2" data-ir-id="{{ $mactivity->ir_id }}">
+                            {{ $mactivity->activities }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -178,36 +198,36 @@
     </style>
 
     <script>
-        function openModal(activityId) {
-            const modal = document.getElementById('activityModal');
-            const select = document.getElementById('activitiesSelect');
-            const activityIdInput = document.getElementById('activityId');
+      
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("activityModal");
+    const activitiesSelect = document.getElementById("activitiesSelect");
+    const activityIdInput = document.getElementById("activityId");
 
-            // Set the input values
-            activityIdInput.value = activityId;
+    const allActivities = Array.from(activitiesSelect.options);
 
-            // Set the selected value in the dropdown
-            select.value = activityId;
+    window.openModal = function(irId) {
+        activityIdInput.value = irId;
 
-            // Show the modal
-            modal.classList.remove('hidden');
-        }
+        // Clear the select list
+        activitiesSelect.innerHTML = "";
 
-        function closeModal() {
-            const modal = document.getElementById('activityModal');
-            modal.classList.add('hidden');
-        }
+        // Filter activities based on the passed irId
+        const filteredActivities = allActivities.filter(option => option.getAttribute('data-ir-id') == irId);
 
-        document.querySelectorAll('.open-modal').forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                const activityId = this.getAttribute('data-activity-id');
-                openModal(activityId);
-            });
+        // Populate the select list with filtered activities
+        filteredActivities.forEach(option => {
+            activitiesSelect.appendChild(option);
         });
 
-        document.getElementById('closeModal').addEventListener('click', closeModal);
+        modal.classList.remove("hidden");
+    };
+
+    document.getElementById("closeModal").addEventListener("click", function () {
+        modal.classList.add("hidden");
+    });
+});
+
     </script>
 
 </x-app-layout>
