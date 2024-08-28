@@ -66,7 +66,8 @@
                         <th class="bg-gray-500 text-white text-xs p-2">Thematic area</th>
                         <th class="bg-gray-500 text-white text-xs p-2">#</th>
                         <th class="bg-gray-500 text-white text-xs p-2">Priority Indicator Year 1</th>
-                        <th class="bg-gray-500 text-white text-xs p-2">Proportion (%)</th>
+                        <th class="bg-gray-500 text-white text-xs p-2">Responses (%)<br />Province</th>
+                        <th class="bg-gray-500 text-white text-xs p-2">Responses (%)<br />District</th>
                     </tr>
 
                 </thead>
@@ -86,21 +87,40 @@
                                 {{ $priority->question->question }}
                             </td>
                             @php
-                                $value = $priority->question->indicator->provinceProfiles[0]->all_value;
-                                $color = '';
+                                $valueprovince = $priority->question->indicator->provinceProfiles[0]->all_value ?? 0;
+                                $valuedis = $priority->question->indicator->districtProfiles[0]->all_value ?? 0;
+                                $colorprovince = '';
+                                $colordis = '';
 
-                                if ($value < 50) {
-                            $color = 'bg-red-800 text-white';
-                        } elseif ($value >= 50 && $value < 80) {
-                            $color = 'bg-orange-400 text-white';
-                        } elseif ($value >= 80) {
-                            $color = 'bg-green-700 text-white';
-                        }
-                    
+                                if ( $valuedis > 0 && $valuedis < 50 ) {
+                                    $colordis = 'bg-red-800 text-white';
+                                } elseif ($valuedis >= 50 && $valuedis < 80) {
+                                    $colordis = 'bg-orange-400 text-white';
+                                } elseif ($valuedis >= 80) {
+                                    $colordis = 'bg-green-700 text-white';
+                                }else{
+                                    $colordis ='';
+                                    $valuedis='-';
+                                }
+
+                                if ($valueprovince < 50 && $valueprovince > 0) {
+                                    $colorprovince = 'bg-red-800 text-white';
+                                } elseif ($valueprovince >= 50 && $valueprovince < 80) {
+                                    $colorprovince = 'bg-orange-400 text-white';
+                                } elseif ($valueprovince >= 80) {
+                                    $colorprovince = 'bg-green-700 text-white';
+                                }else{
+                                    $colorprovince ='';
+                                    $valueprovince='-';
+                                }
+
                             @endphp
 
-                            <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $color }}">
-                                {{ $value }}
+                            <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $colorprovince }}">
+                                {{ $valueprovince }}
+                            </td>
+                            <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $colordis }}">
+                                {{ $valuedis }}
                             </td>
 
 

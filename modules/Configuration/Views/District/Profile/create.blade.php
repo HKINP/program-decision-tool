@@ -42,7 +42,7 @@
                                     {{ $index }}
                                 </td>
                                 <td class="border text-sm border-gray-200 p-2">
-                                    {{ $indicator->indicator_name }}
+                                    {{ $indicator->indicator_name ?? '' }}
                                 </td>
                                 <td class="border text-sm border-gray-200 p-2">
                                     <input type="number" name="all_value[]"

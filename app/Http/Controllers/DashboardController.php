@@ -155,7 +155,7 @@ class DashboardController extends Controller
                     ]);
                 },
                 'targetGroup'
-            ])->get();
+            ])->where('target_group_id', '!=', 5)->get();
             //  return response()->json(['status'=>'ads','data'=>$questions[0]->indicator->provinceProfiles[0]], 200);
 
 

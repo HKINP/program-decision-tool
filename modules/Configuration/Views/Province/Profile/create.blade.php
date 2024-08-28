@@ -47,7 +47,7 @@
                                     {{ $index++ }}
                                 </td>
                                 <td class="border text-sm border-gray-200 p-2">
-                                    {{ $indicator->indicator_name }}
+                                    {{ $indicator->indicator_name ?? '' }}
                                 </td>
                                 <td class="border text-sm border-gray-200 p-2">
                                     <input type="number" required name="all_value[]"
@@ -98,7 +98,7 @@
                                     Delete Prioritize Behaviors </h3>
                                 <div class="mt-2">
                                     <p class="text-sm leading-5 text-gray-500">
-                                        Are you sure you want to delete this prioritize behaviors?This action cannot be
+                                        Are you sure you want to delete this prioritize behaviors? This action cannot be
                                         undone.
                                     </p>
                                 </div>
