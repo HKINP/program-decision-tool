@@ -112,7 +112,7 @@ class ActivitiesController extends Controller
     public function edit($id)
     {
         // $this->authorize('manage-account-code');
-        $activities = $this->activities->all()->pluck('activities', 'id')->toArray();
+        $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
         $ir=[
             1=>'Intermediate Result 1. Improved Household Nutrition Practices',
             2=>'Intermediate Result 2: Improved quality and coverage of nutrition services',
@@ -123,7 +123,7 @@ class ActivitiesController extends Controller
         return view('Configuration::Activities.edit')
             ->withActivities($this->activities->find($id))
             ->withIr($ir)
-            ->withActivitiesList($activities);
+            ->withActivitiesList($outcomes);
     }
 
     /**
@@ -138,10 +138,10 @@ class ActivitiesController extends Controller
     {
         // $this->authorize('manage-account-code');
      
-        
-        $activities = $this->activities->update($id, $request->except('id'));
-       
+      $data=$request->all();
+        $activities = $this->activities->update($id, $data);
         if($activities){
+           
             return redirect()->route('activities.index')->with('success', 'Activities Updated successfully!');
         }
         return response()->json(['status'=>'error',

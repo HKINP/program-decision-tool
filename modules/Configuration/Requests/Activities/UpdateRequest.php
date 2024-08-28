@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'parent_id' => 'nullable|exists:activities,id',
+            'outcomes_id' => 'nullable|exists:outcomes,id',
             'ir_id' => 'required',
             'activities' => 'required|string|max:255',
         ];
