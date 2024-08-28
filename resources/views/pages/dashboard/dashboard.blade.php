@@ -14,7 +14,7 @@
                         </p>
                     </div>
                     <div class="mt-8">
-                        <h2 class="text-xl font-bold  text-sm">Intervention Results (IRs)</h2>
+                        <h2 class="text-xl font-bold  text-sm">Intermediate Results (IRs)</h2>
                         <ul class="list-disc pl-4 mt-2">
                             <li class="text-gray-600">IR 1. Improve household nutrition practices.</li>
                             <li class="text-gray-600">IR 2. Improve quality and coverage of nutrition services</li>
