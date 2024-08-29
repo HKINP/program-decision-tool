@@ -41,6 +41,7 @@
                         <th class="text-sm border border-gray-300 p-2 text-center w-12">#</th>
                         <th class="text-sm border border-gray-300 p-2 text-center">Activities</th>
                         <th class="text-sm border border-gray-300 p-2 text-center">All/Targeted</th>
+                        <th class="text-sm border border-gray-300 p-2 text-center">District</th>
                         <th class="text-sm border border-gray-300 p-2 text-center">Target</th>
                         <th class="text-sm border border-gray-300 p-2 text-center">Unit</th>
                         <th class="text-sm border border-gray-300 p-2 text-center">Responsible Partner</th>
@@ -124,6 +125,8 @@
                                         </td>
                                         <td class="border border-gray-300 p-2 text-sm">
                                             {{ count($activity['activity']['priorities_activities']) ?? '' }}</td>
+                                        <td class="border border-gray-300 p-2 text-sm">
+                                            </td>
                                         <td class="border border-gray-300 p-2 text-sm">
                                             {{ $activity['activity']['unit'] ?? '' }}</td>
                                         <td class="border border-gray-300 p-2 text-sm">
