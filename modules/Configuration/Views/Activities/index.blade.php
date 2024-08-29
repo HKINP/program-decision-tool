@@ -1,13 +1,14 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Activities'" 
-    :headers="['S.N', 'IR' ,'Outcomes','Activities Name', 'Actions']" 
+    :headers="['S.N', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('activities.create')"
     
     >
         @forelse ($activities as $index => $activities)
+  
      
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
@@ -19,6 +20,12 @@
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $activities->activities }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $partners[$activities->partner] ?? '' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $activities->unit }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">

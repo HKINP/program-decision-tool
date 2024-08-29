@@ -114,14 +114,14 @@
     <!-- Modal Structure -->
     <div id="activityModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center z-50">
         <div class="bg-white w-1/2 p-4 rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold mb-4 px-4 py-2">Select Activities</h2>
+            <h2 class="text-xl font-bold mb-4 px-4 py-2">Activity Mapping</h2>
             <form class="p-4" id="updateActivitiesForm" action="{{ route('activityMapping.district') }}"
                 method="POST">
                 @csrf
                 <input type="hidden" name="id" id="activityId">
                 <input type="hidden" name="district_id" value="{{ $districtprofile->id }}">
                 <div class="mb-4">
-
+                <label  class="text-sm font-medium text-gray-700">Work Plan Activity</label>
                     <select id="activitiesSelect" name="activity_id"
                         class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option>Select</option>
@@ -132,6 +132,25 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+                <div class="mb-4">
+                <label  class="text-sm font-medium text-gray-700">Responsible Partner</label>
+                    <select id="activitiesSelect" name="activity_id"
+                        class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option>Select</option>
+                        <option value="Helen Keller Intl" class="w-1/2 max-w-1/2">Helen Keller Intl</option>
+                        <option value="fhi360" class="w-1/2 max-w-1/2">fhi360</option>
+                        <option value="CEAPRED" class="w-1/2 max-w-1/2">CEAPRED</option>
+                        <option value="ENPHO" class="w-1/2 max-w-1/2">ENPHO</option>
+                        <option value="NTAG" class="w-1/2 max-w-1/2">NTAG</option>
+                        <option value="KABOOM" class="w-1/2 max-w-1/2">KABOOM</option>
+                        <option value="PNGO" class="w-1/2 max-w-1/2">PNGO</option>
+                 
+                    </select>
+                </div>
+                <div class="mb-4">
+                <label  class="text-sm font-medium text-gray-700">Total Target</label>
+                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">      
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
                 <button type="button" id="closeModal"

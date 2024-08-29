@@ -64,91 +64,104 @@
                 <tbody>
                     <!-- Iterate over IRs -->
                     @foreach ($data as $irId => $irOutcomes)
-                        <!-- Display IR Header -->
-                        <tr class="bg-purple-600 text-white font-semibold">
-                            <td colspan="19" class="border border-gray-300 text-sm p-2 text-left">
-                                @if ($irId == 1)
-                                    IR 1. Improve household nutrition practices
-                                @elseif ($irId == 2)
-                                    IR 2. Improved coverage and quality of nutrition
-                                    services
-                                @elseif ($irId == 3)
-                                    IR 3. Improve access to safe, diverse, and
-                                    nutritious foods
-                                @elseif ($irId == 4)
-                                    IR 4. Strengthen GON capacity for multi-sectoral
-                                    nutrition programming
-                                @endif
-                            </td>
-                        </tr>
+                    <!-- Display IR Header -->
+                    <tr class="bg-purple-600 text-white font-semibold">
+                        <td colspan="19" class="border border-gray-300 text-sm p-2 text-left">
+                            @if ($irId == 1)
+                            IR 1. Improve household nutrition practices
+                            @elseif ($irId == 2)
+                            IR 2. Improved coverage and quality of nutrition
+                            services
+                            @elseif ($irId == 3)
+                            IR 3. Improve access to safe, diverse, and
+                            nutritious foods
+                            @elseif ($irId == 4)
+                            IR 4. Strengthen GON capacity for multi-sectoral
+                            nutrition programming
+                            @endif
+                        </td>
+                    </tr>
 
-                        <!-- Iterate over Outcomes -->
-                        @foreach ($irOutcomes as $outcomeGroup)
-                            @foreach ($outcomeGroup as $outcome)
-                                <!-- Display Outcome Header -->
-                                <tr class="bg-gray-200 font-semibold">
-                                    <td colspan="19" class="border border-gray-300 p-2 text-left text-sm">
-                                        {{ $outcome['outcome']['outcome'] }}
-                                    </td>
-                                </tr>
+                    <!-- Iterate over Outcomes -->
+                    @foreach ($irOutcomes as $outcomeGroup)
+                    @foreach ($outcomeGroup as $outcome)
+                    <!-- Display Outcome Header -->
+                    <tr class="bg-gray-200 font-semibold">
+                        <td colspan="19" class="border border-gray-300 p-2 text-left text-sm">
+                            {{ $outcome['outcome']['outcome'] }}
+                        </td>
+                    </tr>
 
-                                <!-- Iterate over Activities -->
-                                @foreach ($outcome['activities'] as $index => $activity)
-                                    @php
-                                        // Filter the array where 'targeted_for' is 'All'
-                                        $allTargetedActivities = array_filter(
-                                            $activity['activity']['priorities_activities'],
-                                            function ($item) {
-                                                return $item['targeted_for'] === 'All';
-                                            },
-                                        );
+                    <!-- Iterate over Activities -->
+                    @foreach ($outcome['activities'] as $index => $activity)
 
-                                        // Filter the array where 'targeted_for' is 'Vulnerable'
-                                        $vulnerableTargetedActivities = array_filter(
-                                            $activity['activity']['priorities_activities'],
-                                            function ($item) {
-                                                return $item['targeted_for'] === 'Vulnerable';
-                                            },
-                                        );
+                    @php
+                    // Filter the array where 'targeted_for' is 'All'
+                    $allTargetedActivities = array_filter(
+                    $activity['activity']['priorities_activities'],
+                    function ($item) {
+                    return $item['targeted_for'] === 'All';
+                    },
+                    );
 
-                                        // Count the number of occurrences
-                                        $countAllTargeted = count($allTargetedActivities);
-                                        
-                                        $countVulnerableTargeted = count($vulnerableTargetedActivities);
-                                    @endphp
+                    // Filter the array where 'targeted_for' is 'Vulnerable'
+                    $vulnerableTargetedActivities = array_filter(
+                    $activity['activity']['priorities_activities'],
+                    function ($item) {
+                    return $item['targeted_for'] === 'Vulnerable';
+                    },
+                    );
 
-                                    <tr>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $index + 1 }}</td>
-                                        <td class="border border-gray-300 p-2 text-sm">
-                                            {{ $activity['activity']['activities'] }}</td>
-                                        <td class="border border-gray-300 p-2 text-sm">{{ $countAllTargeted }}/{{ $countVulnerableTargeted }}
-                                        </td>
-                                        <td class="border border-gray-300 p-2 text-sm">
-                                            {{ count($activity['activity']['priorities_activities']) ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-sm">
-                                            </td>
-                                        <td class="border border-gray-300 p-2 text-sm">
-                                            {{ $activity['activity']['unit'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-sm">
-                                            {{ $activity['activity']['responsible_partner'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jul'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['aug'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['sept'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['oct'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['nov'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['dec'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jan'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['feb'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['mar'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['apr'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['may'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jun'] ?? '' }}</td>
-                                        <td class="border border-gray-300 p-2 text-center">
-                                            {{ $activity['activity']['budget'] ?? '' }}</td>
-                                    </tr>
-                                @endforeach
-                            @endforeach
-                        @endforeach
+                    // Count the number of occurrences
+                    $countAllTargeted = count($allTargetedActivities);
+
+                    $countVulnerableTargeted = count($vulnerableTargetedActivities);
+                    @endphp
+
+                    <tr>
+                        <td class="border border-gray-300 p-2 text-center">{{ $index + 1 }}</td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                            {{ $activity['activity']['activities'] }}
+                        </td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                            @if ($countAllTargeted > 0 && $countVulnerableTargeted==0)
+                            All
+                            @endif
+                            @if ($countVulnerableTargeted > 0 && $countAllTargeted==0 )
+                            Targeted
+                            @endif
+
+                        </td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                            {{ count($activity['activity']['priorities_activities']) ?? '' }}
+                        </td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                        </td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                            {{ $activity['activity']['unit'] ?? '' }}
+                        </td>
+                        <td class="border border-gray-300 p-2 text-sm">
+                            {{ $activity['activity']['partner'] ?? '' }}
+                        </td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jul'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['aug'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['sept'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['oct'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['nov'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['dec'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jan'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['feb'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['mar'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['apr'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['may'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jun'] ?? '' }}</td>
+                        <td class="border border-gray-300 p-2 text-center">
+                            {{ $activity['activity']['budget'] ?? '' }}
+                        </td>
+                    </tr>
+                    @endforeach
+                    @endforeach
+                    @endforeach
                     @endforeach
                 </tbody>
             </table>

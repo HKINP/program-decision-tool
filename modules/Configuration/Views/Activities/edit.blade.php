@@ -40,6 +40,21 @@
                         'required' => true,
                         'width' => 'w-1/2',
                     ],
+                    [
+                        'name' => 'partner',
+                        'label' => 'Responsible Partners',
+                        'type' => 'select',
+                        'required' => false,
+                        'width' => 'w-1/2',
+                        'options' => $partners,
+                    ],
+                    [
+                        'name' => 'unit',
+                        'label' => 'Unit',
+                        'type' => 'text',
+                        'required' => true,
+                        'width' => 'w-1/2',
+                    ],
                     
                 ]" />
             </div>
