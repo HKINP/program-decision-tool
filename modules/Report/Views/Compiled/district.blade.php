@@ -38,96 +38,178 @@
                 <thead>
                     <tr>
                         <th class="bg-gray-500 text-white text-xs p-2">#</th>
-                        <th class="bg-gray-500 text-white text-xs p-2">Activities for Year 1</th>
+                        <th class="bg-gray-500 text-white text-xs p-2">Work Plan Activity</th>
+                        <th class="bg-gray-500 text-white text-xs p-2">Co-creation Activity</th>
                         <th class="bg-gray-500 text-white text-xs p-2">Notes</th>
                         <th class="bg-gray-500 text-white text-xs p-2">Activity Mapping</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                    $serialNumber = 1;
+                        $serialNumber = 1;
                     @endphp
                     @foreach ($activities as $stageId => $targetedForGroups)
-                    <tr class="bg-gray-100 border-b">
-                        <td class="p-3 font-bold" colspan="4">
-                            @php
-                            $ir_id = null; // Initialize ir_id
-                            @endphp
+                        <tr class="bg-gray-100 border-b">
+                            <td class="p-3 font-bold" colspan="5">
+                                @php
+                                    $ir_id = null; // Initialize ir_id
+                                @endphp
 
-                            @if ($stageId == 3)
-                            @php
-                            $ir_id = 1;
-                            @endphp
-                            <span class="ml-2 text-blue-600">IR 1. Improve household nutrition practices</span>
-                            @elseif ($stageId == 4)
-                            @php
-                            $ir_id = 2;
-                            @endphp
-                            <span class="ml-2 text-blue-600">IR 2. Improved coverage and quality of nutrition services</span>
-                            @elseif ($stageId == 5)
-                            @php
-                            $ir_id = 3;
-                            @endphp
-                            <span class="ml-2 text-blue-600">IR 3. Improve access to safe, diverse, and nutritious foods</span>
-                            @elseif ($stageId == 6)
-                            @php
-                            $ir_id = 4;
-                            @endphp
-                            <span class="ml-2 text-blue-600">IR 4. Strengthen GON capacity for multi-sectoral nutrition programming</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @foreach ($targetedForGroups as $targetedFor => $activitiesList)
-                    <tr class="bg-gray-200 border-b">
-                        <td class="p-3 font-bold">{{ ucfirst($targetedFor) }}</td>
-                        <td colspan="3"></td>
-                    </tr>
-                    @foreach ($activitiesList as $activity)
-                    <tr class="bg-gray-100 border-b">
-                        <td class="p-3">{{ $serialNumber++ }}</td>
-                        <td class="p-3">
-                            @if ($stageId == 6)
-                            {{ $activity->activity->activities }}
-                            @else
-                            {{ $activity->proposed_activities }}
-                            @endif
-                        </td>
-                        <td class="p-3">{{ $activity->remarks }}</td>
-                        <td class="p-3">
-                            <a href="#" class="open-modal" onclick="openModal({{ $ir_id }})">
-                                <i class="fa-solid fa-link"></i>
-                            </a>
-                        </td>
-                    </tr>
+                                @if ($stageId == 3)
+                                    @php
+                                        $ir_id = 1;
+                                    @endphp
+                                    <span class="ml-2 text-blue-600">IR 1. Improve household nutrition practices</span>
+                                @elseif ($stageId == 4)
+                                    @php
+                                        $ir_id = 2;
+                                    @endphp
+                                    <span class="ml-2 text-blue-600">IR 2. Improved coverage and quality of nutrition
+                                        services</span>
+                                @elseif ($stageId == 5)
+                                    @php
+                                        $ir_id = 3;
+                                    @endphp
+                                    <span class="ml-2 text-blue-600">IR 3. Improve access to safe, diverse, and
+                                        nutritious foods</span>
+                                @elseif ($stageId == 6)
+                                    @php
+                                        $ir_id = 4;
+                                    @endphp
+                                    <span class="ml-2 text-blue-600">IR 4. Strengthen GON capacity for multi-sectoral
+                                        nutrition programming</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @foreach ($targetedForGroups as $targetedFor => $activitiesList)
+                            <tr class="bg-gray-200 border-b">
+                                <td class="p-3 font-bold">{{ ucfirst($targetedFor) }}</td>
+                                <td colspan="4"></td>
+                            </tr>
+                            @foreach ($activitiesList as $activity)
+                                <tr class="bg-gray-100 border-b">
+                                    <td class="p-3">{{ $serialNumber++ }}</td>
+                                    <td class="p-3"> {{ $activity->activity->activities ?? 'NA' }}</td>
+                                    <td class="p-3"> {{ $activity->proposed_activities ?? 'NA' }} </td>
+                                    <td class="p-3">{{ $activity->remarks }}</td>
+                                    <td class="p-3">
+                                        @if($activity->activity_id ==null)
+                                        <a href="#" class="open-modal" onclick="openModal({{ $ir_id }},{{ $activity->id }})">
+                                            <i class="fa-solid fa-link"></i>
+                                        </a>
+                                        @else                                       
+                                            <i class="fa-solid fa-check"></i>
+                                        </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
                     @endforeach
-                    @endforeach
-                    @endforeach
+                </tbody>
+            </table>
+
+            <table class="min-w-full border-collapse border border-gray-300">
+                <!-- Header Section -->
+                <thead>
+                    <tr class="bg-purple-800 text-white">
+                        <th class="border border-gray-300 p-2 text-center w-12">#</th>
+                        <th class="border border-gray-300 p-2 text-center">Activities</th>
+                        <th class="border border-gray-300 p-2 text-center">All/Targeted</th>
+                        <th class="border border-gray-300 p-2 text-center">Target</th>
+                        <th class="border border-gray-300 p-2 text-center">Unit</th>
+                        <th class="border border-gray-300 p-2 text-center">Responsible Partner</th>
+                        <th class="border border-gray-300 p-2 text-center">Jul</th>
+                        <th class="border border-gray-300 p-2 text-center">Aug</th>
+                        <th class="border border-gray-300 p-2 text-center">Sept</th>
+                        <th class="border border-gray-300 p-2 text-center">Oct</th>
+                        <th class="border border-gray-300 p-2 text-center">Nov</th>
+                        <th class="border border-gray-300 p-2 text-center">Dec</th>
+                        <th class="border border-gray-300 p-2 text-center">Jan</th>
+                        <th class="border border-gray-300 p-2 text-center">Feb</th>
+                        <th class="border border-gray-300 p-2 text-center">Mar</th>
+                        <th class="border border-gray-300 p-2 text-center">Apr</th>
+                        <th class="border border-gray-300 p-2 text-center">May</th>
+                        <th class="border border-gray-300 p-2 text-center">Jun</th>
+                        <th class="border border-gray-300 p-2 text-center">Budget</th>
+                    </tr>
+                </thead>
+                <!-- Body Section -->
+                <tbody>
+                    <!-- Program Management -->
+                    <tr class="bg-gray-200 font-semibold">
+                        <td colspan="19" class="border border-gray-300 p-2 text-left">Program Management</td>
+                    </tr>
+                    <!-- Dynamic Rows for Program Management -->
+                    <tr>
+                        <td class="border border-gray-300 p-2 text-center">1</td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                        <td class="border border-gray-300 p-2"></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+    
+                    <!-- Finance and Operations -->
+                    <tr class="bg-gray-200 font-semibold">
+                        <td colspan="19" class="border border-gray-300 p-2 text-left">Finance and Operations</td>
+                    </tr>
+                    <!-- Dynamic Rows for Finance and Operations -->
+                    <!-- Similar rows as above -->
+    
+                    <!-- Intermediate Result 1. Improved Household Nutrition Practices -->
+                    <tr class="bg-purple-600 text-white font-semibold">
+                        <td colspan="19" class="border border-gray-300 p-2 text-left">Intermediate Result 1. Improved Household Nutrition Practices</td>
+                    </tr>
+                    <tr class="bg-gray-200 font-semibold">
+                        <td colspan="19" class="border border-gray-300 p-2 text-left">Outcome 1.1. Households adopt essential nutrition actions, including maternal nutrition, infant and young child feeding and family planning</td>
+                    </tr>
+                    <!-- Dynamic Rows for Outcome 1.1 -->
+                    <!-- Similar rows as above -->
                 </tbody>
             </table>
 
         </div>
     </div>
     <!-- Modal Structure -->
-    <div id="activityModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="relative  bg-white p-4 rounded-lg w-full max-w-4xl">
-            <h2 class="text-xl font-bold mb-4">Select Activities</h2>
-            <form id="updateActivitiesForm" action="{{ route('activityMapping.district') }}" method="POST">
+    <div id="activityModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center z-50">
+        <div class="bg-white w-1/2 p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4 px-4 py-2">Select Activities</h2>
+            <form class="p-4" id="updateActivitiesForm" action="{{ route('activityMapping.district') }}"
+                method="POST">
                 @csrf
-                <input type="hidden" name="activity_id" id="activityId">
-                <input type="hidden" name="district_id" value="{{$districtprofile->id}}">
+                <input type="hidden" name="id" id="activityId">
+                <input type="hidden" name="district_id" value="{{ $districtprofile->id }}">
                 <div class="mb-4">
-                 
-                <select id="activitiesSelect" name="activities" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Select</option>    
-                    @foreach ($mappingActivities as $mactivity)
-                        <option value="{{ $mactivity->id }}" class="w-1/2 max-w-1/2" data-ir-id="{{ $mactivity->ir_id }}">
-                            {{ $mactivity->activities }}
-                        </option>
+
+                    <select id="activitiesSelect" name="activity_id"
+                        class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option>Select</option>
+                        @foreach ($mappingActivities as $mactivity)
+                            <option value="{{ $mactivity->id }}" class="w-1/2 max-w-1/2"
+                                data-ir-id="{{ $mactivity->ir_id }}">
+                                {{ $mactivity->activities }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-                <button type="button" id="closeModal" class="ml-2 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+                <button type="button" id="closeModal"
+                    class="ml-2 bg-red-500 text-white px-4 py-2 rounded">Close</button>
             </form>
         </div>
     </div>
@@ -198,36 +280,41 @@
     </style>
 
     <script>
-      
-       document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("activityModal");
-    const activitiesSelect = document.getElementById("activitiesSelect");
-    const activityIdInput = document.getElementById("activityId");
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("activityModal");
+            const activitiesSelect = document.getElementById("activitiesSelect");
+            const activityIdInput = document.getElementById("activityId");
 
-    const allActivities = Array.from(activitiesSelect.options);
+            const allActivities = Array.from(activitiesSelect.options);
 
-    window.openModal = function(irId) {
-        activityIdInput.value = irId;
+            window.openModal = function(irId,activityId) {
+                activityIdInput.value = activityId;
 
-        // Clear the select list
-        activitiesSelect.innerHTML = "";
+                // Clear the select list
+                activitiesSelect.innerHTML = "";
 
-        // Filter activities based on the passed irId
-        const filteredActivities = allActivities.filter(option => option.getAttribute('data-ir-id') == irId);
+                // Add the first option
+                const firstOption = document.createElement("option");
+                firstOption.value = "";
+                firstOption.textContent = "Please select an activity";
+                activitiesSelect.appendChild(firstOption);
 
-        // Populate the select list with filtered activities
-        filteredActivities.forEach(option => {
-            activitiesSelect.appendChild(option);
+                // Filter activities based on the passed irId
+                const filteredActivities = allActivities.filter(option => option.getAttribute('data-ir-id') ==
+                    irId);
+
+                // Populate the select list with filtered activities
+                filteredActivities.forEach(option => {
+                    activitiesSelect.appendChild(option);
+                });
+
+                modal.classList.remove("hidden");
+            };
+
+            document.getElementById("closeModal").addEventListener("click", function() {
+                modal.classList.add("hidden");
+            });
         });
-
-        modal.classList.remove("hidden");
-    };
-
-    document.getElementById("closeModal").addEventListener("click", function () {
-        modal.classList.add("hidden");
-    });
-});
-
     </script>
 
 </x-app-layout>

@@ -38,7 +38,11 @@ class Activities extends Model
     {
         return $this->belongsTo(Outcomes::class, 'outcomes_id');
     }
-
+    public function prioritiesActivities()
+    {
+        return $this->hasMany(PrioritizedActivities::class, 'activity_id');
+    }
+    
     
    
 }

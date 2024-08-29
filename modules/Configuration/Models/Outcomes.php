@@ -33,5 +33,10 @@ class Outcomes extends Model
      */
     protected $hidden = [];
 
-     
+    public function activities()
+    {
+        return $this->hasMany(Activities::class, 'outcomes_id');
+    }
+
+    
 }

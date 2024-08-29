@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Configuration\Repositories\ActivitiesRepository;
 use Modules\Configuration\Repositories\DistrictRepository;
+use Modules\Configuration\Repositories\OutcomesRepository;
 use Modules\Configuration\Repositories\PlatformsRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use Modules\Configuration\Repositories\QuestionRepository;
@@ -28,7 +29,7 @@ class PrioritizedActivitiesController extends Controller
      * @param  DistrictRepository $districts
      * @return void
      */
-    protected $mapactivities, $districts, $provinces, $priorities,
+    protected $mapactivities, $districts, $provinces, $priorities, $outcomes,
         $questions, $prioritizedactivities, $stepRemarks, $vulnerability, $keyBarriers, $platforms;
 
     public function __construct(
@@ -43,6 +44,7 @@ class PrioritizedActivitiesController extends Controller
         ActivitiesRepository $mapactivities,
         KeyBarrierRepository $keyBarriers,
         PlatformsRepository $platforms,
+        OutcomesRepository $outcomes,
 
     ) {
         $this->districts = $districts;
@@ -55,6 +57,7 @@ class PrioritizedActivitiesController extends Controller
         $this->mapactivities = $mapactivities;
         $this->keyBarriers = $keyBarriers;
         $this->platforms = $platforms;
+        $this->outcomes = $outcomes;
     }
 
     /**
@@ -403,20 +406,36 @@ class PrioritizedActivitiesController extends Controller
         }
     }
 
+
     public function activityMapping(Request $request)
     {
         $data = $request->all();
-        $id = $data['activity_id'];
-        $did = $data['district_id'];
+        $activityId = $data['activity_id'];
+        $id = $data['id'];
+        $districtId = $data['district_id'];
 
-        $inputs = [
-            'activity_id' => $data['activities'],
-        ];
+        // Check if the record exists with both activity_id and district_id
+        $existingRecord = $this->prioritizedactivities
+            ->where('id', '=', $id)
+            ->where('district_id', '=', $districtId)
+            ->first();
 
-        $this->prioritizedactivities->update($id, $inputs);
-        return redirect()->route('prioritizedActivities.index', ['stageId' => 6, 'did' => $did])
-            ->with('success', 'Activities added successfully!');
+        if ($existingRecord) {
+            // If the record exists, update it
+            $inputs = [
+                'activity_id' => $activityId,
+            ];
+
+            $this->prioritizedactivities->update($existingRecord->id, $inputs);
+
+            return redirect()->route('compiledreport.district', ['did' => $districtId])
+                ->with('success', 'Activities updated successfully!');
+        } else {
+            // Handle the case where the record doesn't exist
+            return redirect()->back()->with('error', 'Record not found for the given activity and district.');
+        }
     }
+
 
     public function edit($id)
     {
@@ -521,12 +540,74 @@ class PrioritizedActivitiesController extends Controller
             return $activities->groupBy('targeted_for');
         });
 
-        // return response()->json(['status'=>'ads','data'=>$structuredData], 200);
+
 
 
         return view('Report::Compiled.province')
             ->withProvince($province)
             ->withActivities($structuredData);
+    }
+    public function workPlanReport(Request $request)
+    {
+        // Retrieve the input parameters
+        $districtId = $request->input('did');
+        $provinceId = $request->input('pid'); // Assuming provinceId is passed with key 'pid'
+
+        // Define the query
+        $query = $this->outcomes->with(['activities' => function ($query) use ($districtId, $provinceId) {
+            if ($districtId) {
+                // Filter by districtId
+                $query->with(['prioritiesActivities' => function ($query) use ($districtId) {
+                    $query->where('district_id', $districtId);
+                }])->whereHas('prioritiesActivities', function ($query) use ($districtId) {
+                    $query->where('district_id', $districtId);
+                });
+            } elseif ($provinceId) {
+                // Filter by provinceId
+                $query->whereHas('prioritiesActivities', function ($query) use ($provinceId) {
+                    $query->where('province_id', $provinceId);
+                });
+            }
+        }]);
+
+        // Execute the query and get results
+    $outcomes = $query->get();
+
+    // Group the data by ir_id, outcomes, and activities
+    $groupedData = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) {
+        return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) {
+            return $outcomeActivities->map(function ($outcome) {
+                // Filter activities to only include those with prioritiesActivities
+                $filteredActivities = $outcome->activities->filter(function ($activity) {
+                    return $activity->prioritiesActivities->isNotEmpty();
+                });
+
+                return [
+                    'outcome' => $outcome->toArray(),
+                    'activities' => $filteredActivities->map(function ($activity) {
+                        // Group prioritiesActivities by targeted_for
+                        $groupedPrioritiesActivities = $activity->prioritiesActivities->groupBy('targeted_for');
+
+                        return [
+                            'activity' => $activity->toArray(),
+                            'prioritiesActivities' => $groupedPrioritiesActivities->map(function ($group) {
+                                return $group->toArray();
+                            })->toArray()
+                        ];
+                    })->toArray()
+                ];
+            });
+        });
+    });
+
+        $districtprofile = $this->districts
+            ->with(['province', 'locallevel'])
+            ->find($districtId);
+
+        // return response()->json(['status' => 'ads', 'data' => $groupedData], 200);
+        return view('Report::Workplan.district')
+            ->withDistrictprofile($districtprofile)
+            ->withData($groupedData);
     }
 
     public function destroy($id)

@@ -24,6 +24,7 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
         Route::resource('prioritizedActivities', PrioritizedActivitiesController::class);
        
         Route::get('compiledreport', [PrioritizedActivitiesController::class, 'compiledReport'])->name('compiledreport.district');
+        Route::get('workplanreport', [PrioritizedActivitiesController::class, 'workPlanReport'])->name('workPlanReport.index');
         Route::post('activiymapping', [PrioritizedActivitiesController::class, 'activityMapping'])->name('activityMapping.district');
         Route::post('stepremarks', [PrioritizedActivitiesController::class, 'stepRemarksadd'])->name('stepremarks.add');
         Route::get('compiledreport/province/{provinceid}', [PrioritizedActivitiesController::class, 'compiledReportProvince'])->name('compiledreport.province');
