@@ -42,11 +42,28 @@ class ActivitiesController extends Controller
         $partners = Constants::PARTNERS;
         $activities = $this->activities->with(['outcomes'])->orderby('id', 'asc')->get();
 
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+
         return view('Configuration::Activities.index')
             ->withIr($ir)
             ->withPartners($partners)
             ->withActivities($activities);
     }
+
 
     /**
      * Show the form for creating a new account head.
@@ -75,16 +92,25 @@ class ActivitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        // $this->authorize('manage-account-code');
-        $activities = $this->activities->create($request->all());
-        if ($activities) {
-            return redirect()->route('activities.index')->with('success', 'Added Activities successfully!');
+        try {
+            // Exclude 'partner' from the input and process it separately
+            $input = $request->except('partner');
+            $partnerCsv = implode(',', $request['partner']);
+            $input['partner'] = $partnerCsv;
+
+            // Attempt to create the activity
+            $activities = $this->activities->create($input);
+
+            // If successful, redirect with a success message
+            if ($activities) {
+                return redirect()->route('activities.index')->with('success', 'Added Activities successfully!');
+            }
+        } catch (\Exception $e) {
+            // If an error occurs, redirect back with the error message
+            return redirect()->back()->with('error', 'Failed to add Activities: ' . $e->getMessage());
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Platforms can not be added.'
-        ], 422);
     }
+
 
     /**
      * Display the specified account head.
@@ -108,17 +134,27 @@ class ActivitiesController extends Controller
      */
     public function edit($id)
     {
-        // $this->authorize('manage-account-code');
+        // Fetch the necessary data
         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        
+
+        // Find the activity by ID
+        $activity = $this->activities->find($id);
+
+        // Convert the comma-separated partner string into an array
+        $partnerArray = explode(',', $activity->partner);
+
+        // Replace the partner field in the activity with the array
+        $activity->partner = $partnerArray;
+
         return view('Configuration::Activities.edit')
-            ->withActivities($this->activities->find($id))
+            ->withActivities($activity)
             ->withIr($ir)
             ->withPartners($partners)
             ->withActivitiesList($outcomes);
     }
+
 
     /**
      * Update the specified account head in storage.
@@ -130,18 +166,29 @@ class ActivitiesController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        // $this->authorize('manage-account-code');
+        try {
+            // Prepare the data except for 'partner'
+            $data = $request->except('partner');
 
-        $data = $request->all();
-        $activities = $this->activities->update($id, $data);
-        if ($activities) {
+            // Convert the 'partner' array to a comma-separated string
+            $partnerCsv = implode(',', $request['partner']);
+            $data['partner'] = $partnerCsv;
 
-            return redirect()->route('activities.index')->with('success', 'Activities Updated successfully!');
+            // Attempt to update the activity
+            $activities = $this->activities->find($id);
+
+            if (!$activities) {
+                return redirect()->back()->with('error', 'Activity not found.');
+            }
+
+            $activities->update($data);
+
+            // If successful, redirect with a success message
+            return redirect()->route('activities.index')->with('success', 'Activities updated successfully!');
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the update
+            return redirect()->back()->with('error', 'Failed to update activities: ' . $e->getMessage());
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Actors can not be updated.'
-        ], 422);
     }
 
     /**

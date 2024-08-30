@@ -42,6 +42,7 @@
                         'label' => 'Responsible Partners',
                         'type' => 'select',
                         'required' => false,
+                        'multiple' => true,
                         'width' => 'w-1/2',
                         'options' => $partners,
                     ],
@@ -59,7 +60,7 @@
         </div>
     </div>
     <script>
-        $('#partner').select2();
+        
         document.addEventListener('DOMContentLoaded', function () {
             const irSelect = document.getElementById('ir_id');
             const outcomesSelect = document.getElementById('outcomes_id');

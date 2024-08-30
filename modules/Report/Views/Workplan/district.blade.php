@@ -124,12 +124,10 @@
                             {{ $activity['activity']['activities'] }}
                         </td>
                         <td class="border border-gray-300 p-2 text-sm">
-                            @if ($countAllTargeted > 0 && $countVulnerableTargeted==0)
-                            All
-                            @endif
-                            @if ($countVulnerableTargeted > 0 && $countAllTargeted==0 )
-                            Targeted
-                            @endif
+                        
+                            All-{{$countAllTargeted}},
+                            Targeted-{{$countVulnerableTargeted}}
+                           
 
                         </td>
                         <td class="border border-gray-300 p-2 text-sm">
@@ -172,4 +170,3 @@
 
 
 </x-app-layout>
-0

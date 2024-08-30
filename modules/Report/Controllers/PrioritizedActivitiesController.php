@@ -17,6 +17,7 @@ use Modules\Report\Repositories\PriorityRepository;
 use Modules\Report\Repositories\StepRemarksRepository;
 use Modules\Report\Requests\PrioritizedActivities\StoreRequest;
 use Modules\Report\Requests\PrioritizedActivities\UpdateRequest;
+use App\Constants;
 
 class PrioritizedActivitiesController extends Controller
 {
@@ -424,6 +425,9 @@ class PrioritizedActivitiesController extends Controller
             // If the record exists, update it
             $inputs = [
                 'activity_id' => $activityId,
+                'year' => $request->input('year'),
+                'months' => json_encode($request->input('months')),
+                'total_target' => $request->input('total_target'),
             ];
 
             $this->prioritizedactivities->update($existingRecord->id, $inputs);
@@ -436,6 +440,118 @@ class PrioritizedActivitiesController extends Controller
         }
     }
 
+
+
+    public function editctivityMapping(Request $request, $id)
+    {
+        $data = $request->all();
+        $districtId = $data['district_id'];
+        $activityId = $data['activity_id'];
+
+        // Retrieve the existing record
+        $existingRecord = $this->prioritizedactivities
+            ->where('id', '=', $id)
+            ->where('district_id', '=', $districtId)
+            ->first();
+
+        if ($existingRecord) {
+            // Update the existing record
+            $inputs = [
+                'activity_id' => $activityId,
+                'year' => $request->input('year'),
+                'months' => json_encode($request->input('months')),
+            ];
+
+            $this->prioritizedactivities->update($existingRecord->id, $inputs);
+
+            return redirect()->route('compiledreport.district', ['did' => $districtId])
+                ->with('success', 'Activities updated successfully!');
+        } else {
+            // Handle the case where the record doesn't exist
+            return redirect()->back()->with('error', 'Record not found for the given activity and district.');
+        }
+    }
+
+
+
+    public function rollbackactivityMapping(Request $request, $id)
+    {
+        $districtId = $request->input('district_id');
+
+        // Retrieve the existing record
+        $existingRecord = $this->prioritizedactivities
+            ->where('id', '=', $id)
+            ->where('district_id', '=', $districtId)
+            ->first();
+
+        if ($existingRecord) {
+            // Update the existing record to set specific columns to null
+            $inputs = [
+                'activity_id' => null,
+                'year' => null,
+                'months' => null,
+            ];
+
+            $this->prioritizedactivities->where('id', $id)
+                ->where('district_id', $districtId)
+                ->update($inputs);
+
+            return redirect()->route('compiledreport.district', ['did' => $districtId])
+                ->with('success', 'Activity rollback completed successfully!');
+        } else {
+            // Handle the case where the record doesn't exist
+            return redirect()->back()->with('error', 'Record not found for the given activity and district.');
+        }
+    }
+
+
+    public function showAddForm(Request $request, $id)
+    {
+        $prioritizedActivities = $this->prioritizedactivities->find($id);
+        $stage_id = $prioritizedActivities->stage_id;
+
+        $ir_id = match ($stage_id) {
+            3 => 1,
+            4 => 2,
+            5 => 3,
+            6 => 4,
+            default => null, // or handle unexpected stage_id values if needed
+        };
+
+        if ($ir_id !== null) {
+            $activities = $this->mapactivities->where('ir_id','=', $ir_id)->get();
+        } else {
+            $activities = collect(); // return an empty collection if ir_id is not set
+        }
+        $districtprofile = $this->districts
+            ->with(['province', 'locallevel'])
+            ->find($prioritizedActivities->district_id);
+
+        return view('Report::compiled.mapping')
+            ->withDistrictprofile($districtprofile)
+            ->withPrioritizedActivities($prioritizedActivities)
+            ->withId($id)
+            ->withActivities($activities);
+    }
+
+
+    // Method to show the form for editing activities
+    public function showEditForm(Request $request, $id)
+    {
+        $districtId = $request->input('district_id');
+        $activity = $this->prioritizedactivities
+            ->where('id', '=', $id)
+            ->where('district_id', '=', $districtId)
+            ->first();
+
+        return view('activities.edit', compact('districtId', 'activity'));
+    }
+
+    // Method to show the form for rollback activities
+    public function showRollbackForm(Request $request, $id)
+    {
+        $districtId = $request->input('district_id');
+    }
 
     public function edit($id)
     {
@@ -539,10 +655,6 @@ class PrioritizedActivitiesController extends Controller
         $structuredData = $groupedByStage->map(function ($activities) {
             return $activities->groupBy('targeted_for');
         });
-
-
-
-
         return view('Report::Compiled.province')
             ->withProvince($province)
             ->withActivities($structuredData);
@@ -571,34 +683,45 @@ class PrioritizedActivitiesController extends Controller
         }]);
 
         // Execute the query and get results
-    $outcomes = $query->get();
+        $outcomes = $query->get();
+        $partners = Constants::PARTNERS;
 
-    // Group the data by ir_id, outcomes, and activities
-    $groupedData = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) {
-        return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) {
-            return $outcomeActivities->map(function ($outcome) {
-                // Filter activities to only include those with prioritiesActivities
-                $filteredActivities = $outcome->activities->filter(function ($activity) {
-                    return $activity->prioritiesActivities->isNotEmpty();
+        $groupedData = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners) {
+            return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners) {
+                return $outcomeActivities->map(function ($outcome) use ($partners) {
+                    // Filter activities to only include those with prioritiesActivities
+                    $filteredActivities = $outcome->activities->filter(function ($activity) {
+                        return $activity->prioritiesActivities->isNotEmpty();
+                    });
+
+                    return [
+                        'outcome' => $outcome->toArray(),
+                        'activities' => $filteredActivities->map(function ($activity) use ($partners) {
+                            // Convert partner IDs to partner names
+                            $partnerIds = explode(',', $activity->partner); // Split the partner CSV string into an array
+                            $partnerNames = array_map(function ($id) use ($partners) {
+                                return $partners[$id] ?? 'NA'; // Replace IDs with partner names
+                            }, $partnerIds);
+
+                            // Replace the partner IDs with the names in the activity array
+                            $activityArray = $activity->toArray();
+                            $activityArray['partner'] = implode(', ', $partnerNames);
+
+                            // Group prioritiesActivities by targeted_for
+                            $groupedPrioritiesActivities = $activity->prioritiesActivities->groupBy('targeted_for');
+
+                            return [
+                                'activity' => $activityArray,
+                                'prioritiesActivities' => $groupedPrioritiesActivities->map(function ($group) {
+                                    return $group->toArray();
+                                })->toArray()
+                            ];
+                        })->toArray()
+                    ];
                 });
-
-                return [
-                    'outcome' => $outcome->toArray(),
-                    'activities' => $filteredActivities->map(function ($activity) {
-                        // Group prioritiesActivities by targeted_for
-                        $groupedPrioritiesActivities = $activity->prioritiesActivities->groupBy('targeted_for');
-
-                        return [
-                            'activity' => $activity->toArray(),
-                            'prioritiesActivities' => $groupedPrioritiesActivities->map(function ($group) {
-                                return $group->toArray();
-                            })->toArray()
-                        ];
-                    })->toArray()
-                ];
             });
         });
-    });
+
 
         $districtprofile = $this->districts
             ->with(['province', 'locallevel'])

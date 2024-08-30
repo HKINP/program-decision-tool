@@ -43,6 +43,9 @@ class PrioritizedActivities extends Model
         'proposed_activities',
         'targeted_for',
         'activity_id',
+        'total_target',
+        'year',
+        'months',
         'remarks',
     ];
 

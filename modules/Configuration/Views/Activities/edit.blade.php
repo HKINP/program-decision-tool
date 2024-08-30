@@ -45,6 +45,7 @@
                         'label' => 'Responsible Partners',
                         'type' => 'select',
                         'required' => false,
+                        'multiple' => true,
                         'width' => 'w-1/2',
                         'options' => $partners,
                     ],

@@ -46,116 +46,79 @@
                 </thead>
                 <tbody>
                     @php
-                        $serialNumber = 1;
+                    $serialNumber = 1;
                     @endphp
                     @foreach ($activities as $stageId => $targetedForGroups)
-                        <tr class="bg-gray-100 border-b">
-                            <td class="p-3 font-bold" colspan="5">
-                                @php
-                                    $ir_id = null; // Initialize ir_id
-                                @endphp
+                    <tr class="bg-gray-100 border-b">
+                        <td class="p-3 font-bold" colspan="5">
+                            @php
+                            $ir_id = null; // Initialize ir_id
+                            @endphp
 
-                                @if ($stageId == 3)
-                                    @php
-                                        $ir_id = 1;
-                                    @endphp
-                                    <span class="ml-2 text-blue-600">IR 1. Improve household nutrition practices</span>
-                                @elseif ($stageId == 4)
-                                    @php
-                                        $ir_id = 2;
-                                    @endphp
-                                    <span class="ml-2 text-blue-600">IR 2. Improved coverage and quality of nutrition
-                                        services</span>
-                                @elseif ($stageId == 5)
-                                    @php
-                                        $ir_id = 3;
-                                    @endphp
-                                    <span class="ml-2 text-blue-600">IR 3. Improve access to safe, diverse, and
-                                        nutritious foods</span>
-                                @elseif ($stageId == 6)
-                                    @php
-                                        $ir_id = 4;
-                                    @endphp
-                                    <span class="ml-2 text-blue-600">IR 4. Strengthen GON capacity for multi-sectoral
-                                        nutrition programming</span>
+                            @if ($stageId == 3)
+                            @php
+                            $ir_id = 1;
+                            @endphp
+                            <span class="ml-2 text-blue-600">IR 1. Improve household nutrition practices</span>
+                            @elseif ($stageId == 4)
+                            @php
+                            $ir_id = 2;
+                            @endphp
+                            <span class="ml-2 text-blue-600">IR 2. Improved coverage and quality of nutrition
+                                services</span>
+                            @elseif ($stageId == 5)
+                            @php
+                            $ir_id = 3;
+                            @endphp
+                            <span class="ml-2 text-blue-600">IR 3. Improve access to safe, diverse, and
+                                nutritious foods</span>
+                            @elseif ($stageId == 6)
+                            @php
+                            $ir_id = 4;
+                            @endphp
+                            <span class="ml-2 text-blue-600">IR 4. Strengthen GON capacity for multi-sectoral
+                                nutrition programming</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @foreach ($targetedForGroups as $targetedFor => $activitiesList)
+                    <tr class="bg-gray-200 border-b">
+                        <td class="p-3 font-bold">{{ ucfirst($targetedFor) }}</td>
+                        <td colspan="4"></td>
+                    </tr>
+                    @foreach ($activitiesList as $activity)
+                    <tr class="bg-gray-100 border-b">
+                        <td class="p-3">{{ $serialNumber++ }}</td>
+                        <td class="p-3"> {{ $activity->activity->activities ?? 'NA' }}</td>
+                        <td class="p-3"> {{ $activity->proposed_activities ?? 'NA' }} </td>
+                        <td class="p-3">{{ $activity->remarks }}</td>
+                        <td class="p-3">
+                            <div class="flex space-x-4">
+                                @if($activity->activity_id == null)
+                                <a href="{{ route('activityMapping.showAdd', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-blue-500 hover:text-blue-700" onclick="openModal({{ $ir_id }}, {{ $activity->id }})">
+                                    <i class="fa-solid fa-link"></i>
+                                </a>
+                                @else
+                           
+                                <a href="{{ route('activityMapping.showRollback', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('http://localhost:8000/user/1')">
+                                    <i class="fas fa-reply"></i>
+                                </a>
                                 @endif
-                            </td>
-                        </tr>
-                        @foreach ($targetedForGroups as $targetedFor => $activitiesList)
-                            <tr class="bg-gray-200 border-b">
-                                <td class="p-3 font-bold">{{ ucfirst($targetedFor) }}</td>
-                                <td colspan="4"></td>
-                            </tr>
-                            @foreach ($activitiesList as $activity)
-                                <tr class="bg-gray-100 border-b">
-                                    <td class="p-3">{{ $serialNumber++ }}</td>
-                                    <td class="p-3"> {{ $activity->activity->activities ?? 'NA' }}</td>
-                                    <td class="p-3"> {{ $activity->proposed_activities ?? 'NA' }} </td>
-                                    <td class="p-3">{{ $activity->remarks }}</td>
-                                    <td class="p-3">
-                                        @if($activity->activity_id ==null)
-                                        <a href="#" class="open-modal" onclick="openModal({{ $ir_id }},{{ $activity->id }})">
-                                            <i class="fa-solid fa-link"></i>
-                                        </a>
-                                        @else                                       
-                                            <i class="fa-solid fa-check"></i>
-                                        </a>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endforeach
+                                <a href="{{ route('activityMapping.showEdit', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-yellow-500 hover:text-yellow-700">
+                                    <i class="fa-solid fa-edit"></i>
+                                </a>
+                               
+                            </div>
+
+
+                        </td>
+                    </tr>
+                    @endforeach
+                    @endforeach
                     @endforeach
                 </tbody>
             </table>
 
-        </div>
-    </div>
-    <!-- Modal Structure -->
-    <div id="activityModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center z-50">
-        <div class="bg-white w-1/2 p-4 rounded-lg shadow-lg">
-            <h2 class="text-xl font-bold mb-4 px-4 py-2">Activity Mapping</h2>
-            <form class="p-4" id="updateActivitiesForm" action="{{ route('activityMapping.district') }}"
-                method="POST">
-                @csrf
-                <input type="hidden" name="id" id="activityId">
-                <input type="hidden" name="district_id" value="{{ $districtprofile->id }}">
-                <div class="mb-4">
-                <label  class="text-sm font-medium text-gray-700">Work Plan Activity</label>
-                    <select id="activitiesSelect" name="activity_id"
-                        class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option>Select</option>
-                        @foreach ($mappingActivities as $mactivity)
-                            <option value="{{ $mactivity->id }}" class="w-1/2 max-w-1/2"
-                                data-ir-id="{{ $mactivity->ir_id }}">
-                                {{ $mactivity->activities }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4">
-                <label  class="text-sm font-medium text-gray-700">Responsible Partner</label>
-                    <select id="activitiesSelect" name="activity_id"
-                        class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option>Select</option>
-                        <option value="Helen Keller Intl" class="w-1/2 max-w-1/2">Helen Keller Intl</option>
-                        <option value="fhi360" class="w-1/2 max-w-1/2">fhi360</option>
-                        <option value="CEAPRED" class="w-1/2 max-w-1/2">CEAPRED</option>
-                        <option value="ENPHO" class="w-1/2 max-w-1/2">ENPHO</option>
-                        <option value="NTAG" class="w-1/2 max-w-1/2">NTAG</option>
-                        <option value="KABOOM" class="w-1/2 max-w-1/2">KABOOM</option>
-                        <option value="PNGO" class="w-1/2 max-w-1/2">PNGO</option>
-                 
-                    </select>
-                </div>
-                <div class="mb-4">
-                <label  class="text-sm font-medium text-gray-700">Total Target</label>
-                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required="">      
-                </div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
-                <button type="button" id="closeModal"
-                    class="ml-2 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-            </form>
         </div>
     </div>
 
@@ -224,43 +187,6 @@
         }
     </style>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const modal = document.getElementById("activityModal");
-            const activitiesSelect = document.getElementById("activitiesSelect");
-            const activityIdInput = document.getElementById("activityId");
-
-            const allActivities = Array.from(activitiesSelect.options);
-
-            window.openModal = function(irId,activityId) {
-                activityIdInput.value = activityId;
-
-                // Clear the select list
-                activitiesSelect.innerHTML = "";
-
-                // Add the first option
-                const firstOption = document.createElement("option");
-                firstOption.value = "";
-                firstOption.textContent = "Please select an activity";
-                activitiesSelect.appendChild(firstOption);
-
-                // Filter activities based on the passed irId
-                const filteredActivities = allActivities.filter(option => option.getAttribute('data-ir-id') ==
-                    irId);
-
-                // Populate the select list with filtered activities
-                filteredActivities.forEach(option => {
-                    activitiesSelect.appendChild(option);
-                });
-
-                modal.classList.remove("hidden");
-            };
-
-            document.getElementById("closeModal").addEventListener("click", function() {
-                modal.classList.add("hidden");
-            });
-        });
-    </script>
 
 </x-app-layout>
 0
