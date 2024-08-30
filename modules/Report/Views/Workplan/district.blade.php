@@ -4,6 +4,46 @@
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold">District Compiled Report</h2>
         </div>
+        <!-- Search Section -->
+        <div class="bg-white p-4 rounded-lg mb-5 border border-[#D8DAE5]">
+            <form action="{{ route('workPlanReport.index') }}" method="GET" class="flex gap-4 mb-4">
+                <!-- Province Select -->
+                <div class="flex-1">
+                    <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
+                    <select id="province" name="province"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="">Select Province</option>
+                        @foreach ($provinces as $province)
+                            <option value="{{ $province->id }}" @if (request('province') == $province->id) selected @endif>
+                                {{ $province->province }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- District Select -->
+                <div class="flex-1">
+                    <label for="district" class="block text-sm font-medium text-gray-700">District</label>
+                    <select id="district" name="district"
+                        class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="">Select District</option>
+                        <!-- Add your dynamic district options here -->
+                        @foreach ($districts as $district)
+                            <option value="{{ $district->id }}" @if (request('district') == $district->id) selected @endif>
+                                {{ $district->district }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- Search Button -->
+                <div class="flex items-end">
+                    <button type="submit"
+                        class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+
 
         <div class="flex gap-4">
             <!-- Province Section -->
@@ -34,139 +74,210 @@
                 <p class="font-semibold text-md text-blue-600">Activities</p>
             </div>
 
-            <table class="min-w-full border-collapse border border-gray-300">
+            <table class="min-w-full border-collapse border  divide-y divide-gray-200 border-gray-300">
                 <!-- Header Section -->
                 <thead>
                     <tr class="bg-purple-800 text-white">
-                        <th class="text-sm border border-gray-300 p-2 text-center w-12">#</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">Activities</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">All/Targeted</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">District</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">Target</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">Unit</th>
-                        <th class="text-sm border border-gray-300 p-2 text-center">Responsible Partner</th>
-                        <th class="border border-gray-300 p-2 text-center">Jul</th>
-                        <th class="border border-gray-300 p-2 text-center">Aug</th>
-                        <th class="border border-gray-300 p-2 text-center">Sept</th>
-                        <th class="border border-gray-300 p-2 text-center">Oct</th>
-                        <th class="border border-gray-300 p-2 text-center">Nov</th>
-                        <th class="border border-gray-300 p-2 text-center">Dec</th>
-                        <th class="border border-gray-300 p-2 text-center">Jan</th>
-                        <th class="border border-gray-300 p-2 text-center">Feb</th>
-                        <th class="border border-gray-300 p-2 text-center">Mar</th>
-                        <th class="border border-gray-300 p-2 text-center">Apr</th>
-                        <th class="border border-gray-300 p-2 text-center">May</th>
-                        <th class="border border-gray-300 p-2 text-center">Jun</th>
-                        <th class="border border-gray-300 p-2 text-center">Budget</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center w-12">#</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Activities</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">All/Targeted</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">District</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Target</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Unit</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Responsible Partner</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Jul</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Aug</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Sept</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Oct</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Nov</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Dec</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Jan</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Feb</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Mar</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Apr</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">May</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Jun</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Budget</th>
                     </tr>
                 </thead>
                 <!-- Body Section -->
-                <tbody>
+                <tbod class="divide-y divide-gray-200">
                     <!-- Iterate over IRs -->
                     @foreach ($data as $irId => $irOutcomes)
-                    <!-- Display IR Header -->
-                    <tr class="bg-purple-600 text-white font-semibold">
-                        <td colspan="19" class="border border-gray-300 text-sm p-2 text-left">
-                            @if ($irId == 1)
-                            IR 1. Improve household nutrition practices
-                            @elseif ($irId == 2)
-                            IR 2. Improved coverage and quality of nutrition
-                            services
-                            @elseif ($irId == 3)
-                            IR 3. Improve access to safe, diverse, and
-                            nutritious foods
-                            @elseif ($irId == 4)
-                            IR 4. Strengthen GON capacity for multi-sectoral
-                            nutrition programming
-                            @endif
-                        </td>
-                    </tr>
+                        <!-- Display IR Header -->
+                        <tr class="bg-purple-600 text-white font-semibold">
+                            <td colspan="19" class="border border-gray-300 text-xs p-2 text-left">
+                                @if ($irId == 1)
+                                    IR 1. Improve household nutrition practices
+                                @elseif ($irId == 2)
+                                    IR 2. Improved coverage and quality of nutrition
+                                    services
+                                @elseif ($irId == 3)
+                                    IR 3. Improve access to safe, diverse, and
+                                    nutritious foods
+                                @elseif ($irId == 4)
+                                    IR 4. Strengthen GON capacity for multi-sectoral
+                                    nutrition programming
+                                @endif
+                            </td>
+                        </tr>
 
-                    <!-- Iterate over Outcomes -->
-                    @foreach ($irOutcomes as $outcomeGroup)
-                    @foreach ($outcomeGroup as $outcome)
-                    <!-- Display Outcome Header -->
-                    <tr class="bg-gray-200 font-semibold">
-                        <td colspan="19" class="border border-gray-300 p-2 text-left text-sm">
-                            {{ $outcome['outcome']['outcome'] }}
-                        </td>
-                    </tr>
+                        <!-- Iterate over Outcomes -->
+                        @foreach ($irOutcomes as $outcomeGroup)
+                            @foreach ($outcomeGroup as $outcome)
+                                <!-- Display Outcome Header -->
+                                <tr class="bg-gray-200 font-semibold">
+                                    <td colspan="19" class="border border-gray-300 p-2 text-left text-xs">
+                                        {{ $outcome['outcome']['outcome'] }}
+                                    </td>
+                                </tr>
 
-                    <!-- Iterate over Activities -->
-                    @foreach ($outcome['activities'] as $index => $activity)
+                                <!-- Iterate over Activities -->
+                                @foreach ($outcome['activities'] as $index => $activity)
+                                    @php
+                                        // Filter the array where 'targeted_for' is 'All'
+                                        $allTargetedActivities = array_filter(
+                                            $activity['activity']['priorities_activities'],
+                                            function ($item) {
+                                                return $item['targeted_for'] === 'All';
+                                            },
+                                        );
+                                        $totalSum = collect($activity['activity']['priorities_activities'])
+                                            ->filter(function ($item) {
+                                                return is_numeric($item['total_target']);
+                                            })
+                                            ->sum('total_target');
+                                        // Filter the array where 'targeted_for' is 'Vulnerable'
+                                        $vulnerableTargetedActivities = array_filter(
+                                            $activity['activity']['priorities_activities'],
+                                            function ($item) {
+                                                return $item['targeted_for'] === 'Vulnerable';
+                                            },
+                                        );
 
-                    @php
-                    // Filter the array where 'targeted_for' is 'All'
-                    $allTargetedActivities = array_filter(
-                    $activity['activity']['priorities_activities'],
-                    function ($item) {
-                    return $item['targeted_for'] === 'All';
-                    },
-                    );
+                                        // Count the number of occurrences
+                                        $countAllTargeted = count($allTargetedActivities);
 
-                    // Filter the array where 'targeted_for' is 'Vulnerable'
-                    $vulnerableTargetedActivities = array_filter(
-                    $activity['activity']['priorities_activities'],
-                    function ($item) {
-                    return $item['targeted_for'] === 'Vulnerable';
-                    },
-                    );
+                                        $countVulnerableTargeted = count($vulnerableTargetedActivities);
 
-                    // Count the number of occurrences
-                    $countAllTargeted = count($allTargetedActivities);
+                                        // Array of all months with corresponding table header abbreviations
+                                        $months = [
+                                            'jul' => 'July',
+                                            'aug' => 'August',
+                                            'sept' => 'September',
+                                            'oct' => 'October',
+                                            'nov' => 'November',
+                                            'dec' => 'December',
+                                            'jan' => 'January',
+                                            'feb' => 'February',
+                                            'mar' => 'March',
+                                            'apr' => 'April',
+                                            'may' => 'May',
+                                            'jun' => 'June',
+                                        ];
 
-                    $countVulnerableTargeted = count($vulnerableTargetedActivities);
-                    @endphp
+                                        // Initialize an array to hold the presence status of each month
+                                        $monthPresence = array_fill_keys(array_keys($months), false);
 
-                    <tr>
-                        <td class="border border-gray-300 p-2 text-center">{{ $index + 1 }}</td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                            {{ $activity['activity']['activities'] }}
-                        </td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                        
-                            All-{{$countAllTargeted}},
-                            Targeted-{{$countVulnerableTargeted}}
-                           
+                                        // Loop through each `priorities_activities` item
+                                        foreach (
+                                            $activity['activity']['priorities_activities']
+                                            as $priorities_activity
+                                        ) {
+                                            // Ensure 'months' is processed as an array
+                                            $activityMonths = json_decode($priorities_activity['months'], true);
+                                            if (!is_array($activityMonths)) {
+                                                $activityMonths = [];
+                                            }
 
-                        </td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                            {{ count($activity['activity']['priorities_activities']) ?? '' }}
-                        </td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                        </td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                            {{ $activity['activity']['unit'] ?? '' }}
-                        </td>
-                        <td class="border border-gray-300 p-2 text-sm">
-                            {{ $activity['activity']['partner'] ?? '' }}
-                        </td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jul'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['aug'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['sept'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['oct'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['nov'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['dec'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jan'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['feb'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['mar'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['apr'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['may'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">{{ $activity['activity']['jun'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center">
-                            {{ $activity['activity']['budget'] ?? '' }}
-                        </td>
-                    </tr>
+                                            // Check if each month is present in the `months` array
+                                            foreach ($months as $key => $month) {
+                                                if (in_array($month, $activityMonths)) {
+                                                    $monthPresence[$key] = true;
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">
+                                            {{ $activity['activity']['activities'] ?? '' }}
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">
+
+                                            All-{{ $countAllTargeted }},
+                                            Targeted-{{ $countVulnerableTargeted }}
+
+
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">
+                                            {{ count($activity['activity']['priorities_activities']) ?? '' }}
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">{{ $totalSum ?? '' }}</td>
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">
+                                            {{ $activity['activity']['unit'] ?? '' }}
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-xs">
+                                            {{ $activity['activity']['partner'] ?? '' }}
+                                        </td>
+
+                                        @foreach ($months as $key => $month)
+                                            <td class="border border-gray-300 p-2 text-center">
+                                                @if ($monthPresence[$key])
+                                                    <i
+                                                        class="fas fa-check-circle text-green-500 text-xl p-2 rounded-full"></i>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        @endforeach
                     @endforeach
-                    @endforeach
-                    @endforeach
-                    @endforeach
-                </tbody>
+                    </tbody>
             </table>
 
 
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceSelect = document.getElementById('province');
+            const districtSelect = document.getElementById('district');
 
+            provinceSelect.addEventListener('change', function() {
+                const provinceId = this.value;
+                if (provinceId) {
+                    const provinceIds = [provinceId];
+                    fetch('{{ route('district.getdistrictbyprovince') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                provinceIds: provinceIds
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            districtSelect.innerHTML = '<option value="">Select District</option>';
+                            data.districts.forEach(district => {
+                                const option = document.createElement('option');
+                                option.value = district.id;
+                                option.textContent = district.district;
+                                districtSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching districts:', error));
+                } else {
+                    districtSelect.innerHTML = '<option value="">Select District</option>';
+                }
+            });
+        });
+    </script>
 </x-app-layout>

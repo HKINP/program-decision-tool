@@ -440,64 +440,28 @@ class PrioritizedActivitiesController extends Controller
         }
     }
 
-
-
-    public function editctivityMapping(Request $request, $id)
-    {
-        $data = $request->all();
-        $districtId = $data['district_id'];
-        $activityId = $data['activity_id'];
-
-        // Retrieve the existing record
-        $existingRecord = $this->prioritizedactivities
-            ->where('id', '=', $id)
-            ->where('district_id', '=', $districtId)
-            ->first();
-
-        if ($existingRecord) {
-            // Update the existing record
-            $inputs = [
-                'activity_id' => $activityId,
-                'year' => $request->input('year'),
-                'months' => json_encode($request->input('months')),
-            ];
-
-            $this->prioritizedactivities->update($existingRecord->id, $inputs);
-
-            return redirect()->route('compiledreport.district', ['did' => $districtId])
-                ->with('success', 'Activities updated successfully!');
-        } else {
-            // Handle the case where the record doesn't exist
-            return redirect()->back()->with('error', 'Record not found for the given activity and district.');
-        }
-    }
-
-
-
     public function rollbackactivityMapping(Request $request, $id)
     {
-        $districtId = $request->input('district_id');
-
+       
+       
         // Retrieve the existing record
         $existingRecord = $this->prioritizedactivities
             ->where('id', '=', $id)
-            ->where('district_id', '=', $districtId)
             ->first();
 
         if ($existingRecord) {
             // Update the existing record to set specific columns to null
             $inputs = [
-                'activity_id' => null,
+                'activity_id' =>null,
                 'year' => null,
-                'months' => null,
+                'months' =>null,
+                'total_target' => null,
             ];
 
-            $this->prioritizedactivities->where('id', $id)
-                ->where('district_id', $districtId)
+            $this->prioritizedactivities->where('id','=', $id)
                 ->update($inputs);
 
-            return redirect()->route('compiledreport.district', ['did' => $districtId])
-                ->with('success', 'Activity rollback completed successfully!');
+            return redirect()->back()->with('success', 'Activity rollback completed successfully!');
         } else {
             // Handle the case where the record doesn't exist
             return redirect()->back()->with('error', 'Record not found for the given activity and district.');
@@ -538,13 +502,31 @@ class PrioritizedActivitiesController extends Controller
     // Method to show the form for editing activities
     public function showEditForm(Request $request, $id)
     {
-        $districtId = $request->input('district_id');
-        $activity = $this->prioritizedactivities
-            ->where('id', '=', $id)
-            ->where('district_id', '=', $districtId)
-            ->first();
+      $prioritizedActivities = $this->prioritizedactivities->find($id);
+        $stage_id = $prioritizedActivities->stage_id;
 
-        return view('activities.edit', compact('districtId', 'activity'));
+        $ir_id = match ($stage_id) {
+            3 => 1,
+            4 => 2,
+            5 => 3,
+            6 => 4,
+            default => null, // or handle unexpected stage_id values if needed
+        };
+
+        if ($ir_id !== null) {
+            $activities = $this->mapactivities->where('ir_id','=', $ir_id)->get();
+        } else {
+            $activities = collect(); // return an empty collection if ir_id is not set
+        }
+        $districtprofile = $this->districts
+            ->with(['province', 'locallevel'])
+            ->find($prioritizedActivities->district_id);
+
+        return view('Report::compiled.mapping')
+            ->withDistrictprofile($districtprofile)
+            ->withPrioritizedActivities($prioritizedActivities)
+            ->withId($id)
+            ->withActivities($activities);
     }
 
     // Method to show the form for rollback activities
@@ -685,6 +667,8 @@ class PrioritizedActivitiesController extends Controller
         // Execute the query and get results
         $outcomes = $query->get();
         $partners = Constants::PARTNERS;
+        $provinces=$this->provinces->get();
+        $districts=$this->districts->get();
 
         $groupedData = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners) {
             return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners) {
@@ -722,7 +706,6 @@ class PrioritizedActivitiesController extends Controller
             });
         });
 
-
         $districtprofile = $this->districts
             ->with(['province', 'locallevel'])
             ->find($districtId);
@@ -730,6 +713,8 @@ class PrioritizedActivitiesController extends Controller
         // return response()->json(['status' => 'ads', 'data' => $groupedData], 200);
         return view('Report::Workplan.district')
             ->withDistrictprofile($districtprofile)
+            ->withDistricts($districts)
+            ->withProvinces($provinces)
             ->withData($groupedData);
     }
 

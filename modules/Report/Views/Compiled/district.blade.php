@@ -95,16 +95,16 @@
                         <td class="p-3">
                             <div class="flex space-x-4">
                                 @if($activity->activity_id == null)
-                                <a href="{{ route('activityMapping.showAdd', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-blue-500 hover:text-blue-700" onclick="openModal({{ $ir_id }}, {{ $activity->id }})">
+                                <a href="{{ route('activityMapping.showAdd', [ 'id' => $activity->id]) }}" class="text-blue-500 hover:text-blue-700">
                                     <i class="fa-solid fa-link"></i>
                                 </a>
                                 @else
                            
-                                <a href="{{ route('activityMapping.showRollback', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('http://localhost:8000/user/1')">
+                                <a href="javascript:void(0);" class="text-red-500 hover:text-red-700" onclick="showDeleteModal('{{ route('activityMapping.showRollback', ['id' => $activity->id]) }}')">
                                     <i class="fas fa-reply"></i>
                                 </a>
                                 @endif
-                                <a href="{{ route('activityMapping.showEdit', ['ir_id' => $ir_id, 'id' => $activity->id]) }}" class="text-yellow-500 hover:text-yellow-700">
+                                <a href="{{ route('activityMapping.showEdit', [ 'id' => $activity->id]) }}" class="text-yellow-500 hover:text-yellow-700">
                                     <i class="fa-solid fa-edit"></i>
                                 </a>
                                
@@ -121,6 +121,20 @@
 
         </div>
     </div>
+<!-- Rollback Confirmation Modal -->
+<div id="rollbackModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 class="text-lg font-semibold mb-4">Rollback Confirmation</h2>
+        <p class="mb-4">Are you sure you want to rollback the activity mapping?</p>
+        <div class="flex justify-end">
+            <button id="cancelRollback" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+            <form id="rollbackForm" method="POST">
+                @csrf
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Rollback</button>
+            </form>
+        </div>
+    </div>
+</div>
 
     <style>
         @media print {
@@ -186,6 +200,20 @@
             }
         }
     </style>
+<script>
+    function showDeleteModal(rollbackUrl) {
+        // Set the form action to the passed URL
+        document.getElementById('rollbackForm').action = rollbackUrl;
+
+        // Show the modal
+        document.getElementById('rollbackModal').classList.remove('hidden');
+    }
+
+    document.getElementById('cancelRollback').addEventListener('click', function () {
+        // Hide the modal on cancel
+        document.getElementById('rollbackModal').classList.add('hidden');
+    });
+</script>
 
 
 </x-app-layout>
