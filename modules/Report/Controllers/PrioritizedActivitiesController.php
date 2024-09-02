@@ -491,7 +491,7 @@ class PrioritizedActivitiesController extends Controller
             ->with(['province', 'locallevel'])
             ->find($prioritizedActivities->district_id);
 
-        return view('Report::compiled.mapping')
+         return view('Report::Compiled.mapping')
             ->withDistrictprofile($districtprofile)
             ->withPrioritizedActivities($prioritizedActivities)
             ->withId($id)
