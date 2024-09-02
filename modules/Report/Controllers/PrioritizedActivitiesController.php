@@ -641,11 +641,18 @@ class PrioritizedActivitiesController extends Controller
             ->withProvince($province)
             ->withActivities($structuredData);
     }
+
+
+
+
+
     public function workPlanReport(Request $request)
     {
         // Retrieve the input parameters
         $districtId = $request->input('did');
-        $provinceId = $request->input('pid'); // Assuming provinceId is passed with key 'pid'
+        $provinceId = $request->input('pid');
+        
+         // Assuming provinceId is passed with key 'pid'
 
         // Define the query
         $query = $this->outcomes->with(['activities' => function ($query) use ($districtId, $provinceId) {
@@ -663,13 +670,13 @@ class PrioritizedActivitiesController extends Controller
                 });
             }
         }]);
-
+        
         // Execute the query and get results
         $outcomes = $query->get();
         $partners = Constants::PARTNERS;
-        $provinces=$this->provinces->get();
+        $allprovince=$this->provinces->get();
+        $province=$this->provinces->where('id','=',$provinceId)->first();
         $districts=$this->districts->get();
-
         $groupedData = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners) {
             return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners) {
                 return $outcomeActivities->map(function ($outcome) use ($partners) {
@@ -709,12 +716,12 @@ class PrioritizedActivitiesController extends Controller
         $districtprofile = $this->districts
             ->with(['province', 'locallevel'])
             ->find($districtId);
-
-        // return response()->json(['status' => 'ads', 'data' => $groupedData], 200);
+            // return response()->json(['status' => 'ads', 'data' => $groupedData], 200);
         return view('Report::Workplan.district')
             ->withDistrictprofile($districtprofile)
+            ->withProvince($province)
             ->withDistricts($districts)
-            ->withProvinces($provinces)
+            ->withProvinces($allprovince)
             ->withData($groupedData);
     }
 

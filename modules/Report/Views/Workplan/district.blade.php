@@ -10,12 +10,12 @@
                 <!-- Province Select -->
                 <div class="flex-1">
                     <label for="province" class="block text-sm font-medium text-gray-700">Province</label>
-                    <select id="province" name="province"
+                    <select id="pid" name="pid"
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="">Select Province</option>
-                        @foreach ($provinces as $province)
-                            <option value="{{ $province->id }}" @if (request('province') == $province->id) selected @endif>
-                                {{ $province->province }}
+                        @foreach ($provinces as $provincelist)
+                            <option value="{{ $provincelist->id }}" @if (request('province') == $provincelist->id) selected @endif>
+                                {{ $provincelist->province }}
                             </option>
                         @endforeach
                     </select>
@@ -23,7 +23,7 @@
                 <!-- District Select -->
                 <div class="flex-1">
                     <label for="district" class="block text-sm font-medium text-gray-700">District</label>
-                    <select id="district" name="district"
+                    <select id="did" name="did"
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="">Select District</option>
                         <!-- Add your dynamic district options here -->
@@ -51,8 +51,8 @@
                 <div class="flex items-center mb-4">
                     <p class="h-12 w-12 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
                     <p class="font-semibold text-md ml-4">
-                        <span class="text-blue-600">Province:</span>
-                        <span class="text-black">{{ $districtprofile->province->province ?? 'All Provinces' }}</span>
+                        <span class="text-blue-600">Province:</span>                      
+                        <span class="text-black">{{ $province->province ?? 'All Provinces' }}</span>
                     </p>
                 </div>
             </div>
@@ -245,8 +245,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const provinceSelect = document.getElementById('province');
-            const districtSelect = document.getElementById('district');
+            const provinceSelect = document.getElementById('pid');
+            const districtSelect = document.getElementById('did');
 
             provinceSelect.addEventListener('change', function() {
                 const provinceId = this.value;
