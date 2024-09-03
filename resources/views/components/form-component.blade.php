@@ -9,7 +9,7 @@
 
         <div class="{{ $field['width'] }} {{ $field['type'] !== 'invisible' ? 'px-2 mb-6' : '' }}">
             @if ($field['type'] !== 'invisible')
-            <label for="{{ $field['name'] }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $field['label'] }}</label>
+            <label for="{{ $field['name'] }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $field['label'] }} {{ $field['required'] ? '*' : '' }}</label>
 
             @endif
 

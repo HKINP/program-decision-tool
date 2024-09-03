@@ -17,11 +17,12 @@
                 :method="'PUT'" 
                 :values="$activities"
                 :fields="[
-                   [
+                  [
                         'name' => 'ir_id',
                         'label' => 'IR Activities',
                         'type' => 'select',
                         'required' => true,
+                        'labelfirst'=>'Select Activities',
                         'width' => 'w-1/2',
                         'options' => $ir,
                     ],
@@ -29,7 +30,8 @@
                         'name' => 'outcomes_id',
                         'label' => 'Outcomes',
                         'type' => 'select',
-                        'required' => false,
+                        'labelfirst'=>'Select Outcomes',
+                        'required' => true,
                         'width' => 'w-1/2',
                         'options' => $activitiesList,
                     ],
@@ -44,7 +46,7 @@
                         'name' => 'partner',
                         'label' => 'Responsible Partners',
                         'type' => 'select',
-                        'required' => false,
+                        'required' => true,
                         'multiple' => true,
                         'width' => 'w-1/2',
                         'options' => $partners,

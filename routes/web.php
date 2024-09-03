@@ -26,11 +26,18 @@ Route::redirect('/', 'login');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
-    // Route for the getting the data feed
-    Route::get('/json-data-feed', [DataFeedController::class, 'getDataFeed'])->name('json_data_feed');
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/documentation', [DashboardController::class, 'documentation'])->name('documentation');
-    Route::get('steplist', [DashboardController::class, 'stageRecord'])->name('steplist.create');
-    Route::get('dataentry', [DashboardController::class, 'stages'])->name('dataentrystage.create'); 
+    Route::middleware('can:view-stage-list')->group(function () {
+        Route::get('steplist', [DashboardController::class, 'stageRecord'])->name('steplist.create');
+    });
+    Route::get('dataentry', [DashboardController::class, 'stages'])->name('dataentrystage.create');
+    Route::get('/unauthorized', function () {
+        return view('pages.utility.unauthorized'); // Path to the view
+    })->name('unauthorized');
+});
+
+
+Route::get('/debug-session', function () {
+    return session()->all();
 });

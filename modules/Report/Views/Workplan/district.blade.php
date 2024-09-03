@@ -14,7 +14,7 @@
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="">Select Province</option>
                         @foreach ($provinces as $provincelist)
-                            <option value="{{ $provincelist->id }}" @if (request('province') == $provincelist->id) selected @endif>
+                            <option value="{{ $provincelist->id }}" @if (request('pid') == $provincelist->id) selected @endif>
                                 {{ $provincelist->province }}
                             </option>
                         @endforeach
@@ -26,9 +26,8 @@
                     <select id="did" name="did"
                         class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value="">Select District</option>
-                        <!-- Add your dynamic district options here -->
                         @foreach ($districts as $district)
-                            <option value="{{ $district->id }}" @if (request('district') == $district->id) selected @endif>
+                            <option value="{{ $district->id }}" @if (request('did') == $district->id) selected @endif>
                                 {{ $district->district }}
                             </option>
                         @endforeach
@@ -43,6 +42,7 @@
                 </div>
             </form>
         </div>
+        
 
 
         <div class="flex gap-4">
@@ -251,16 +251,14 @@
             provinceSelect.addEventListener('change', function() {
                 const provinceId = this.value;
                 if (provinceId) {
-                    const provinceIds = [provinceId];
                     fetch('{{ route('district.getdistrictbyprovince') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             },
                             body: JSON.stringify({
-                                provinceIds: provinceIds
+                                provinceIds: [provinceId]
                             })
                         })
                         .then(response => response.json())
@@ -272,12 +270,23 @@
                                 option.textContent = district.district;
                                 districtSelect.appendChild(option);
                             });
+
+                            // Re-select the district if already selected in the request
+                            const selectedDistrict = "{{ request('did') }}";
+                            if (selectedDistrict) {
+                                districtSelect.value = selectedDistrict;
+                            }
                         })
                         .catch(error => console.error('Error fetching districts:', error));
                 } else {
                     districtSelect.innerHTML = '<option value="">Select District</option>';
                 }
             });
+
+            // Trigger the change event to load districts if a province was selected
+            if (provinceSelect.value) {
+                provinceSelect.dispatchEvent(new Event('change'));
+            }
         });
     </script>
 </x-app-layout>
