@@ -74,6 +74,7 @@
                             </div>
                         </a>
                     </li>
+                    @can('manage-data-entry')
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['steplist'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['steplist'])){{ 'hover:text-gray-500 dark:hover:text-white' }}@endif" href="{{ route('steplist.create') }}">
                             <div class="flex items-center">
@@ -85,6 +86,7 @@
                             </div>
                         </a>
                     </li>
+                    @endif
                     <!-- User Configuration -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['user','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
