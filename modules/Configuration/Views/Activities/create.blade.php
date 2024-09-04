@@ -55,7 +55,13 @@
                         'required' => true,
                         'width' => 'w-1/2',
                     ],
-                    
+                    [
+                        'name' => 'total_budget',
+                        'label' => 'Budget',
+                        'type' => 'text',
+                        'required' => false,
+                        'width' => 'w-1/2',
+                    ],                    
                     
                 ]" />
             </div>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Activities'" 
-    :headers="['S.N', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit', 'Actions']" 
+    :headers="['S.N', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit','Budget', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('activities.create')"
@@ -26,6 +26,9 @@
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $activities->unit }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $activities->total_budget }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">
