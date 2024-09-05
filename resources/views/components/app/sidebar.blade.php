@@ -4,8 +4,7 @@
         class="fixed inset-0 bg-gray-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200"
         :class="sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'"
         aria-hidden="true"
-        x-cloak
-    ></div>
+        x-cloak></div>
 
     <!-- Sidebar -->
     <div
@@ -13,8 +12,7 @@
         class="flex lg:!flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:-translate-x-0 h-[100dvh] overflow-y-scroll lg:overflow-y-auto no-scrollbar w-20 lg:w-20 lg:sidebar-expanded:!w-72 shrink-0 bg-[#844a8a] dark:bg-gray-800 p-4 transition-all duration-200 ease-in-out {{ $variant === 'v2' ? 'border-r border-gray-200 dark:border-gray-700/60' : 'rounded-r-2xl shadow-sm' }}"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-64'"
         @click.outside="sidebarOpen = false"
-        @keydown.escape.window="sidebarOpen = false"
-    >
+        @keydown.escape.window="sidebarOpen = false">
 
         <!-- Sidebar header -->
         <div class="flex justify-between mb-10 pr-3 sm:px-2">
@@ -59,10 +57,10 @@
         <div class="space-y-8">
             <!-- Pages group -->
             <div>
-                
+
                 <ul class="mt-3">
                     <!-- Dashboard -->
-                    
+
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['dashboard'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['dashboard'])){{ 'hover:text-gray-500 dark:hover:text-white' }}@endif" href="{{ route('dashboard') }}">
                             <div class="flex items-center">
@@ -75,18 +73,90 @@
                         </a>
                     </li>
                     @can('manage-data-entry')
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['steplist'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif">
-                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['steplist'])){{ 'hover:text-gray-500 dark:hover:text-white' }}@endif" href="{{ route('steplist.create') }}">
-                            <div class="flex items-center">
+                       <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['district','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
+                        <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    
                                 <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['steplist'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                    <path d="M12 0c-.553 0-1 .448-1 1v10h-10c-.552 0-1 .448-1 1s.448 1 1 1h10v10c0 .552.447 1 1 1s1-.448 1-1v-10h10c.552 0 1-.448 1-1s-.448-1-1-1h-10v-10c0-.552-.447-1-1-1z"/>
+                                    <path d="M12 0c-.553 0-1 .448-1 1v10h-10c-.552 0-1 .448-1 1s.448 1 1 1h10v10c0 .552.447 1 1 1s1-.448 1-1v-10h10c.552 0 1-.448 1-1s-.448-1-1-1h-10v-10c0-.552-.447-1-1-1z" />
                                 </svg>
-                                
-                                <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data Entry</span>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Activity Entry</span>
+                                </div>
+                                <!-- Icon -->
+                                <div class="flex shrink-0 ml-2 mr-2  lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(in_array(Request::segment(1), ['steplist','districtactivities','provinceactivitis',''])){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                        <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                    </svg>
+                                </div>
                             </div>
-                        </a>
-                    </li>
+                        </a>                
+                    <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                            <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
+                                @can('manage-user')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('steplist.create')){{ '!text-[#f87c56]' }}@endif" href="{{ route('steplist.create') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">District</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-role')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('role.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('role.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Province</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Federal</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Program management</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">GID Plan</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Program management</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">MMEL Plan
+                                        </span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">EPRR Plan
+                                        </span>
+                                    </a>
+                                </li>
+                                @endif
+
+                            </ul>
+                        </div>
+                        </li>
                     @endif
+                    @can('manage-user-configuration')
                     <!-- User Configuration -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['user','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
@@ -107,25 +177,33 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
+                                @can('manage-user')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('user.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('user.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Users</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-role')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('role.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('role.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Roles</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Permissions</span>
                                     </a>
                                 </li>
-                               
+                                @endif
+
                             </ul>
                         </div>
                     </li>
+                    @endif
+                    @can('manage-system-configuration')
                     <!-- Community -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','activities'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','activities']) ? 1 : 0 }} }">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','activities'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
@@ -146,49 +224,67 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['targetgroup','thematicarea','province','district','stages','questions','platforms','activities'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
+                                @can('manage-target-groups')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('targetgroup.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('targetgroup.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Target Groups</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-thematic-areas')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('thematicarea.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('thematicarea.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Thematic Areas</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-province')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('province.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('province.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Province</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-district')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('district.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('district.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">District</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-stage')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('stages.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('stages.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Stages</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-question')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('question.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('question.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Questions</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-platforms')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('platform.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('platform.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Platforms</span>
                                     </a>
                                 </li>
+                                @endif
+                                @can('manage-activities')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.index') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Activities</span>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
+                    @endif
+                    @can('manage-report')
                     <!-- Finance -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['finance'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['finance']) ? 1 : 0 }} }">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['finance'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
@@ -215,13 +311,14 @@
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Workplan</span>
                                     </a>
                                 </li>
-                            
+
                             </ul>
                         </div>
                     </li>
-                   
+                    @endif
+
                 </ul>
-            </div>          
+            </div>
         </div>
 
         <!-- Expand / collapse button -->
