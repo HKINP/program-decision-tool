@@ -25,7 +25,19 @@ class Activities extends Model
      *
      * @var array
      */
-    protected $fillable = ['ir_id','outcomes_id', 'activities','partner','unit','total_budget'];
+    protected $fillable = [
+        'ir_id',
+        'outcomes_id',
+         'activities',
+         'partner',
+         'unit',
+         'total_budget',
+         'implemented_by',
+         'months',
+         'year',
+         'total_target',
+         'activity_type'
+        ];
 
     /**
      * The attributes excluded from the model's JSON form.

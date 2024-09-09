@@ -40,6 +40,8 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -61,6 +63,8 @@ class ActivitiesController extends Controller
         return view('Configuration::Activities.index')
             ->withIr($ir)
             ->withPartners($partners)
+            ->withImplementor($implementor)
+            ->withActivityTypes($activitytype)
             ->withActivities($activities);
     }
 
@@ -77,9 +81,17 @@ class ActivitiesController extends Controller
 
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $year=Constants::Year;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $months=Constants::MONTHS;
         return view('Configuration::Activities.create')
             ->withIr($ir)
             ->withPartners($partners)
+            ->withImplementor($implementor)
+            ->withYear($year)
+            ->withActivitytype($activitytype)
+            ->withMonths($months)
             ->withOutcomes($outcomes);
     }
 
@@ -92,11 +104,14 @@ class ActivitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        
         try {
             // Exclude 'partner' from the input and process it separately
             $input = $request->except('partner');
             $partnerCsv = implode(',', $request['partner']);
+            $monthsCv=implode(',', $request['months']);
             $input['partner'] = $partnerCsv;
+            $input['months'] = $monthsCv;
 
             // Attempt to create the activity
             $activities = $this->activities->create($input);
@@ -138,21 +153,28 @@ class ActivitiesController extends Controller
         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-
-        // Find the activity by ID
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor=Constants::IMPLEMENTOR;
+        $year=Constants::Year;
+        $months=Constants::MONTHS;
         $activity = $this->activities->find($id);
 
-        // Convert the comma-separated partner string into an array
         $partnerArray = explode(',', $activity->partner);
+        $monthsarray = explode(',', $activity->months);
 
         // Replace the partner field in the activity with the array
         $activity->partner = $partnerArray;
+        $activity->months = $monthsarray;
 
         return view('Configuration::Activities.edit')
-            ->withActivities($activity)
+            ->withActivity($activity)
+            ->withActivitytype($activitytype)
             ->withIr($ir)
+            ->withYear($year)
             ->withPartners($partners)
-            ->withActivitiesList($outcomes);
+            ->withImplementor($implementor)
+            ->withMonths($months)
+            ->withOutcomes($outcomes);
     }
 
 
@@ -173,6 +195,8 @@ class ActivitiesController extends Controller
             // Convert the 'partner' array to a comma-separated string
             $partnerCsv = implode(',', $request['partner']);
             $data['partner'] = $partnerCsv;
+            $monthsCsv = implode(',', $request['months']);
+            $data['months'] = $monthsCsv;
 
             // Attempt to update the activity
             $activities = $this->activities->find($id);

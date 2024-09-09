@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-table-listing 
     :title="'Activities'" 
-    :headers="['S.N', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit','Budget', 'Actions']" 
+    :headers="['S.N','Activity Type', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit','Budget', 'Actions']" 
     :useAddModal="false" 
     :name="'province'" 
     :addRoute="route('activities.create')"
@@ -13,10 +13,13 @@
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $ir[$activities->ir_id] }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $activityTypes[$activities->activity_type] ?? 'NA' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $activities->outcomes->outcome ?? '' }}</div>
+                <div class="text-sm leading-5 text-gray-900">{{ $ir[$activities->ir_id] ?? 'NA' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $activities->outcomes->outcome ?? 'NA' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $activities->activities }}</div>

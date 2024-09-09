@@ -26,8 +26,8 @@ class UpdateRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'ir_id' => 'required|integer',
-            'outcomes_id' => 'required|integer',
+           
+            'implemented_by' => 'required|integer',
             'activities' => 'required|string|max:255',
             'partner' => 'required|array',
             'unit' => 'required|string|max:50',

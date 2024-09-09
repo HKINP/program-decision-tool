@@ -131,6 +131,11 @@
                                         {{ $outcome['outcome']['outcome'] }}
                                     </td>
                                 </tr>
+                                <tr class="bg-gray-200 font-semibold">
+                                    <td colspan="19" class="border border-gray-300 p-2 text-left text-xs">
+                                       Federal
+                                    </td>
+                                </tr>
 
                                 <!-- Iterate over Activities -->
                                 @foreach ($outcome['activities'] as $index => $activity)
