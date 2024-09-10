@@ -9,6 +9,8 @@ use Modules\Configuration\Repositories\OutcomesRepository;
 use Modules\Configuration\Requests\Activities\StoreRequest;
 use Modules\Configuration\Requests\Activities\UpdateRequest;
 use App\Constants;
+use Modules\Configuration\Repositories\DistrictRepository;
+use Modules\Configuration\Repositories\ProvinceRepository;
 
 class ActivitiesController extends Controller
 {
@@ -18,16 +20,20 @@ class ActivitiesController extends Controller
      * @param  PlatformsRepository $districts
      * @return void
      */
-    protected $activities, $outcomes;
+    protected $activities, $outcomes,$provinces,$districts;
 
 
     public function __construct(
         ActivitiesRepository $activities,
-        OutcomesRepository $outcomes
+        OutcomesRepository $outcomes,
+        ProvinceRepository $provinces,
+        DistrictRepository $districts
 
     ) {
         $this->activities = $activities;
         $this->outcomes = $outcomes;
+        $this->districts = $districts;
+        $this->provinces = $provinces;
     }
 
     /**
@@ -85,12 +91,16 @@ class ActivitiesController extends Controller
         $year=Constants::Year;
         $activitytype=Constants::ACTIVITIESTYPE;
         $months=Constants::MONTHS;
+        $districts=$this->districts->all();
+        $provinces=$this->provinces->all();
         return view('Configuration::Activities.create')
             ->withIr($ir)
             ->withPartners($partners)
             ->withImplementor($implementor)
             ->withYear($year)
             ->withActivitytype($activitytype)
+            ->withDistricts($districts)
+            ->withProvinces($provinces)
             ->withMonths($months)
             ->withOutcomes($outcomes);
     }
