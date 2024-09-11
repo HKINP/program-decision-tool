@@ -76,7 +76,7 @@
                         <!-- Implemented By -->
                         <div class="w-1/2 px-2 mb-6">
                             <label for="implemented_by" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Implemented By *</label>
-                            <select id="implemented_by" name="implemented_by" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="implemented_by" multiple name="implemented_by[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select </option>
                                 @foreach ($implementor as $value => $label)
                                 <option value="{{ $value }}" {{ old('implemented_by') == $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -115,7 +115,7 @@
 
                         <div class="w-1/2 px-2 mb-6">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Months</label>
-                            <select id="months" name="months" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
+                            <select id="months" name="months[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
                                 <option value="">Select Months</option>
                                 @foreach ($months as $key=>$month)
                                 <option value="{{ $key }}" {{ old('months') == $value ? 'selected' : '' }}>{{ $month }}</option>
@@ -123,9 +123,9 @@
                             </select>
                         </div>
                         <!-- Province -->
-                        <div id="provinceDiv" style="display: none;" class="w-1/2 px-2 mb-6">
+                        <div id="provinceDiv"  class="w-1/2 px-2 hidden mb-6">
                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province *</label>
-                            <select id="pid" name="province_id" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="pid" name="province_id[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select Province</option>
                                 @foreach($provinces as $province)
                                 <option value="{{ $province->id }}" {{ old('province_id') == $province->id ? 'selected' : '' }}>
@@ -136,9 +136,9 @@
                         </div>
 
                         <!-- District -->
-                        <div id="districtDiv" style="display: none;" class="w-1/2 px-2 mb-6">
+                        <div id="districtDiv"  class="w-1/2 px-2 hidden mb-6">
                             <label for="district" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select District *</label>
-                            <select id="did" name="district_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
+                            <select id="did" name="district_id[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
                                 <option value="">Select District</option>
                                 @foreach($districts as $district)
                                 <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
@@ -163,15 +163,28 @@
         $(document).ready(function() {
             $('#did').select2({
                 placeholder: 'Select District',
-                allowClear: true
+                allowClear: true,
+                width: 'resolve'
             });
             $('#pid').select2({
                 placeholder: 'Select Province',
-                allowClear: true
+                allowClear: true,
+                width: 'resolve'
             });
             $('#months').select2({
                 placeholder: 'Select Months',
-                allowClear: true
+                allowClear: true,
+                width: 'resolve'
+            });
+            $('#months').select2({
+                placeholder: 'Select Months',
+                allowClear: true,
+                width: 'resolve'
+            });
+            $('#implemented_by').select2({
+                placeholder: 'Select ',
+                allowClear: true,
+                width: 'resolve'
             });
         });
         // Function to show/hide province and district divs based on implemented_by value

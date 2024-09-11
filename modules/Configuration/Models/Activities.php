@@ -36,7 +36,13 @@ class Activities extends Model
          'months',
          'year',
          'total_target',
-         'activity_type'
+         'activity_type',
+         'implemented_by',
+         'total_target',
+         'year',
+         'months',
+         'province_ids',
+         'district_ids'
         ];
 
     /**

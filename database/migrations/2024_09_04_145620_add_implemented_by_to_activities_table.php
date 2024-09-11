@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('total_target')->nullable();
             $table->text('year')->nullable();
             $table->text('months')->nullable();
+            $table->text('province_ids')->nullable();
+            $table->text('district_ids')->nullable();
        
         });
     }
@@ -32,6 +34,8 @@ return new class extends Migration
             $table->dropColumn('total_target');
             $table->dropColumn('year');
             $table->dropColumn('months');
+            $table->dropColumn('province_ids');
+            $table->dropColumn('district_ids');
         });
     }
 };

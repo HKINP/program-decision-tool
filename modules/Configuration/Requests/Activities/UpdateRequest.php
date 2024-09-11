@@ -27,7 +27,7 @@ class UpdateRequest extends FormRequest
     {
         return [
            
-            'implemented_by' => 'required|integer',
+            'implemented_by' => 'required',
             'activities' => 'required|string|max:255',
             'partner' => 'required|array',
             'unit' => 'required|string|max:50',

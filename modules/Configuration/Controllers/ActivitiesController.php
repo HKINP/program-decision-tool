@@ -114,14 +114,20 @@ class ActivitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        
+       
         try {
             // Exclude 'partner' from the input and process it separately
-            $input = $request->except('partner');
+            $input = $request->except(['partner','implemented_by','month','province_id','district_id']);
             $partnerCsv = implode(',', $request['partner']);
-            $monthsCv=implode(',', $request['months']);
+            $implementedbycsv=implode(',', $request['implemented_by']);
+            $monthsCsv=implode(',', $request['months']);
+            $provinceCsv=implode(',', $request['province_id']);
+            $districtCsv=implode(',', $request['district_id']);
             $input['partner'] = $partnerCsv;
-            $input['months'] = $monthsCv;
+            $input['months'] = $monthsCsv;
+            $input['implemented_by'] = $implementedbycsv;
+            $input['province_id'] = $provinceCsv;
+            $input['district_id'] = $districtCsv;
 
             // Attempt to create the activity
             $activities = $this->activities->create($input);
@@ -171,16 +177,26 @@ class ActivitiesController extends Controller
 
         $partnerArray = explode(',', $activity->partner);
         $monthsarray = explode(',', $activity->months);
-
+        $districtsarray = explode(',', $activity->district_ids);
+        $provincesarray = explode(',', $activity->province_ids);
+        $implementedbyarray = explode(',', $activity->implemented_by);
         // Replace the partner field in the activity with the array
         $activity->partner = $partnerArray;
+        $activity->implemented_by = $implementedbyarray;
         $activity->months = $monthsarray;
+        $activity->province_id = $provincesarray;
+        $activity->district_id = $districtsarray;
+
+        $districts=$this->districts->all();
+        $provinces=$this->provinces->all();
 
         return view('Configuration::Activities.edit')
             ->withActivity($activity)
             ->withActivitytype($activitytype)
             ->withIr($ir)
             ->withYear($year)
+            ->withDistricts($districts)
+            ->withProvinces($provinces)
             ->withPartners($partners)
             ->withImplementor($implementor)
             ->withMonths($months)
