@@ -114,22 +114,18 @@ class ActivitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
-       
+    
         try {
             // Exclude 'partner' from the input and process it separately
             $input = $request->except(['partner','implemented_by','month','province_id','district_id']);
-            $partnerCsv = implode(',', $request['partner']);
-            $implementedbycsv=implode(',', $request['implemented_by']);
-            $monthsCsv=implode(',', $request['months']);
-            $provinceCsv=implode(',', $request['province_id']);
-            $districtCsv=implode(',', $request['district_id']);
-            $input['partner'] = $partnerCsv;
-            $input['months'] = $monthsCsv;
-            $input['implemented_by'] = $implementedbycsv;
-            $input['province_id'] = $provinceCsv;
-            $input['district_id'] = $districtCsv;
+            $input['partner'] = implode(',', $request->input('partner', []));
+            $input['implemented_by'] = implode(',', $request->input('implemented_by', []));
+            $input['months'] = implode(',', $request->input('months', []));
+            $input['province_ids'] = implode(',', $request->input('province_ids', []));
+            $input['district_ids'] = implode(',', $request->input('district_ids', []));
 
             // Attempt to create the activity
+           
             $activities = $this->activities->create($input);
 
             // If successful, redirect with a success message
@@ -216,13 +212,15 @@ class ActivitiesController extends Controller
     {
         try {
             // Prepare the data except for 'partner'
-            $data = $request->except('partner');
+            $input = $request->except(['partner', 'implemented_by', 'month', 'province_id', 'district_id']);
+
 
             // Convert the 'partner' array to a comma-separated string
-            $partnerCsv = implode(',', $request['partner']);
-            $data['partner'] = $partnerCsv;
-            $monthsCsv = implode(',', $request['months']);
-            $data['months'] = $monthsCsv;
+            $input['partner'] = implode(',', $request->input('partner', []));
+            $input['implemented_by'] = implode(',', $request->input('implemented_by', []));
+            $input['months'] = implode(',', $request->input('months', []));
+            $input['province_id'] = implode(',', $request->input('province_id', []));
+            $input['district_id'] = implode(',', $request->input('district_id', []));
 
             // Attempt to update the activity
             $activities = $this->activities->find($id);
@@ -231,7 +229,7 @@ class ActivitiesController extends Controller
                 return redirect()->back()->with('error', 'Activity not found.');
             }
 
-            $activities->update($data);
+            $activities->update($input);
 
             // If successful, redirect with a success message
             return redirect()->route('activities.index')->with('success', 'Activities updated successfully!');

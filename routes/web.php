@@ -1,15 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
-// // use App\Http\Controllers\CustomerController;
-// use App\Http\Controllers\OrderController;
-// use App\Http\Controllers\InvoiceController;
-// use App\Http\Controllers\MemberController;
-// use App\Http\Controllers\TransactionController;
-// use App\Http\Controllers\JobController;
-// use App\Http\Controllers\CampaignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +20,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/documentation', [DashboardController::class, 'documentation'])->name('documentation');
-    Route::middleware('can:view-stage-list')->group(function () {
+    Route::middleware('can:manage-data-entry')->group(function () {
         Route::get('steplist', [DashboardController::class, 'stageRecord'])->name('steplist.create');
     });
     Route::get('dataentry', [DashboardController::class, 'stages'])->name('dataentrystage.create');

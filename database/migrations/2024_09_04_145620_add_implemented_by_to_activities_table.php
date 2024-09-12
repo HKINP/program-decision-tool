@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('months')->nullable();
             $table->text('province_ids')->nullable();
             $table->text('district_ids')->nullable();
+            $table->text('targeted_for')->nullable();
        
         });
     }
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->dropColumn('months');
             $table->dropColumn('province_ids');
             $table->dropColumn('district_ids');
+            $table->dropColumn('targeted_for');
         });
     }
 };

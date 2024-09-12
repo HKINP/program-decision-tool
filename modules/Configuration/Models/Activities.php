@@ -42,7 +42,8 @@ class Activities extends Model
          'year',
          'months',
          'province_ids',
-         'district_ids'
+         'district_ids',
+         'targeted_for'
         ];
 
     /**
