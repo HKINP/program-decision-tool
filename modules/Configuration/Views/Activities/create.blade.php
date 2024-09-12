@@ -68,9 +68,9 @@
                             <label for="targeted_for" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Targeted For *</label>
                             <select id="targeted_for" name="targeted_for" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select Targeted For</option>
-                                <option value="All" {{ old('targeted_for') == 'All' ? 'selected' : '' }}>All Municipalities</option>
-                                <option value="Vulnerable" {{ old('targeted_for') == 'Vulnerable' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
-                                <option value="Selected" {{ old('targeted_for') == 'Selected' ? 'selected' : '' }}>Selected Municipalities</option>
+                                <option value="All" {{ old('targeted_for') == 'all' ? 'selected' : '' }}>All Municipalities</option>
+                                <option value="Vulnerable" {{ old('targeted_for') == 'vulnerable' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
+                                <option value="Mixed" {{ old('targeted_for') == 'both' ? 'selected' : '' }}>Selected Municipalities</option>
                             </select>
                         </div>
                         <!-- Implemented By -->
@@ -123,12 +123,12 @@
                             </select>
                         </div>
                         <!-- Province -->
-                        <div id="provinceDiv"  class="w-1/2 px-2 hidden mb-6">
+                        <div id="provinceDiv" style="display: none;" class="w-1/2 px-2 mb-6">
                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province *</label>
-                            <select id="pid" name="province_ids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="pid" name="province_id[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select Province</option>
                                 @foreach($provinces as $province)
-                                <option value="{{ $province->id }}" {{ old('province_ids') == $province->id ? 'selected' : '' }}>
+                                <option value="{{ $province->id }}" {{ old('province_id') == $province->id ? 'selected' : '' }}>
                                     {{ $province->province }}
                                 </option>
                                 @endforeach
@@ -136,12 +136,12 @@
                         </div>
 
                         <!-- District -->
-                        <div id="districtDiv"  class="w-1/2 px-2 hidden mb-6">
+                        <div id="districtDiv" style="display:none;" class="w-1/2 px-2 mb-6">
                             <label for="district" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select District *</label>
-                            <select id="did" name="district_ids[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
+                            <select id="did" name="district_id[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
                                 <option value="">Select District</option>
                                 @foreach($districts as $district)
-                                <option value="{{ $district->id }}" {{ old('district_ids') == $district->id ? 'selected' : '' }}>
+                                <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
                                     {{ $district->district }}
                                 </option>
                                 @endforeach

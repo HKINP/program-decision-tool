@@ -15,127 +15,112 @@
 
                 <form action="{{ route('activities.update', $activity->id) }}" method="POST">
                     @csrf
-                    @method('PUT') <!-- Use PUT or PATCH for update -->
+                    @method('PUT')
 
                     <div class="flex flex-wrap -mx-2">
                         <!-- Activity Type -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="activity_type"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activity Type
-                                *</label>
+                            <label for="activity_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Activity Type *
+                            </label>
                             <select id="activity_type" name="activity_type"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 required>
                                 <option value="">Select Type</option>
                                 @foreach ($activitytype as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ old('activity_type', $activity->activity_type) == $value ? 'selected' : '' }}>
-                                        {{ $label }}</option>
+                                <option value="{{ $value }}" {{ old('activity_type', $activity->activity_type) == $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <!-- IR Activities -->
-                        <div id="ir-activities" class="w-1/2 px-2 mb-6" style="display: none;">
-                            <label for="ir_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">IR Activities
-                                *</label>
+                        <div id="ir-activities" class="w-1/2 px-2 mb-6 hidden">
+                            <label for="ir_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                IR Activities *
+                            </label>
                             <select id="ir_id" name="ir_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="">Select Activities</option>
                                 @foreach ($ir as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ old('ir_id', $activity->ir_id) == $value ? 'selected' : '' }}>
-                                        {{ $label }}</option>
+                                <option value="{{ $value }}" {{ old('ir_id', $activity->ir_id) == $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <!-- Outcomes -->
-                        <div id="outcomes-section" class="w-1/2 px-2 mb-6" style="display: none;">
-                            <label for="outcomes_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Outcomes</label>
+                        <div id="outcomes-section" class="w-1/2 px-2 mb-6 hidden">
+                            <label for="outcomes_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Outcomes
+                            </label>
                             <select id="outcomes_id" name="outcomes_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="">Select Outcomes</option>
                                 @foreach ($outcomes as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ old('outcomes_id', $activity->outcomes_id) == $value ? 'selected' : '' }}>
-                                        {{ $label }}</option>
+                                <option value="{{ $value }}" {{ old('outcomes_id', $activity->outcomes_id) == $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
-                     
 
                         <!-- Activities -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="activities"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Activities
-                                *</label>
-                            <input type="text" id="activities" name="activities"
-                                value="{{ old('activities', $activity->activities) }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            <label for="activities" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Activities *
+                            </label>
+                            <input type="text" id="activities" name="activities" value="{{ old('activities', $activity->activities) }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 required />
                         </div>
 
                         <!-- Responsible Partners -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="partner"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Responsible
-                                Partners *</label>
-                            <select id="partner" name="partner[]"
-                                class="multipleselect bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            <label for="partner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Responsible Partners *
+                            </label>
+                            <select id="partner" name="partner[]" class="multipleselect bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 multiple required>
                                 @foreach ($partners as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ in_array($value, old('partner', $activity->partner)) ? 'selected' : '' }}>
-                                        {{ $label }}</option>
+                                <option value="{{ $value }}" {{ in_array($value, old('partner', $activity->partner)) ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Targeted For -->
-                        <div class="w-1/2 px-2 mb-6">
-                            <label for="targeted_for"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Targeted For
-                                *</label>
-                            <select id="targeted_for" name="targeted_for"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required>
-                                <option value="">Select Targeted For</option>
-                                <option value="All"
-                                    {{ old('targeted_for', $activity->targeted_for) == 'All' ? 'selected' : '' }}>All
-                                    Municipalities</option>
-                                <option value="Vulnerable"
-                                    {{ old('targeted_for', $activity->targeted_for) == 'Vulnerable' ? 'selected' : '' }}>
-                                    Vulnerable Municipalities</option>
-                                <option value="Selected"
-                                    {{ old('targeted_for', $activity->targeted_for) == 'Selected' ? 'selected' : '' }}>
-                                    Selected Municipalities</option>
                             </select>
                         </div>
 
                         <!-- Implemented By -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="implemented_by"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Implemented By
-                                *</label>
-                            <select id="implemented_by" multiple name="implemented_by[]"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            <label for="implemented_by" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Implementation at *
+                            </label>
+                            <select id="implemented_by" name="implemented_by[]" multiple
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 required>
-                                <option value="">Select </option>
                                 @foreach ($implementor as $value => $label)
-                                    <option value="{{ $value }}"
-                                    {{ in_array($value, old('partner', $activity->implemented_by)) ? 'selected' : '' }}>
-                                        {{ $label }}</option>
+                                <option value="{{ $value }}" {{ in_array($value, old('implemented_by', $activity->implemented_by)) ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
-
+                        <div class="w-1/2 px-2 mb-6">
+                            <label for="targeted_for" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Targeted For *</label>
+                            <select id="targeted_for" name="targeted_for"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required>
+                                <option value="">Select Targeted For</option>
+                                <option value="All" {{ old('targeted_for', $activity->targeted_for) == 'All' ? 'selected' : '' }}>All Municipalities</option>
+                                <option value="Vulnerable" {{ old('targeted_for', $activity->targeted_for) == 'Vulnerable' ? 'selected' : '' }}>Vulnerable Municipalities</option>
+                                <option value="Selected" {{ old('targeted_for', $activity->targeted_for) == 'Selected' ? 'selected' : '' }}>Selected Municipalities</option>
+                            </select>
+                        </div>
                         <!-- Unit -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="unit"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit *</label>
+                            <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unit *</label>
                             <input type="text" id="unit" name="unit"
                                 value="{{ old('unit', $activity->unit) }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -144,18 +129,14 @@
 
                         <!-- Budget -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="total_budget"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Budget</label>
+                            <label for="total_budget" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Budget</label>
                             <input type="text" id="total_budget" name="total_budget"
                                 value="{{ old('total_budget', $activity->total_budget) }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
-
                         <!-- Total Target -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="total_target"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total
-                                Target</label>
+                            <label for="total_target" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total Target</label>
                             <input type="text" id="total_target" name="total_target"
                                 value="{{ old('total_target', $activity->total_target) }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -163,82 +144,66 @@
 
                         <!-- Year -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="year"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Year
-                                *</label>
+                            <label for="year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Year *</label>
                             <select id="year" name="year"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required>
                                 <option value="">Select Year</option>
                                 @foreach ($year as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ old('year') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                <option value="{{ $value }}" {{ old('year', $activity->year) == $value ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
                             </select>
                         </div>
 
+                        <!-- Months -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
-                                Months</label>
-                            <select id="months" name="months[]"
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Months</label>
+                            <select id="months" name="months[]" multiple
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                multiple required>
+                                required>
                                 <option value="">Select Months</option>
                                 @foreach ($months as $key => $month)
-                                    <option value="{{ $key }}"
-                                    {{ in_array($value, old('months', $activity->months)) ? 'selected' : '' }}
-                                        {{ old('months') == $value ? 'selected' : '' }}>{{ $month }}</option>
+                                <option value="{{ $key }}" {{ in_array($key, old('months', $activity->months)) ? 'selected' : '' }}>{{ $month }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <!-- Province -->
-                        <div id="provinceDiv" class="w-1/2 px-2 hidden mb-6">
-                            <label for="province"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province
-                                *</label>
-                            <select id="pid" name="province_id[]" multiple
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required>
+                        <div id="provinceDiv" style="display:none" class="w-1/2 px-2 mb-6">
+                            <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province *</label>
+                            <select id="pid" name="province_ids[]" multiple
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">Select Province</option>
                                 @foreach ($provinces as $province)
-                                    <option value="{{ $province->id }}"
-                                        {{ old('province_id') == $province->id ? 'selected' : '' }}>
-                                        {{ $province->province }}
-                                    </option>
+                                <option value="{{ $province->id }}" {{ in_array($province->id, old('province_ids', $activity->province_ids)) ? 'selected' : '' }}>{{ $province->province }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <!-- District -->
-                        <div id="districtDiv" class="w-1/2 px-2 hidden mb-6">
-                            <label for="district"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select District
-                                *</label>
-                            <select id="did" name="district_id[]"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                multiple required>
+                        <div id="districtDiv" style="display:none" class="w-1/2 px-2 mb-6">
+                            <label for="district" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select District *</label>
+                            <select id="did" name="district_ids[]" multiple
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">Select District</option>
                                 @foreach ($districts as $district)
-                                    <option value="{{ $district->id }}"
-                                        {{ in_array($value, old('district_id', $activity->district_id)) ? 'selected' : '' }}>
-                                        {{ $district->district }}
-                                    </option>
+                                <option value="{{ $district->id }}" {{ in_array($district->id, old('district_ids', $activity->district_ids)) ? 'selected' : '' }}>{{ $district->district }}</option>
                                 @endforeach
                             </select>
                         </div>
-
-
                     </div>
-
+                    <!-- Update Button -->
                     <div class="mt-0">
-                        <button type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Update
+                        </button>
                     </div>
-                </form>
-
-
             </div>
+            </form>
+
+
+
         </div>
+    </div>
     </div>
     <script>
         $(document).ready(function() {
@@ -265,34 +230,40 @@
             $('#implemented_by').select2({
                 placeholder: 'Select ',
                 allowClear: true,
-                width: 'resolve'
+                width: 'resolve',
             });
         });
-        // Function to show/hide province and district divs based on implemented_by value
+
         function toggleVisibility() {
-            const implementor = document.getElementById('implemented_by').value;
+            const implementors = $('#implemented_by').val(); // Get selected values as an array
             const provinceDiv = document.getElementById('provinceDiv');
             const districtDiv = document.getElementById('districtDiv');
 
-            // Reset visibility
-            provinceDiv.style.display = 'block';
-            districtDiv.style.display = 'block';
+            // Set initial visibility to hidden
+            provinceDiv.style.display = 'none';
+            districtDiv.style.display = 'none';
 
-            if (implementor == '1') {
-                // Hide both province and district
+            // Logic for showing or hiding the divs based on selected values
+            if (implementors.includes('1')) {
+                // If '1' is selected, hide both province and district regardless of other selections
                 provinceDiv.style.display = 'none';
                 districtDiv.style.display = 'none';
-            } else if (implementor == '2') {
-                // Hide district only
-                districtDiv.style.display = 'none';
-            } else if (implementor == '3') {
-                // Hide province only
-                provinceDiv.style.display = 'none';
             }
+            // If '1' is not selected, show province and district based on other selections
+            if (implementors.includes('2')) {
+                // Show district when '2' is selected
+                provinceDiv.style.display = 'block';
+            }
+            if (implementors.includes('3')) {
+                // Show province when '3' is selected
+                districtDiv.style.display = 'block';
+            }
+
         }
 
         // Add event listener to call toggleVisibility when implemented_by changes
-        document.getElementById('implemented_by').addEventListener('change', toggleVisibility);
+        $('#implemented_by').on('change', toggleVisibility);
+
 
         // Call function on page load in case a value is pre-selected
         document.addEventListener('DOMContentLoaded', toggleVisibility);
@@ -301,7 +272,9 @@
             const activityTypeSelect = document.getElementById('activity_type');
             const irActivitiesSection = document.getElementById('ir-activities');
             const outcomesSection = document.getElementById('outcomes-section');
-
+            // Set initial visibility to hidden
+            irActivitiesSection.style.display = 'none';
+            outcomesSection.style.display = 'none';
             // Function to show/hide IR activities and outcomes
             function toggleSections() {
                 const selectedActivityType = activityTypeSelect.value;

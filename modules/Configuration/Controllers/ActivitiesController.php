@@ -73,6 +73,31 @@ class ActivitiesController extends Controller
             ->withActivityTypes($activitytype)
             ->withActivities($activities);
     }
+/**
+     * Display a listing of the account codes.
+     *
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function workPlan()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $programactivities = $this->activities->where('activity_type','=',1)->orderby('id', 'asc')->get();
+        $provinces=$this->provinces->get();
+
+        
+
+        return view('Report::Workplan.index')
+            ->withIr($ir)
+            ->withProvinces($provinces)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            ->withActivityTypes($activitytype)
+            ->withProgramactivities($programactivities);
+    }
 
 
     /**
@@ -115,6 +140,7 @@ class ActivitiesController extends Controller
     public function store(StoreRequest $request)
     {
     
+        // dd($request->all());
         try {
             // Exclude 'partner' from the input and process it separately
             $input = $request->except(['partner','implemented_by','month','province_id','district_id']);
@@ -171,17 +197,12 @@ class ActivitiesController extends Controller
         $months=Constants::MONTHS;
         $activity = $this->activities->find($id);
 
-        $partnerArray = explode(',', $activity->partner);
-        $monthsarray = explode(',', $activity->months);
-        $districtsarray = explode(',', $activity->district_ids);
-        $provincesarray = explode(',', $activity->province_ids);
-        $implementedbyarray = explode(',', $activity->implemented_by);
-        // Replace the partner field in the activity with the array
-        $activity->partner = $partnerArray;
-        $activity->implemented_by = $implementedbyarray;
-        $activity->months = $monthsarray;
-        $activity->province_id = $provincesarray;
-        $activity->district_id = $districtsarray;
+       // Convert CSV strings to arrays with fallback for null values
+    $activity->partner = explode(',', $activity->partner ?? '');
+    $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
+    $activity->months = explode(',', $activity->months ?? '');
+    $activity->province_ids = explode(',', $activity->province_ids ?? '');
+    $activity->district_ids = explode(',', $activity->district_ids ?? '');
 
         $districts=$this->districts->all();
         $provinces=$this->provinces->all();
@@ -213,14 +234,18 @@ class ActivitiesController extends Controller
         try {
             // Prepare the data except for 'partner'
             $input = $request->except(['partner', 'implemented_by', 'month', 'province_id', 'district_id']);
-
+            $activitytype=$input['activity_type'] ?? '';
+            if($activitytype!=3){
+                $input['ir_id']  =null;
+                $input['outcomes_id']  =null;
+            }
 
             // Convert the 'partner' array to a comma-separated string
             $input['partner'] = implode(',', $request->input('partner', []));
             $input['implemented_by'] = implode(',', $request->input('implemented_by', []));
             $input['months'] = implode(',', $request->input('months', []));
-            $input['province_id'] = implode(',', $request->input('province_id', []));
-            $input['district_id'] = implode(',', $request->input('district_id', []));
+            $input['province_ids'] = implode(',', $request->input('province_ids', []));
+            $input['district_ids'] = implode(',', $request->input('district_ids', []));
 
             // Attempt to update the activity
             $activities = $this->activities->find($id);

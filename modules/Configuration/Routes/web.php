@@ -125,6 +125,8 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
 
     // Route::middleware('can:manage-thematicarea')->prefix('privilege')->group(function(){
     Route::get('activities', [ActivitiesController::class, 'index'])->name('activities.index');
+    Route::get('activities/program', [ActivitiesController::class, 'programActivities'])->name('activities.program');
+    Route::get('workplan', [ActivitiesController::class, 'workPlan'])->name('activities.workPlan');
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
     Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
     Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
