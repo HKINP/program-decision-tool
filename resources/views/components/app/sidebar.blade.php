@@ -116,37 +116,51 @@
                                 @endif
                                 @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.ir')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.ir') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Intermediate Result</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.program')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.program') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Program management</span>
                                     </a>
                                 </li>
                                 @endif
                                 @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.finance')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.finance') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Finance and Operations</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('manage-permission')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.gid')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.gid') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">GID Plan</span>
                                     </a>
                                 </li>
                                 @endif
                                 @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
-                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Program management</span>
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.merl')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.merl') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">MMEL Plan</span>
                                     </a>
                                 </li>
                                 @endif
                                 @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
-                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">MMEL Plan
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.rsr')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.rsr') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">EPRR Plan
                                         </span>
                                     </a>
                                 </li>
                                 @endif
                                 @can('manage-permission')
                                 <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('permission.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('permission.index') }}">
-                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">EPRR Plan
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.diverse')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.diverse') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Diverse Partnerships Plan
                                         </span>
                                     </a>
                                 </li>

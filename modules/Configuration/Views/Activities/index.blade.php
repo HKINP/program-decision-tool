@@ -1,26 +1,41 @@
 <x-app-layout>
-    <x-table-listing 
-    :title="'Activities'" 
-    :headers="['S.N','Activity Type', 'IR' ,'Outcomes','Activities Name','Responsible Partners','Unit','Budget', 'Actions']" 
+<x-table-listing 
+    :title="@isset($activityType)
+        ? $activityType.' - Activities'
+        : 'Activities'"
+    :headers="array_merge(
+        ['S.N'], 
+        isset($activityType) ? [] : ['Activity Type'], 
+        isset($ir) ? ['IR', 'Outcomes'] : [],
+        ['Activities Name', 'Responsible Partners', 'Unit', 'Budget', 'Actions']
+    )"
     :useAddModal="false" 
-    :name="'province'" 
+    :name="'province'"
     :addRoute="route('activities.create')"
-    
-    >
+>
+
         @forelse ($activities as $index => $activities)
-  
      
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <div class="text-sm leading-5 text-gray-900">{{ $activityTypes[$activities->activity_type] ?? 'NA' }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+            <?php if(!isset($activityType)){ ?>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <div class="text-sm leading-5 text-gray-900">{{ $activityTypes[$activities->activity_type] ?? 'NA' }}</div>
+                </td>
+            <?php }else{} ?>
+            
+            <?php if(isset($ir)){ ?>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $ir[$activities->ir_id] ?? 'NA' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $activities->outcomes->outcome ?? 'NA' }}</div>
             </td>
+            <?php }else{} ?>
+            
+            
+            
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $activities->activities }}</div>
             </td>
