@@ -20,7 +20,7 @@ class ActivitiesController extends Controller
      * @param  PlatformsRepository $districts
      * @return void
      */
-    protected $activities, $outcomes,$provinces,$districts;
+    protected $activities, $outcomes, $provinces, $districts;
 
 
     public function __construct(
@@ -46,8 +46,8 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -73,7 +73,7 @@ class ActivitiesController extends Controller
             ->withActivityTypes($activitytype)
             ->withActivities($activities);
     }
-/**
+    /**
      * Display a listing of the account codes.
      *
      * @return \Illuminate\Http\Response
@@ -83,19 +83,95 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
-        $programactivities = $this->activities->where('activity_type','=',1)->orderby('id', 'asc')->get();
-        $provinces=$this->provinces->get();
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $provinces = $this->provinces->get();
+        $programactivities = $this->activities->where('activity_type', '=', 1)->orderby('id', 'asc')->get();
 
+        $programactivities->transform(function ($activity) use ($partners, $implementor, $activitytype, $provinces) {
+            // Transform partners
+            $partnerIds = explode(',', $activity->partner);
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+            $activity->partner = implode(', ', $partnerNames);
+
+            // Transform implementors
+            $implementorIds = explode(',', $activity->implemented_by);
+            $implementorNames = array_map(function ($id) use ($implementor) {
+                return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+            }, $implementorIds);
+            $activity->implemented_by = implode(', ', $implementorNames);
+
+            // Count provinces
+            $provinceIds = explode(',', $activity->province_ids);
+            $activity->province_count = count($provinceIds);
+
+            // Count districts
+            $districtIds = explode(',', $activity->district_ids);
+            $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+            return $activity;
+        });
+        $budgetPA=$programactivities->sum('total_budget');
+        // dd($programactivities);
+
+
+        $outcomes = $this->outcomes->with(['activities' => function($query) {
+            $query->where('activity_type', 3);
+        }])->get();
+        $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
+            return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners, $implementor) {
+                return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
+                    // Assuming activities is a relationship on outcome
+                    $activities = $outcome->activities;
         
-
+                    // Transform activities within each outcome
+                    $transformedActivities = $activities->map(function ($activity) use ($partners, $implementor) {
+                        // Transform partners
+                        $partnerIds = explode(',', $activity->partner);
+                        $partnerNames = array_map(function ($id) use ($partners) {
+                            return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+                        }, $partnerIds);
+                        $activity->partner = implode(', ', $partnerNames);
+        
+                        // Transform implementors
+                        $implementorIds = explode(',', $activity->implemented_by);
+                        $implementorNames = array_map(function ($id) use ($implementor) {
+                            return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+                        }, $implementorIds);
+                        $activity->implemented_by = implode(', ', $implementorNames);
+        
+                        // Count provinces
+                        $provinceIds = explode(',', $activity->province_ids);
+                        $activity->province_count = count($provinceIds);
+        
+                        // Count districts
+                        $districtIds = explode(',', $activity->district_ids);
+                        $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+        
+                        return $activity;
+                    });
+        
+                    // Optionally, if you need to return the transformed outcome
+                    $outcome->activities = $transformedActivities;
+        
+                    return [
+                        'outcome' => $outcome->toArray(),
+                    ];
+                });
+            });
+        });
+        // return response()->json(['status' => 'ads', 'data' => $irOutcomesact], 200);
+       
         return view('Report::Workplan.index')
             ->withIr($ir)
             ->withProvinces($provinces)
             ->withPartners($partners)
             ->withImplementor($implementor)
             ->withActivityTypes($activitytype)
+            ->withBudgetPA($budgetPA)
+            ->withIrOutcomes($irOutcomesact)
             ->withProgramactivities($programactivities);
     }
 
@@ -112,12 +188,12 @@ class ActivitiesController extends Controller
 
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $year=Constants::Year;
-        $activitytype=Constants::ACTIVITIESTYPE;
-        $months=Constants::MONTHS;
-        $districts=$this->districts->all();
-        $provinces=$this->provinces->all();
+        $implementor = Constants::IMPLEMENTOR;
+        $year = Constants::Year;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $months = Constants::MONTHS;
+        $districts = $this->districts->all();
+        $provinces = $this->provinces->all();
         return view('Configuration::Activities.create')
             ->withIr($ir)
             ->withPartners($partners)
@@ -139,11 +215,11 @@ class ActivitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
-    
+
         // dd($request->all());
         try {
             // Exclude 'partner' from the input and process it separately
-            $input = $request->except(['partner','implemented_by','month','province_id','district_id']);
+            $input = $request->except(['partner', 'implemented_by', 'month', 'province_id', 'district_id']);
             $input['partner'] = implode(',', $request->input('partner', []));
             $input['implemented_by'] = implode(',', $request->input('implemented_by', []));
             $input['months'] = implode(',', $request->input('months', []));
@@ -151,7 +227,7 @@ class ActivitiesController extends Controller
             $input['district_ids'] = implode(',', $request->input('district_ids', []));
 
             // Attempt to create the activity
-           
+
             $activities = $this->activities->create($input);
 
             // If successful, redirect with a success message
@@ -191,21 +267,21 @@ class ActivitiesController extends Controller
         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $activitytype=Constants::ACTIVITIESTYPE;
-        $implementor=Constants::IMPLEMENTOR;
-        $year=Constants::Year;
-        $months=Constants::MONTHS;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $year = Constants::Year;
+        $months = Constants::MONTHS;
         $activity = $this->activities->find($id);
 
-       // Convert CSV strings to arrays with fallback for null values
-    $activity->partner = explode(',', $activity->partner ?? '');
-    $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
-    $activity->months = explode(',', $activity->months ?? '');
-    $activity->province_ids = explode(',', $activity->province_ids ?? '');
-    $activity->district_ids = explode(',', $activity->district_ids ?? '');
+        // Convert CSV strings to arrays with fallback for null values
+        $activity->partner = explode(',', $activity->partner ?? '');
+        $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
+        $activity->months = explode(',', $activity->months ?? '');
+        $activity->province_ids = explode(',', $activity->province_ids ?? '');
+        $activity->district_ids = explode(',', $activity->district_ids ?? '');
 
-        $districts=$this->districts->all();
-        $provinces=$this->provinces->all();
+        $districts = $this->districts->all();
+        $provinces = $this->provinces->all();
 
         return view('Configuration::Activities.edit')
             ->withActivity($activity)
@@ -234,10 +310,10 @@ class ActivitiesController extends Controller
         try {
             // Prepare the data except for 'partner'
             $input = $request->except(['partner', 'implemented_by', 'month', 'province_id', 'district_id']);
-            $activitytype=$input['activity_type'] ?? '';
-            if($activitytype!=3){
-                $input['ir_id']  =null;
-                $input['outcomes_id']  =null;
+            $activitytype = $input['activity_type'] ?? '';
+            if ($activitytype != 3) {
+                $input['ir_id']  = null;
+                $input['outcomes_id']  = null;
             }
 
             // Convert the 'partner' array to a comma-separated string
