@@ -264,6 +264,237 @@ class ActivitiesController extends Controller
         }
     }
 
+    public function programActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 1)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[1])
+            ->withActivities($activities);
+    }
+
+    public function irActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 3)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[3])
+            ->withActivities($activities);
+    }
+
+        public function financeActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 2)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[2])
+            ->withActivities($activities);
+    }
+
+        public function gidActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 4)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[4])
+            ->withActivities($activities);
+    }
+
+        public function merlActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 5)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[5])
+            ->withActivities($activities);
+    }
+
+        public function rsrActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 6)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+        
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[6])
+            ->withActivities($activities);
+    }
+
+    public function diverseActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor=Constants::IMPLEMENTOR;
+        $activitytype=Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 7)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[7])
+            ->withActivities($activities);
+    }
+
     /**
      * Remove the specified account head from storage.
      *
