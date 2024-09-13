@@ -68,14 +68,15 @@
                             <label for="targeted_for" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Targeted For *</label>
                             <select id="targeted_for" name="targeted_for" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select Targeted For</option>
-                                <option value="All" {{ old('targeted_for') == 'all' ? 'selected' : '' }}>All Municipalities</option>
-                                <option value="Vulnerable" {{ old('targeted_for') == 'vulnerable' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
-                                <option value="Mixed" {{ old('targeted_for') == 'both' ? 'selected' : '' }}>Selected Municipalities</option>
+                                <option value="All Municipalities" {{ old('targeted_for') == 'All Municipalities' ? 'selected' : '' }}>All Municipalities</option>
+                                <option value="Vulnerable Muncipalities" {{ old('targeted_for') == 'Vulnerable Muncipalities' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
+                                <option value="Selected Municipalities" {{ old('targeted_for') == 'Selected Municipalities' ? 'Selected Municipalities' : '' }}>Selected Municipalities</option>
+                                <option value="Others" {{ old('targeted_for') == 'Others' ? 'Others' : '' }}>Other</option>
                             </select>
                         </div>
                         <!-- Implemented By -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="implemented_by" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Implemented By *</label>
+                            <label for="implemented_by" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Implementation at *</label>
                             <select id="implemented_by" multiple name="implemented_by[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select </option>
                                 @foreach ($implementor as $value => $label)
@@ -92,7 +93,7 @@
 
                         <!-- Budget -->
                         <div class="w-1/2 px-2 mb-6">
-                            <label for="total_budget" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Budget</label>
+                            <label for="total_budget" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Budget ($)</label>
                             <input type="text" id="total_budget" name="total_budget" value="{{ old('total_budget') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
 
@@ -125,7 +126,7 @@
                         <!-- Province -->
                         <div id="provinceDiv" style="display: none;" class="w-1/2 px-2 mb-6">
                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Province *</label>
-                            <select id="pid" name="province_id[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            <select id="pid" name="province_id[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                 <option value="">Select Province</option>
                                 @foreach($provinces as $province)
                                 <option value="{{ $province->id }}" {{ old('province_id') == $province->id ? 'selected' : '' }}>
@@ -138,7 +139,7 @@
                         <!-- District -->
                         <div id="districtDiv" style="display:none;" class="w-1/2 px-2 mb-6">
                             <label for="district" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select District *</label>
-                            <select id="did" name="district_id[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple required>
+                            <select id="did" name="district_id[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple >
                                 <option value="">Select District</option>
                                 @foreach($districts as $district)
                                 <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
@@ -187,31 +188,37 @@
                 width: 'resolve'
             });
         });
-        // Function to show/hide province and district divs based on implemented_by value
+
         function toggleVisibility() {
-            const implementor = document.getElementById('implemented_by').value;
+            const implementors = $('#implemented_by').val(); // Get selected values as an array
             const provinceDiv = document.getElementById('provinceDiv');
             const districtDiv = document.getElementById('districtDiv');
 
-            // Reset visibility
-            provinceDiv.style.display = 'block';
-            districtDiv.style.display = 'block';
+            // Set initial visibility to hidden
+            provinceDiv.style.display = 'none';
+            districtDiv.style.display = 'none';
 
-            if (implementor == '1') {
-                // Hide both province and district
+            // Logic for showing or hiding the divs based on selected values
+            if (implementors.includes('1')) {
+                // If '1' is selected, hide both province and district regardless of other selections
                 provinceDiv.style.display = 'none';
                 districtDiv.style.display = 'none';
-            } else if (implementor == '2') {
-                // Hide district only
-                districtDiv.style.display = 'none';
-            } else if (implementor == '3') {
-                // Hide province only
-                provinceDiv.style.display = 'none';
             }
+            // If '1' is not selected, show province and district based on other selections
+            if (implementors.includes('2')) {
+                // Show district when '2' is selected
+                provinceDiv.style.display = 'block';
+            }
+            if (implementors.includes('3')) {
+                // Show province when '3' is selected
+                districtDiv.style.display = 'block';
+            }
+
         }
 
-        // Add event listener to call toggleVisibility when implemented_by changes
-        document.getElementById('implemented_by').addEventListener('change', toggleVisibility);
+       // Add event listener to call toggleVisibility when implemented_by changes
+        $('#implemented_by').on('change', toggleVisibility);
+
 
         // Call function on page load in case a value is pre-selected
         document.addEventListener('DOMContentLoaded', toggleVisibility);

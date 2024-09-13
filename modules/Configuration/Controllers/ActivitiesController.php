@@ -87,6 +87,7 @@ class ActivitiesController extends Controller
         $activitytype = Constants::ACTIVITIESTYPE;
         $provinces = $this->provinces->get();
         $programactivities = $this->activities->where('activity_type', '=', 1)->orderby('id', 'asc')->get();
+        $financeandoperation = $this->activities->where('activity_type', '=', 2)->orderby('id', 'asc')->get();
 
         $programactivities->transform(function ($activity) use ($partners, $implementor, $activitytype, $provinces) {
             // Transform partners
@@ -104,20 +105,46 @@ class ActivitiesController extends Controller
             $activity->implemented_by = implode(', ', $implementorNames);
 
             // Count provinces
-            $provinceIds = explode(',', $activity->province_ids);
+            $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
             $activity->province_count = count($provinceIds);
-
             // Count districts
-            $districtIds = explode(',', $activity->district_ids);
+            $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
             $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
 
             return $activity;
         });
-        $budgetPA=$programactivities->sum('total_budget');
+        $budgetPA = $programactivities->sum('total_budget');
+
+
+        $financeandoperation->transform(function ($activity) use ($partners, $implementor, $activitytype, $provinces) {
+            // Transform partners
+            $partnerIds = explode(',', $activity->partner);
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+            $activity->partner = implode(', ', $partnerNames);
+
+            // Transform implementors
+            $implementorIds = explode(',', $activity->implemented_by);
+            $implementorNames = array_map(function ($id) use ($implementor) {
+                return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+            }, $implementorIds);
+            $activity->implemented_by = implode(', ', $implementorNames);
+
+            // Count provinces
+            $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
+            $activity->province_count = count($provinceIds);
+            // Count districts
+            $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
+            $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+            return $activity;
+        });
+        $budgetFAO = $financeandoperation->sum('total_budget');
         // dd($programactivities);
 
 
-        $outcomes = $this->outcomes->with(['activities' => function($query) {
+        $outcomes = $this->outcomes->with(['activities' => function ($query) {
             $query->where('activity_type', 3);
         }])->get();
         $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
@@ -125,7 +152,7 @@ class ActivitiesController extends Controller
                 return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
                     // Assuming activities is a relationship on outcome
                     $activities = $outcome->activities;
-        
+
                     // Transform activities within each outcome
                     $transformedActivities = $activities->map(function ($activity) use ($partners, $implementor) {
                         // Transform partners
@@ -134,28 +161,27 @@ class ActivitiesController extends Controller
                             return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
                         }, $partnerIds);
                         $activity->partner = implode(', ', $partnerNames);
-        
+
                         // Transform implementors
                         $implementorIds = explode(',', $activity->implemented_by);
                         $implementorNames = array_map(function ($id) use ($implementor) {
                             return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
                         }, $implementorIds);
                         $activity->implemented_by = implode(', ', $implementorNames);
-        
+
                         // Count provinces
-                        $provinceIds = explode(',', $activity->province_ids);
+                        $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
                         $activity->province_count = count($provinceIds);
-        
                         // Count districts
-                        $districtIds = explode(',', $activity->district_ids);
+                        $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
                         $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
-        
+
                         return $activity;
                     });
-        
+
                     // Optionally, if you need to return the transformed outcome
                     $outcome->activities = $transformedActivities;
-        
+
                     return [
                         'outcome' => $outcome->toArray(),
                     ];
@@ -163,7 +189,7 @@ class ActivitiesController extends Controller
             });
         });
         // return response()->json(['status' => 'ads', 'data' => $irOutcomesact], 200);
-       
+
         return view('Report::Workplan.index')
             ->withIr($ir)
             ->withProvinces($provinces)
@@ -171,7 +197,9 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             ->withActivityTypes($activitytype)
             ->withBudgetPA($budgetPA)
+            ->withBudgetFAO($budgetFAO)
             ->withIrOutcomes($irOutcomesact)
+            ->withFinanceandoperation($financeandoperation)
             ->withProgramactivities($programactivities);
     }
 
@@ -344,8 +372,8 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 1)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -363,7 +391,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             // ->withIr($ir)
             ->withPartners($partners)
@@ -377,8 +405,8 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 3)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -396,7 +424,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             ->withIr($ir)
             ->withPartners($partners)
@@ -406,12 +434,12 @@ class ActivitiesController extends Controller
             ->withActivities($activities);
     }
 
-        public function financeActivities()
+    public function financeActivities()
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 2)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -429,7 +457,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             // ->withIr($ir)
             ->withPartners($partners)
@@ -439,12 +467,12 @@ class ActivitiesController extends Controller
             ->withActivities($activities);
     }
 
-        public function gidActivities()
+    public function gidActivities()
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 4)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -462,7 +490,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             // ->withIr($ir)
             ->withPartners($partners)
@@ -472,12 +500,12 @@ class ActivitiesController extends Controller
             ->withActivities($activities);
     }
 
-        public function merlActivities()
+    public function merlActivities()
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 5)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -495,7 +523,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             // ->withIr($ir)
             ->withPartners($partners)
@@ -505,12 +533,12 @@ class ActivitiesController extends Controller
             ->withActivities($activities);
     }
 
-        public function rsrActivities()
+    public function rsrActivities()
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 6)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text
@@ -528,7 +556,7 @@ class ActivitiesController extends Controller
 
             return $activity;
         });
-        
+
         return view('Configuration::Activities.index')
             // ->withIr($ir)
             ->withPartners($partners)
@@ -542,8 +570,8 @@ class ActivitiesController extends Controller
     {
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
-        $implementor=Constants::IMPLEMENTOR;
-        $activitytype=Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
         $activities = $this->activities->with(['outcomes'])->where('activity_type', 7)->orderby('id', 'asc')->get();
 
         // Convert comma-separated partner values into text

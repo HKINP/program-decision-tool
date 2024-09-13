@@ -86,10 +86,10 @@
                             Finance and Operations
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            {{ $budgetPA }}
+                            {{ $budgetFAO }}
                         </td>
                     </tr>
-                    @foreach ($programactivities as $index=>$programactivity)
+                    @foreach ($financeandoperation as $index=>$programactivity)
                     <tr class="font-semibold">
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1}}</td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities}}</td>

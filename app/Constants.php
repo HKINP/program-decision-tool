@@ -38,6 +38,13 @@ class Constants
         '5' => 'Monitoring, Evaluation, Research and Learning',        
         '6' => 'Resilience and Shock Response',        
         '7' => 'Diverse Partnersips (Private Sector, Academia, CSOs)',        
+        '8' => 'SBC',        
+    ];
+    public const TARGETEDFOR = [
+        '1' => 'All Municipalities',
+        '2' => 'Vulnerable Muncipalities',
+        '3' => 'Selected Municipalities',        
+        '4' => 'Other',
     ];
     
     public const MONTHS = [
