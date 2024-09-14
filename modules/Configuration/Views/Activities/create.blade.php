@@ -71,7 +71,7 @@
                                 <option value="All Municipalities" {{ old('targeted_for') == 'All Municipalities' ? 'selected' : '' }}>All Municipalities</option>
                                 <option value="Vulnerable Muncipalities" {{ old('targeted_for') == 'Vulnerable Muncipalities' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
                                 <option value="Selected Municipalities" {{ old('targeted_for') == 'Selected Municipalities' ? 'Selected Municipalities' : '' }}>Selected Municipalities</option>
-                                <option value="Others" {{ old('targeted_for') == 'Others' ? 'Others' : '' }}>Other</option>
+                                <option value="Not Applicable" {{ old('Not Applicable') == 'Not Applicable' ? 'Not Applicable' : '' }}>Not Applicable</option>
                             </select>
                         </div>
                         <!-- Implemented By -->

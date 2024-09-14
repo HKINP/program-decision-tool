@@ -116,7 +116,7 @@
                                 <option value="All Municipalities" {{ old('targeted_for', $activity->targeted_for) == 'All' ? 'selected' : '' }}>All Municipalities</option>
                                 <option value="Vulnerable Muncipalities" {{ old('targeted_for', $activity->targeted_for) == 'Vulnerable' ? 'selected' : '' }}>Vulnerable Municipalities</option>
                                 <option value="Selected Municipalities" {{ old('targeted_for', $activity->targeted_for) == 'Selected' ? 'selected' : '' }}>Selected Municipalities</option>
-                                <option value="Other" {{ old('targeted_for', $activity->targeted_for) == 'Other' ? 'selected' : '' }}>Others</option>
+                                <option value="Not Applicable" {{ old('targeted_for', $activity->targeted_for) == 'Not Applicable' ? 'selected' : '' }}>Not Applicable</option>
                             </select>
                         </div>
                         <!-- Unit -->
