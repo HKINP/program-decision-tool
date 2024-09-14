@@ -93,20 +93,14 @@
                         </a>                
                     <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
-                            @can('manage-data-entryr')
+                            @can('manage-data-entry')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('steplist.create')){{ '!text-[#f87c56]' }}@endif" href="{{ route('steplist.create') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data Entry</span>
                                     </a>
                                 </li>
                                 @endif   
-                            @can('manage-data-entryr')
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('steplist.create')){{ '!text-[#f87c56]' }}@endif" href="{{ route('steplist.create') }}">
-                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">District</span>
-                                    </a>
-                                </li>
-                                @endif
+                            
                                 @can('manage-data-entry')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('role.index')){{ '!text-[#f87c56]' }}@endif" href="{{ route('role.index') }}">
