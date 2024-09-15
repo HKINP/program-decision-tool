@@ -209,16 +209,26 @@ class ActivitiesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
 
         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+        $activity_id = $request->query('activity_id');
 
         $ir = Constants::IR;
         $partners = Constants::PARTNERS;
         $implementor = Constants::IMPLEMENTOR;
         $year = Constants::Year;
-        $activitytype = Constants::ACTIVITIESTYPE;
+        $activityTypes  = Constants::ACTIVITIESTYPE;
+
+        if ($activity_id !== null && isset($activityTypes[$activity_id])) {
+            $activitytype = [
+                $activity_id => $activityTypes[$activity_id]
+            ];
+    }else {
+        $activitytype = $activityTypes;
+    }
+
         $months = Constants::MONTHS;
         $districts = $this->districts->all();
         $provinces = $this->provinces->all();
@@ -260,7 +270,9 @@ class ActivitiesController extends Controller
 
             // If successful, redirect with a success message
             if ($activities) {
-                return redirect()->route('activities.index')->with('success', 'Added Activities successfully!');
+
+                $message = "Added Activities successfully!";
+                return $this->redirectBasedOnActivityType($activities, $message);
             }
         } catch (\Exception $e) {
             // If an error occurs, redirect back with the error message
@@ -359,13 +371,47 @@ class ActivitiesController extends Controller
             }
 
             $activities->update($input);
-
-            // If successful, redirect with a success message
-            return redirect()->route('activities.index')->with('success', 'Activities updated successfully!');
+            $message = "Activities updated successfully!";
+            return $this->redirectBasedOnActivityType($activities, $message);
         } catch (\Exception $e) {
             // Handle any errors that occur during the update
             return redirect()->back()->with('error', 'Failed to update activities: ' . $e->getMessage());
         }
+    }
+    private function redirectBasedOnActivityType($activity, $message)
+    {
+        switch ($activity->activity_type) {
+            case 1:
+                $route = 'activities.program';
+                break;
+            case 2:
+                $route = 'activities.ir';
+                break;
+            case 3:
+                $route = 'activities.finance';
+                break;
+            case 4:
+                $route = 'activities.gid';
+                break;
+            case 5:
+                $route = 'activities.merl';
+                break;
+            case 6:
+                $route = 'activities.rsr';
+                break;
+            case 7:
+                $route = 'activities.diverse';
+                break;
+            case 8:
+                $route = 'activities.sbcc';
+                break;
+
+            default:
+                $route = 'activities.index'; // Default route if activity_type doesn't match any case
+                break;
+        }
+
+        return redirect()->route($route)->with('success', $message);
     }
 
     public function programActivities()
@@ -398,6 +444,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[1])
+            ->withActivityTypeid(1)
             ->withActivities($activities);
     }
 
@@ -431,6 +478,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[3])
+            ->withActivityTypeid(3)
             ->withActivities($activities);
     }
 
@@ -464,6 +512,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[2])
+            ->withActivityTypeid(2)
             ->withActivities($activities);
     }
 
@@ -497,6 +546,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[4])
+            ->withActivityTypeid(4)
             ->withActivities($activities);
     }
 
@@ -530,6 +580,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[5])
+            ->withActivityTypeid(5)
             ->withActivities($activities);
     }
 
@@ -563,6 +614,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[6])
+            ->withActivityTypeid(6)
             ->withActivities($activities);
     }
 
@@ -596,6 +648,7 @@ class ActivitiesController extends Controller
             ->withImplementor($implementor)
             // ->withActivityTypes($activitytype)
             ->withActivityType($activitytype[7])
+            ->withActivityTypeid(7)
             ->withActivities($activities);
     }
 

@@ -11,7 +11,7 @@
     )"
     :useAddModal="false" 
     :name="'province'"
-    :addRoute="route('activities.create')"
+    :addRoute="route('activities.create', ['activity_id' => $activityTypeid ?? ''])"
 >
 
         @forelse ($activities as $index => $activities)
