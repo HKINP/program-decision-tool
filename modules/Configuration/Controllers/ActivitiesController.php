@@ -48,7 +48,7 @@ class ActivitiesController extends Controller
         $partners = Constants::PARTNERS;
         $implementor = Constants::IMPLEMENTOR;
         $activitytype = Constants::ACTIVITIESTYPE;
-        $activities = $this->activities->with(['outcomes'])->orderby('id', 'asc')->get();
+        $activities = $this->activities->with(['outcomes'])->orderby('activity_type', 'asc')->get();
 
         // Convert comma-separated partner values into text
         $activities->transform(function ($activity) use ($partners) {
@@ -70,6 +70,7 @@ class ActivitiesController extends Controller
             ->withIr($ir)
             ->withPartners($partners)
             ->withImplementor($implementor)
+            ->withActivityTypeid(0)
             ->withActivityTypes($activitytype)
             ->withActivities($activities);
     }
@@ -385,10 +386,10 @@ class ActivitiesController extends Controller
                 $route = 'activities.program';
                 break;
             case 2:
-                $route = 'activities.ir';
+                $route = 'activities.finance';
                 break;
             case 3:
-                $route = 'activities.finance';
+                $route = 'activities.ir';
                 break;
             case 4:
                 $route = 'activities.gid';

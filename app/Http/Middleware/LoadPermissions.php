@@ -108,6 +108,27 @@ class LoadPermissions
         Gate::define('ir4-mapping', function ($user) use ($permissions) {
             return in_array('ir4-mapping', $permissions);
         });
+        Gate::define('program-managment', function ($user) use ($permissions) {
+            return in_array('program-managment', $permissions);
+        });
+        Gate::define('finance-and-operation', function ($user) use ($permissions) {
+            return in_array('finance-and-operation', $permissions);
+        });
+        Gate::define('gid-plan', function ($user) use ($permissions) {
+            return in_array('gid-plan', $permissions);
+        });
+        Gate::define('merl-plan', function ($user) use ($permissions) {
+            return in_array('merl-plan', $permissions);
+        });
+        Gate::define('eprr-plan', function ($user) use ($permissions) {
+            return in_array('eprr-plan', $permissions);
+        });
+        Gate::define('diverse-partnerships', function ($user) use ($permissions) {
+            return in_array('diverse-partnerships', $permissions);
+        });
+        Gate::define('sbcc-plan', function ($user) use ($permissions) {
+            return in_array('sbcc-plan', $permissions);
+        });
 
 
 
