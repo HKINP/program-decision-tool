@@ -87,67 +87,22 @@ class ActivitiesController extends Controller
         $implementor = Constants::IMPLEMENTOR;
         $activitytype = Constants::ACTIVITIESTYPE;
         $provinces = $this->provinces->get();
-        $programactivities = $this->activities->where('activity_type', '=', 1)->orderby('id', 'asc')->get();
-        $financeandoperation = $this->activities->where('activity_type', '=', 2)->orderby('id', 'asc')->get();
 
-        $programactivities->transform(function ($activity) use ($partners, $implementor, $activitytype, $provinces) {
-            // Transform partners
-            $partnerIds = explode(',', $activity->partner);
-            $partnerNames = array_map(function ($id) use ($partners) {
-                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
-            }, $partnerIds);
-            $activity->partner = implode(', ', $partnerNames);
+        // Refactor to handle activity transformation and budget calculation
+        list($programActivities, $budgetPA) = $this->getTransformedActivities(1, $partners, $implementor, $provinces);
+        list($financeAndOperation, $budgetFAO) = $this->getTransformedActivities(2, $partners, $implementor, $provinces);
+        list($gid, $budgetGid) = $this->getTransformedActivities(4, $partners, $implementor, $provinces);
+        list($merl, $budgetMERl) = $this->getTransformedActivities(5, $partners, $implementor, $provinces);
+        list($eprr, $budgetEPRR) = $this->getTransformedActivities(6, $partners, $implementor, $provinces);
+        list($diverse, $budgetdiverse) = $this->getTransformedActivities(7, $partners, $implementor, $provinces);
+        list($sbcc, $budgetsbcc) = $this->getTransformedActivities(8, $partners, $implementor, $provinces);
 
-            // Transform implementors
-            $implementorIds = explode(',', $activity->implemented_by);
-            $implementorNames = array_map(function ($id) use ($implementor) {
-                return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
-            }, $implementorIds);
-            $activity->implemented_by = implode(', ', $implementorNames);
-
-            // Count provinces
-            $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
-            $activity->province_count = count($provinceIds);
-            // Count districts
-            $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
-            $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
-
-            return $activity;
-        });
-        $budgetPA = $programactivities->sum('total_budget');
-
-
-        $financeandoperation->transform(function ($activity) use ($partners, $implementor, $activitytype, $provinces) {
-            // Transform partners
-            $partnerIds = explode(',', $activity->partner);
-            $partnerNames = array_map(function ($id) use ($partners) {
-                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
-            }, $partnerIds);
-            $activity->partner = implode(', ', $partnerNames);
-
-            // Transform implementors
-            $implementorIds = explode(',', $activity->implemented_by);
-            $implementorNames = array_map(function ($id) use ($implementor) {
-                return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
-            }, $implementorIds);
-            $activity->implemented_by = implode(', ', $implementorNames);
-
-            // Count provinces
-            $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
-            $activity->province_count = count($provinceIds);
-            // Count districts
-            $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
-            $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
-
-            return $activity;
-        });
-        $budgetFAO = $financeandoperation->sum('total_budget');
-        // dd($programactivities);
-
+        // Process Outcomes
 
         $outcomes = $this->outcomes->with(['activities' => function ($query) {
             $query->where('activity_type', 3);
         }])->get();
+
         $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
             return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners, $implementor) {
                 return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
@@ -189,21 +144,80 @@ class ActivitiesController extends Controller
                 });
             });
         });
-        // return response()->json(['status' => 'ads', 'data' => $irOutcomesact], 200);
 
+
+        $totalBudget = $budgetPA + $budgetFAO;
         return view('Report::Workplan.index')
             ->withIr($ir)
             ->withProvinces($provinces)
             ->withPartners($partners)
             ->withImplementor($implementor)
             ->withActivityTypes($activitytype)
+            ->withTotalbudget($totalBudget)
+            ->withProgramactivities($programActivities)
+            ->withFinanceandoperation($financeAndOperation)
+            ->withIrOutcomes($irOutcomesact)
+            ->withGid($gid)
+            ->withMerl($merl)
+            ->withEprr($eprr)
+            ->withDiverse($diverse)
+            ->withSbcc($sbcc)
             ->withBudgetPA($budgetPA)
             ->withBudgetFAO($budgetFAO)
-            ->withIrOutcomes($irOutcomesact)
-            ->withFinanceandoperation($financeandoperation)
-            ->withProgramactivities($programactivities);
+            ->withBudgetGid($budgetGid)
+            ->withBudgetMerl($budgetMERl)
+            ->withBudgetEprr($budgetEPRR)
+            ->withBudgetDiverse($budgetdiverse)
+            ->withBudgetsbcc($budgetsbcc);
     }
 
+    /**
+     * Helper method to get activities by type and transform them
+     */
+    private function getTransformedActivities($activityType, $partners, $implementor, $provinces)
+    {
+        $activities = $this->activities->where('activity_type', '=', $activityType)->orderby('id', 'asc')->get();
+
+        $activities = $this->transformActivities($activities, $partners, $implementor, $provinces);
+
+        $totalBudget = $activities->sum(function ($activity) {
+            return is_numeric($activity->total_budget) ? $activity->total_budget : 0;
+        });
+
+        return [$activities, $totalBudget];
+    }
+
+    /**
+     * Transform activities (partners, implementors, provinces, districts)
+     */
+    private function transformActivities($activities, $partners, $implementor, $provinces)
+    {
+        return $activities->transform(function ($activity) use ($partners, $implementor, $provinces) {
+            // Transform partners
+            $partnerIds = explode(',', $activity->partner);
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+            $activity->partner = implode(', ', $partnerNames);
+
+            // Transform implementors
+            $implementorIds = explode(',', $activity->implemented_by);
+            $implementorNames = array_map(function ($id) use ($implementor) {
+                return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+            }, $implementorIds);
+            $activity->implemented_by = implode(', ', $implementorNames);
+
+            // Count provinces
+            $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
+            $activity->province_count = count($provinceIds);
+
+            // Count districts
+            $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
+            $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+            return $activity;
+        });
+    }
 
     /**
      * Show the form for creating a new account head.
@@ -226,9 +240,9 @@ class ActivitiesController extends Controller
             $activitytype = [
                 $activity_id => $activityTypes[$activity_id]
             ];
-    }else {
-        $activitytype = $activityTypes;
-    }
+        } else {
+            $activitytype = $activityTypes;
+        }
 
         $months = Constants::MONTHS;
         $districts = $this->districts->all();
