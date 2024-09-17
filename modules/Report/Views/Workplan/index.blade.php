@@ -327,7 +327,7 @@
 
                     <tr class="bg-gray-100 text-white font-semibold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
-                        Social Behaviour Change
+                        Social and Behaviour Change
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
                             $ {{ $budgetsbcc }}
