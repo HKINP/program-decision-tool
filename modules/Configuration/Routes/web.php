@@ -138,6 +138,7 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
     Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
     Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
+    Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');
     Route::put('activities/{actors}', [ActivitiesController::class, 'update'])->name('activities.update');
     Route::delete('activities/{actors}', [ActivitiesController::class, 'destroy'])->name('activities.destroy');
     Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');

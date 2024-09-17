@@ -668,6 +668,48 @@ class ActivitiesController extends Controller
     }
 
     /**
+     * Display the specified threshold.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function view($id)
+    {
+         // Fetch the necessary data
+         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+         $ir = Constants::IR;
+         $partners = Constants::PARTNERS;
+         $activitytype = Constants::ACTIVITIESTYPE;
+         $implementor = Constants::IMPLEMENTOR;
+         $year = Constants::Year;
+         $months = Constants::MONTHS;
+         $activity = $this->activities->find($id);
+ 
+         // Convert CSV strings to arrays with fallback for null values
+         $activity->partner = explode(',', $activity->partner ?? '');
+         $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
+         $activity->months = explode(',', $activity->months ?? '');
+         $activity->province_ids = explode(',', $activity->province_ids ?? '');
+         $activity->district_ids = explode(',', $activity->district_ids ?? '');
+ 
+         $districts = $this->districts->all();
+         $provinces = $this->provinces->all();
+ 
+         return view('Configuration::Activities.view')
+             ->withActivity($activity)
+             ->withActivitytype($activitytype)
+             ->withIr($ir)
+             ->withYear($year)
+             ->withDistricts($districts)
+             ->withProvinces($provinces)
+             ->withPartners($partners)
+             ->withImplementor($implementor)
+             ->withMonths($months)
+             ->withOutcomes($outcomes);
+    }
+
+
+    /**
      * Remove the specified account head from storage.
      *
      * @param  int $id

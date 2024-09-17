@@ -87,8 +87,17 @@
                     </svg>
                 </span>
             </div>
+            
             <div class="province-content grid grid-cols-1 gap-4 p-4 hidden">
-                <div class="col-span-6 mb-4">
+            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                <a href="{{ route('activities.create', ['activity_id' => $activityTypeid ?? '']) }}" class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
+                    <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"></path>
+                    </svg>
+                    <span class="max-xs:sr-only">Add +</span>
+                </a>
+            </div>    
+            <div class="col-span-6 mb-4">
                     <input type="text" class="search-district form-input w-full p-2 border rounded-lg" placeholder="Search activities..." oninput="filterTable(this, {{ $irId }})">
                 </div>
                 <table class="min-w-full divide-y divide-gray-200">
@@ -151,22 +160,22 @@
     @endforeach
     @endif
     <script>
-    document.querySelectorAll('.province-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const content = header.nextElementSibling;
-            const arrowIcon = header.querySelector('svg');
-            content.classList.toggle('hidden');
-            arrowIcon.classList.toggle('rotate-180');
+        document.querySelectorAll('.province-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const arrowIcon = header.querySelector('svg');
+                content.classList.toggle('hidden');
+                arrowIcon.classList.toggle('rotate-180');
+            });
         });
-    });
 
-    function filterTable(input, irId) {
-        const filter = input.value.toLowerCase();
-        const rows = document.querySelectorAll(`#table-body-${irId} tr`);
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(filter) ? '' : 'none';
-        });
-    }
-</script>
+        function filterTable(input, irId) {
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll(`#table-body-${irId} tr`);
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        }
+    </script>
 </x-app-layout>
