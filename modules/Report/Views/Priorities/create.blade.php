@@ -118,7 +118,7 @@
                                 else{
                                     if ($valuedistrict > 20) {
                                         $colordistrict = 'bg-red-800 text-white';
-                                    } elseif ($valuedistrict <= 20 & $valuedistrict != '-') {
+                                    } elseif ($valuedistrict <= 20 & $valuedistrict != '-' && $valuedistrict > 0) {
                                         $colordistrict = 'bg-green-700 text-white';
                                     } else {
                                         $colordistrict = '';
