@@ -58,7 +58,9 @@
 
 
         <div class="overflow-x-auto mt-6">
-            <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80%</p>
+            <p class="bg-white p-4 rounded-lg w-full mb-5">Legend: red < 50%; orange 50%-79%; green>=80%
+                        for recommended behaviors (e.g., breastfeeding) and red >20% for discouraged behaviors (e.g.,
+                        consumption of unhealthy foods)</p>
             <table class="min-w-full border-collapse bg-white border-gray-600 rounded-lg overflow-hidden">
                 <thead class="rounded-lg">
                     <tr>
@@ -87,40 +89,71 @@
                                 {{ $priority->question->question }}
                             </td>
                             @php
-                                $valueprovince = $priority->question->indicator->provinceProfiles[0]->all_value ?? 0;
-                                $valuedis = $priority->question->indicator->districtProfiles[0]->all_value ?? 0;
+                                $valueprovince = $priority->question->indicator->provinceProfiles[0]->all_value ?? '-';
+                                $valuedistrict = $priority->question->indicator->districtProfiles[0]->all_value ?? '-';
                                 $colorprovince = '';
-                                $colordis = '';
+                                $colordistrict = '';
 
-                                if ( $valuedis > 0 && $valuedis < 50 ) {
-                                    $colordis = 'bg-red-800 text-white';
-                                } elseif ($valuedis >= 50 && $valuedis < 80) {
-                                    $colordis = 'bg-orange-400 text-white';
-                                } elseif ($valuedis >= 80) {
-                                    $colordis = 'bg-green-700 text-white';
-                                }else{
-                                    $colordis ='';
-                                    $valuedis='-';
+                                $excludedIndicators = [7, 8, 25]; 
+
+                                if (!in_array($priority->question->indicator_id, $excludedIndicators)) {
+                                    if ($valueprovince < 50 && $valueprovince != '-' && $valueprovince > 0) {
+                                        $colorprovince = 'bg-red-800 text-white';
+                                    } elseif ($valueprovince >= 50 && $valueprovince < 80) {
+                                        $colorprovince = 'bg-orange-400 text-white';
+                                    } elseif ($valueprovince >= 80) {
+                                        $colorprovince = 'bg-green-700 text-white';
+                                    } else {
+                                        $colorprovince = '';
+                                        $valueprovince = '-';
+                                    }
+                                } else {
+                                    if ($valueprovince > 20) {
+                                        $colorprovince = 'bg-red-800 text-white';
+                                    } elseif ($valueprovince <= 20 & $valueprovince != '-') {
+                                        $colorprovince = 'bg-green-700 text-white';
+                                    } else {
+                                        $colorprovince = '';
+                                        $valueprovince = '-';
+                                    }
                                 }
 
-                                if ($valueprovince < 50 && $valueprovince > 0) {
-                                    $colorprovince = 'bg-red-800 text-white';
-                                } elseif ($valueprovince >= 50 && $valueprovince < 80) {
-                                    $colorprovince = 'bg-orange-400 text-white';
-                                } elseif ($valueprovince >= 80) {
-                                    $colorprovince = 'bg-green-700 text-white';
-                                }else{
-                                    $colorprovince ='';
-                                    $valueprovince='-';
+
+                                $excludedIndicators = [7, 8, 25]; 
+
+                                if (!in_array($priority->question->indicator_id, $excludedIndicators)) {
+                                    if ($valuedistrict < 50 && $valuedistrict != '-' && $valuedistrict > 0) {
+                                    $colordistrict = 'bg-red-800 text-white';
+                                    } elseif ($valuedistrict >= 50 && $valuedistrict < 80) {
+                                    $colordistrict = 'bg-orange-400 text-white';
+                                    } elseif ($valuedistrict >= 80) {
+                                    $colordistrict = 'bg-green-700 text-white';
+                                    } else {
+                                    $colordistrict = '';
+                                    $valuedistrict='-';
+
+                                    }
                                 }
+                                else{
+                                    if ($valuedistrict > 20) {
+                                        $colordistrict = 'bg-red-800 text-white';
+                                    } elseif ($valuedistrict <= 20 & $valuedistrict != '-') {
+                                        $colordistrict = 'bg-green-700 text-white';
+                                    } else {
+                                        $colordistrict = '';
+                                        $valuedistrict = '-';
+                                    }
+
+                                }
+
 
                             @endphp
 
                             <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $colorprovince }}">
                                 {{ $valueprovince }}
                             </td>
-                            <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $colordis }}">
-                                {{ $valuedis }}
+                            <td class="border text-sm border-gray-600 text-black text-center px-2 {{ $colordistrict }}">
+                                {{ $valuedistrict }}
                             </td>
 
 
