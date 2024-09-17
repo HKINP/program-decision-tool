@@ -75,29 +75,55 @@
                                 $sourcedistrict = $question->indicator->districtProfiles[0]->source ?? '';
                                 $color = '';
 
-                                if ($valueprovince < 50 && $valueprovince != '-' && $valueprovince > 0) {
-                                    $colorprovince = 'bg-red-800 text-white';
-                                } elseif ($valueprovince >= 50 && $valueprovince < 80) {
-                                    $colorprovince = 'bg-orange-400 text-white';
-                                } elseif ($valueprovince >= 80) {
-                                    $colorprovince = 'bg-green-700 text-white';
-                                }
-                                else {
-                                    $colorprovince = '';
-                                    $valueprovince = '-';
-                                }
+                                $excludedIndicators = [7, 8, 25]; 
 
-
-
-                                if ($valuedistrict < 50 && $valuedistrict != '-' && $valuedistrict > 0) {
-                                    $colordistrict = 'bg-red-800 text-white';
-                                } elseif ($valuedistrict >= 50 && $valuedistrict < 80) {
-                                    $colordistrict = 'bg-orange-400 text-white';
-                                } elseif ($valuedistrict >= 80) {
-                                    $colordistrict = 'bg-green-700 text-white';
+                                if (!in_array($question->indicator->id, $excludedIndicators)) {
+                                    if ($valueprovince < 50 && $valueprovince != '-' && $valueprovince > 0) {
+                                        $colorprovince = 'bg-red-800 text-white';
+                                    } elseif ($valueprovince >= 50 && $valueprovince < 80) {
+                                        $colorprovince = 'bg-orange-400 text-white';
+                                    } elseif ($valueprovince >= 80) {
+                                        $colorprovince = 'bg-green-700 text-white';
+                                    } else {
+                                        $colorprovince = '';
+                                        $valueprovince = '-';
+                                    }
                                 } else {
+                                    if ($valueprovince > 20) {
+                                        $colorprovince = 'bg-red-800 text-white';
+                                    } elseif ($valueprovince <= 20 & $valueprovince != '-') {
+                                        $colorprovince = 'bg-green-700 text-white';
+                                    } else {
+                                        $colorprovince = '';
+                                        $valueprovince = '-';
+                                    }
+                                }
+
+
+                                $excludedIndicators = [7, 8, 25]; 
+
+                                if (!in_array($question->indicator->id, $excludedIndicators)) {
+                                    if ($valuedistrict < 50 && $valuedistrict != '-' && $valuedistrict > 0) {
+                                    $colordistrict = 'bg-red-800 text-white';
+                                    } elseif ($valuedistrict >= 50 && $valuedistrict < 80) {
+                                    $colordistrict = 'bg-orange-400 text-white';
+                                    } elseif ($valuedistrict >= 80) {
+                                    $colordistrict = 'bg-green-700 text-white';
+                                    } else {
                                     $colordistrict = '';
                                     $valuedistrict='-';
+
+                                    }
+                                }
+                                else{
+                                    if ($valuedistrict > 20) {
+                                        $colordistrict = 'bg-red-800 text-white';
+                                    } elseif ($valuedistrict <= 20 & $valuedistrict != '-') {
+                                        $colordistrict = 'bg-green-700 text-white';
+                                    } else {
+                                        $colordistrict = '';
+                                        $valuedistrict = '-';
+                                    }
 
                                 }
 
