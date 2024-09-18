@@ -66,18 +66,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
@@ -103,18 +103,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs"></td>
                     </tr>
                     @endforeach
@@ -196,18 +196,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
@@ -233,18 +233,19 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
+                        
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
@@ -270,18 +271,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
@@ -307,18 +308,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
@@ -344,18 +345,18 @@
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->partner ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->unit ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $programactivity->total_target ?? '-'}}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                        @php
+                        $months = explode(',', $programactivity->months);
+                        @endphp
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td @if (in_array($i, $months))
+                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                            @endfor
                         <td class="border border-gray-300 p-2 text-center text-xs">
                             <!-- {{ $programactivity->total_budget}} -->
                         </td>
