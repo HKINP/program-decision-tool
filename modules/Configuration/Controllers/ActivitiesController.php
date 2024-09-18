@@ -719,9 +719,11 @@ class ActivitiesController extends Controller
     public function destroy($id)
     {
         // $this->authorize('manage-account-code');
+        $activities = $this->activities->find($id);
+        $message="Activities is successfully deleted.";
         $flag = $this->activities->destroy($id);
         if ($flag) {
-            return redirect()->route('activities.index')->with('success', 'Activities is successfully deleted.');
+            return $this->redirectBasedOnActivityType($activities, $message);
         }
         return response()->json([
             'type' => 'error',
