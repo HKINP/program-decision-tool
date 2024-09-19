@@ -7,19 +7,25 @@
         </div>
 
 
-
-
         <div class="bg-white p-4 rounded-lg w-full mb-5">
             <div class="flex gap-2 items-center mb-4 no-print">
                 <p class="h-10 w-10 bg-[#F1F3F8] rounded-full flex items-center justify-center font-semibold">01</p>
                 <p class="font-semibold text-md text-blue-600">Activities</p>
             </div>
-            <button class="mb-2" onclick="exportTableToExcel('myTable', 'myExcelFile')">Export to Excel</button>
+            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                <button id="exportBtn" class="btn bg-[#844a8a] text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
+                    <svg class="fill-current shrink-0 xs:hidden" width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"></path>
+                    </svg>
+                    <span class="max-xs:sr-only">Export to Excel</span>
+                </button>
+            </div>
 
-            <table class="min-w-full border-collapse border  divide-y divide-gray-200 border-gray-300">
+            <!-- Add your table here -->
+            <table id="myTable" class="min-w-full border-collapse border divide-y divide-gray-200 mt-8 border-gray-300">
                 <!-- Header Section -->
                 <thead>
-                    <tr id="myTable" class="bg-purple-800 text-white">
+                    <tr class="bg-purple-800 text-white">
                         <th class="text-xs border border-gray-300 p-2 text-center w-12">#</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Activities</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Targeted For</th>
@@ -41,13 +47,13 @@
                         <th class="text-xs border border-gray-300 p-2 text-center">Apr</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">May</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Jun</th>
-                        <th class="text-xs border border-gray-300 p-2 text-center">Budget</th>
+                        <th class="text-xs border border-gray-300 p-2 w-[5rem] text-center">Budget</th>
                     </tr>
                 </thead>
                 <!-- Body Section -->
                 <tbody class="divide-y divide-gray-200">
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
                             Program Management
                         </td>
@@ -71,17 +77,17 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
-                        @endforeach
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
+                            @endforeach
                     </tr>
 
                     <tr class="bg-gray-100 text-white font-semibold">
@@ -108,21 +114,21 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs"></td>
+                            <td class="border border-gray-300 p-2 text-center text-xs"></td>
                     </tr>
                     @endforeach
 
                     <!-- Iterate over Outcomes -->
                     @foreach ($irOutcomes as $irId => $irOutcomes)
                     <!-- Display IR Header -->
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="22" class="border text-black font-bold border-gray-300 text-xs p-2 text-left">
                             @if ($irId == 1)
                             IR 1. Improve household nutrition practices
@@ -141,8 +147,15 @@
                     @foreach ($irOutcomes as $outcomeGroup)
                     @foreach ($outcomeGroup as $outcome)
                     <tr class="bg-gray-200 ">
-                        <td colspan="21" class="border border-gray-300 p-2 font-bold  text-black text-left text-xs">
+                        <td colspan="21" class="border border-gray-300 p-2 font-bold  text-black text-left text-xs" style="background:#e5e7eb;font-weight:bold">
                             {{ $outcome['outcome']['outcome'] }}
+                        </td>
+                        <td class="border border-gray-300 p-2 font-bold  text-black text-left text-xs" style="background:#e5e7eb;font-weight:bold">
+                            @php
+                            // Calculate the sum of totalbudget for all activities
+                            $totalBudgetSum = collect($outcome['outcome']['activities'])->sum('totalbudget');
+                            @endphp
+                            $ {{$totalBudgetSum}}
                         </td>
                     </tr>
 
@@ -163,7 +176,7 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
@@ -177,7 +190,7 @@
                     @endforeach
                     @endforeach
                     @endforeach
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
                             Monitoring, Evaluation, Research and Learning
                         </td>
@@ -201,20 +214,20 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
                     </tr>
                     @endforeach
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
                             Gender and Inclusive Development
                         </td>
@@ -238,23 +251,23 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
+
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
                     </tr>
                     @endforeach
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
-                        Resilience and Shock Response
+                            Resilience and Shock Response
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
                             $ {{ $budgetEprr }}
@@ -276,22 +289,22 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
                     </tr>
                     @endforeach
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
-                        Diverse Partnersips (Private Sector, Academia, CSOs)
+                            Diverse Partnersips (Private Sector, Academia, CSOs)
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
                             $ {{ $budgetDiverse }}
@@ -313,22 +326,22 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
                     </tr>
                     @endforeach
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td colspan="21" class="border border-gray-300  text-black text-xs p-2 text-left">
-                        Social and Behaviour Change
+                            Social and Behaviour Change
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
                             $ {{ $budgetsbcc }}
@@ -350,20 +363,20 @@
                         @endphp
                         @for ($i = 1; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 bg-purple-950 text-center text-xs"
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
                             class="border border-gray-300 p-2 text-center text-xs"
                             @endif>
 
                             </td>
                             @endfor
-                        <td class="border border-gray-300 p-2 text-center text-xs">
-                            <!-- {{ $programactivity->total_budget}} -->
-                        </td>
+                            <td class="border border-gray-300 p-2 text-center text-xs">
+                                <!-- {{ $programactivity->total_budget}} -->
+                            </td>
                     </tr>
                     @endforeach
 
-                    <tr class="bg-gray-100 text-white font-semibold">
+                    <tr class="bg-gray-100 text-white" style="background:#e5e7eb;font-weight:bold">
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
 
                         </td>
@@ -371,7 +384,7 @@
                             Total Budget
                         </td>
                         <td colspan="2" class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetPA }}
+                            $ {{ $totalbudget }}
                         </td>
                     </tr>
 
@@ -382,16 +395,34 @@
         </div>
     </div>
     <script>
-    function exportTableToExcel(tableID, filename = ''){
-        // Select the table element
-        let table = document.getElementById(tableID);
+        $(document).ready(function() {
+            $('#exportBtn').on('click', function() {
+                exportTableToExcel('myTable', `Year One Workplan_${new Date().toISOString().split("T")[0]}`);
+            });
 
-        // Convert HTML table to a worksheet
-        let wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+            function exportTableToExcel(tableID, filename = '') {
+                var downloadLink;
+                var dataType = 'application/vnd.ms-excel';
+                var tableSelect = document.getElementById(tableID);
+                var tableHTML = tableSelect.outerHTML;
 
-        // Write the workbook and download the file
-        XLSX.writeFile(wb, filename ? filename + '.xlsx' : 'excel_data.xlsx');
-    }
-</script>
+                // Specify file name
+                filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+                // Create download link element
+                downloadLink = document.createElement("a");
+
+                document.body.appendChild(downloadLink);
+
+                var blob = new Blob([tableHTML], {
+                    type: dataType
+                });
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+        });
+    </script>
 
 </x-app-layout>
