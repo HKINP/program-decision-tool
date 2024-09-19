@@ -673,6 +673,39 @@ class ActivitiesController extends Controller
             ->withActivityTypeid(7)
             ->withActivities($activities);
     }
+    public function sbccActivities()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $activities = $this->activities->with(['outcomes'])->where('activity_type', 8)->orderby('id', 'asc')->get();
+
+        // Convert comma-separated partner values into text
+        $activities->transform(function ($activity) use ($partners) {
+            // Split the comma-separated partner values
+            $partnerIds = explode(',', $activity->partner);
+
+            // Replace the IDs with the corresponding text values from the PARTNERS constant
+            $partnerNames = array_map(function ($id) use ($partners) {
+                return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+            }, $partnerIds);
+
+            // Join the partner names back into a string
+            $activity->partner = implode(', ', $partnerNames);
+
+            return $activity;
+        });
+
+        return view('Configuration::Activities.index')
+            // ->withIr($ir)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            // ->withActivityTypes($activitytype)
+            ->withActivityType($activitytype[8])
+            ->withActivityTypeid(8)
+            ->withActivities($activities);
+    }
 
     /**
      * Display the specified threshold.

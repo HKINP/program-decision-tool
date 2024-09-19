@@ -133,6 +133,7 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('activities/merl', [ActivitiesController::class, 'merlActivities'])->name('activities.merl');
     Route::get('activities/rsr', [ActivitiesController::class, 'rsrActivities'])->name('activities.rsr');
     Route::get('activities/diverse', [ActivitiesController::class, 'diverseActivities'])->name('activities.diverse');
+    Route::get('activities/sbcc', [ActivitiesController::class, 'sbccActivities'])->name('activities.sbcc');
     
     Route::get('workplan', [ActivitiesController::class, 'workPlan'])->name('activities.workPlan');
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
