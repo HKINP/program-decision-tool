@@ -146,7 +146,7 @@ class ActivitiesController extends Controller
         });
 
 
-        $totalBudget = $budgetPA + $budgetFAO;
+        $totalBudget = $budgetPA+$budgetFAO+$budgetGid+$budgetMERl+$budgetEPRR+ $budgetdiverse+$budgetsbcc;
         return view('Report::Workplan.index')
             ->withIr($ir)
             ->withProvinces($provinces)
@@ -399,30 +399,37 @@ class ActivitiesController extends Controller
             case 1:
                 $route = 'activities.program';
                 break;
+
             case 2:
                 $route = 'activities.finance';
                 break;
+                
             case 3:
                 $route = 'activities.ir';
                 break;
+
             case 4:
                 $route = 'activities.gid';
                 break;
+
             case 5:
                 $route = 'activities.merl';
                 break;
+
             case 6:
                 $route = 'activities.rsr';
                 break;
+
             case 7:
                 $route = 'activities.diverse';
                 break;
+
             case 8:
                 $route = 'activities.sbcc';
                 break;
 
             default:
-                $route = 'activities.index'; // Default route if activity_type doesn't match any case
+                $route = 'activities.index';
                 break;
         }
 
