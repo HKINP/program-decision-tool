@@ -152,9 +152,10 @@
                         </td>
                         <td class="border border-gray-300 p-2 font-bold  text-black text-left text-xs" style="background:#e5e7eb;font-weight:bold">
                             @php
-                            // Calculate the sum of totalbudget for all activities
-                            $totalBudgetSum = collect($outcome['outcome']['activities'])->sum('total_budget');
-                            
+                            // Calculate the sum of totalbudget for all activities, only including numeric values
+                            $totalBudgetSum = collect($outcome['outcome']['activities'])->sum(function ($activity) {
+                            return is_numeric($activity['total_budget']) ? $activity['total_budget'] : 0;
+                            });
                             @endphp
                             $ {{$totalBudgetSum}}
                         </td>
