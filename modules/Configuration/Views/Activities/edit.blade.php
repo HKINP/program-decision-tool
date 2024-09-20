@@ -114,7 +114,7 @@
                                 required>
                                 <option value="">Select Targeted For</option>
                                 <option value="All" {{ old('targeted_for', $activity->targeted_for) == 'All' ? 'selected' : '' }}>All</option>
-                                <option value="Vulnerable" {{ old('targeted_for', $activity->targeted_for) == 'Vulnerable' ? 'selected' : '' }}>Vulnerable Municipalities</option>
+                                <option value="Vulnerable" {{ old('targeted_for', $activity->targeted_for) == 'Vulnerable' ? 'selected' : '' }}>Vulnerable</option>
                                 <option value="Selected" {{ old('targeted_for', $activity->targeted_for) == 'Selected' ? 'selected' : '' }}>Selected</option>
                                 <option value="NA" {{ old('targeted_for', $activity->targeted_for) == 'NA' ? 'selected' : '' }}>NA</option>
                             </select>
