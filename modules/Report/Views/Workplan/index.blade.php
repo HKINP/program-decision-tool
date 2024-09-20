@@ -81,13 +81,16 @@
                 @foreach ($programactivities as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class=" remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->implemented_by ?? '-' }}
@@ -139,13 +142,16 @@
                 @foreach ($financeandoperation as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class=" remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -236,13 +242,16 @@
                                 <tr class="text-black">
                                     {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }} --}}
                                     </td>
-                                    <td class="border border-gray-300 p-2 text-center text-xs">
+                                    <td  class=" remove border border-gray-300 p-2 text-center text-xs">
                                         <input type="text" id="order" name="order[]"
                                             value="{{ $activity['order'] ?? 0 }}"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                         <input type="text" id="activity_id" name="activity_id[]"
                                             value="{{ $activity['id'] }}" hidden />
 
+                                    </td>
+                                    <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                                        {{ $activity['order'] ?? 0 }}
                                     </td>
                                     <td class="border border-gray-300 p-2 text-xs">
                                         {{ $activity['activities'] ?? '' }}</td>
@@ -297,13 +306,16 @@
                 @foreach ($merl as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class="remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -355,13 +367,16 @@
                 @foreach ($gid as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class="remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -414,13 +429,16 @@
                 @foreach ($eprr as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class="remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -472,13 +490,16 @@
                 @foreach ($diverse as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class="remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -530,13 +551,16 @@
                 @foreach ($sbcc as $index => $programactivity)
                     <tr class="text-black">
                         {{-- <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td> --}}
-                        <td class="border border-gray-300 p-2 text-center text-xs">
+                        <td  class="remove border border-gray-300 p-2 text-center text-xs">
                             <input type="text" id="order" name="order[]"
                                 value="{{ $programactivity->order ?? 0 }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <input type="text" id="activity_id" name="activity_id[]"
                                 value="{{ $programactivity->id }}" hidden />
 
+                        </td>
+                        <td hidden class="border border-gray-300 p-2 text-center text-xs">
+                            {{ $programactivity->order ?? 0 }}
                         </td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
                         <td class="border border-gray-300 p-2 text-xs">
@@ -597,35 +621,46 @@
     </div>
     </div>
     <script>
-        $(document).ready(function() {
-            $('#exportBtn').on('click', function() {
-                exportTableToExcel('myTable',
-                    `Year One Workplan_${new Date().toISOString().split("T")[0]}`);
-            });
+      $(document).ready(function() {
+    $('#exportBtn').on('click', function() {
+        // Disable the export button to prevent multiple clicks
+        $('#exportBtn').prop('disabled', true);
 
-            function exportTableToExcel(tableID, filename = '') {
-                var downloadLink;
-                var dataType = 'application/vnd.ms-excel';
-                var tableSelect = document.getElementById(tableID);
-                var tableHTML = tableSelect.outerHTML;
+        // Remove the element with id 'remove'
+        $('.remove').remove();
 
-                // Specify file name
-                filename = filename ? filename + '.xls' : 'excel_data.xls';
+        // Export table to Excel
+        exportTableToExcel('myTable', `Year One Workplan_${new Date().toISOString().split("T")[0]}`);
 
-                // Create download link element
-                downloadLink = document.createElement("a");
+        // After download, re-enable the export button and reload the page
+        setTimeout(function() {
+            $('#exportBtn').prop('disabled', false); // Re-enable button
+            location.reload(); // Reload the page
+        }, 1000); // Optional delay before reloading
+    });
 
-                document.body.appendChild(downloadLink);
+    function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML;
 
-                var blob = new Blob([tableHTML], {
-                    type: dataType
-                });
-                const url = URL.createObjectURL(blob);
-                downloadLink.href = url;
-                downloadLink.download = filename;
-                downloadLink.click();
-            }
-        });
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        var blob = new Blob([tableHTML], { type: dataType });
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = filename;
+        downloadLink.click();
+    }
+});
+
     </script>
 
 </x-app-layout>
