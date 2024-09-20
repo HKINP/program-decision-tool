@@ -28,8 +28,8 @@
                     <tr class="bg-purple-800 text-white">
                         <th class="text-xs border border-gray-300 p-2 text-center w-12">#</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Activities</th>
-                        <th class="text-xs border border-gray-300 p-2 text-center">Targeted For</th>
-                        <th class="text-xs border border-gray-300 p-2 text-center">Implementation at</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Municipalities</th>
+                        <th class="text-xs border border-gray-300 p-2 text-center">Administrative Level</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Province</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">District</th>
                         <th class="text-xs border border-gray-300 p-2 text-center">Responsible Partner</th>
@@ -58,7 +58,7 @@
                             Program Management
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetPA }}
+                            $ {{ number_format($budgetPA) }}
                         </td>
                     </tr>
                     @foreach ($programactivities as $index=>$programactivity)
@@ -75,15 +75,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                       @for ($i = 7; $i <= 12; $i++)
+                       <td @if (in_array($i, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
 
-                            </td>
-                            @endfor
+                       </td>
+                   @endfor
+                   @for ($j = 1; $j <= 6; $j++)
+                       <td @if (in_array($j, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
+
+                       </td>
+                   @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
                             </td>
@@ -95,7 +104,7 @@
                             Finance and Operations
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetFAO }}
+                            $ {{ number_format($budgetFAO) }}
                         </td>
                     </tr>
                     @foreach ($financeandoperation as $index=>$programactivity)
@@ -112,15 +121,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                       @for ($i = 7; $i <= 12; $i++)
+                       <td @if (in_array($i, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
 
-                            </td>
-                            @endfor
+                       </td>
+                   @endfor
+                   @for ($j = 1; $j <= 6; $j++)
+                       <td @if (in_array($j, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
+
+                       </td>
+                   @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs"></td>
                     </tr>
                     @endforeach
@@ -162,7 +180,7 @@
                             });
                             $overallTotalBudget += $totalBudgetSum;
                             @endphp
-                            $ {{$totalBudgetSum}}
+                            $ {{ number_format($totalBudgetSum) }}
                         </td>
                     </tr>
 
@@ -181,7 +199,7 @@
                         @php
                         $months = explode(',', $activity['months']);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
+                        @for ($i = 7; $i <= 12; $i++)
                             <td @if (in_array($i, $months))
                             class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
                             @else
@@ -189,7 +207,16 @@
                             @endif>
 
                             </td>
-                            @endfor
+                        @endfor
+                        @for ($j = 1; $j <= 6; $j++)
+                            <td @if (in_array($j, $months))
+                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                            @else
+                            class="border border-gray-300 p-2 text-center text-xs"
+                            @endif>
+
+                            </td>
+                        @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity->total_budget ?? ''}}</td>
                     </tr>
 
@@ -202,7 +229,7 @@
                             Monitoring, Evaluation, Research and Learning
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetMerl }}
+                            $ {{ number_format($budgetMerl) }}
                         </td>
                     </tr>
                     @foreach ($merl as $index=>$programactivity)
@@ -219,15 +246,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                        @for ($i = 7; $i <= 12; $i++)
+                        <td @if (in_array($i, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
 
-                            </td>
-                            @endfor
+                        </td>
+                    @endfor
+                    @for ($j = 1; $j <= 6; $j++)
+                        <td @if (in_array($j, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
+
+                        </td>
+                    @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
                             </td>
@@ -239,7 +275,7 @@
                             Gender and Inclusive Development
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetGid }}
+                            $ {{ number_format($budgetGid) }}
                         </td>
                     </tr>
                     @foreach ($gid as $index=>$programactivity)
@@ -256,15 +292,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                        @for ($i = 7; $i <= 12; $i++)
+                        <td @if (in_array($i, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
 
-                            </td>
-                            @endfor
+                        </td>
+                    @endfor
+                    @for ($j = 1; $j <= 6; $j++)
+                        <td @if (in_array($j, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
+
+                        </td>
+                    @endfor
 
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
@@ -277,7 +322,7 @@
                             Resilience and Shock Response
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetEprr }}
+                            $ {{ number_format($budgetEprr) }}
                         </td>
                     </tr>
                     @foreach ($eprr as $index=>$programactivity)
@@ -294,15 +339,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                        @for ($i = 7; $i <= 12; $i++)
+                        <td @if (in_array($i, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
 
-                            </td>
-                            @endfor
+                        </td>
+                    @endfor
+                    @for ($j = 1; $j <= 6; $j++)
+                        <td @if (in_array($j, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
+
+                        </td>
+                    @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
                             </td>
@@ -314,7 +368,7 @@
                             Diverse Partnersips (Private Sector, Academia, CSOs)
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetDiverse }}
+                            $ {{ number_format($budgetDiverse) }}
                         </td>
                     </tr>
                     @foreach ($diverse as $index=>$programactivity)
@@ -331,15 +385,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                        @for ($i = 7; $i <= 12; $i++)
+                        <td @if (in_array($i, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
 
-                            </td>
-                            @endfor
+                        </td>
+                    @endfor
+                    @for ($j = 1; $j <= 6; $j++)
+                        <td @if (in_array($j, $months))
+                        class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                        @else
+                        class="border border-gray-300 p-2 text-center text-xs"
+                        @endif>
+
+                        </td>
+                    @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
                             </td>
@@ -351,7 +414,7 @@
                             Social and Behaviour Change
                         </td>
                         <td class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $budgetsbcc }}
+                            $ {{ number_format($budgetsbcc) }}
                         </td>
                     </tr>
                     @foreach ($sbcc as $index=>$programactivity)
@@ -368,15 +431,24 @@
                         @php
                         $months = explode(',', $programactivity->months);
                         @endphp
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td @if (in_array($i, $months))
-                            class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
-                            @else
-                            class="border border-gray-300 p-2 text-center text-xs"
-                            @endif>
+                       @for ($i = 7; $i <= 12; $i++)
+                       <td @if (in_array($i, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
 
-                            </td>
-                            @endfor
+                       </td>
+                   @endfor
+                   @for ($j = 1; $j <= 6; $j++)
+                       <td @if (in_array($j, $months))
+                       class="border border-gray-300 p-2 text-center text-xs" style="background:#3b0764"
+                       @else
+                       class="border border-gray-300 p-2 text-center text-xs"
+                       @endif>
+
+                       </td>
+                   @endfor
                             <td class="border border-gray-300 p-2 text-center text-xs">
                                 <!-- {{ $programactivity->total_budget}} -->
                             </td>
