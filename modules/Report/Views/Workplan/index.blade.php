@@ -153,7 +153,8 @@
                         <td class="border border-gray-300 p-2 font-bold  text-black text-left text-xs" style="background:#e5e7eb;font-weight:bold">
                             @php
                             // Calculate the sum of totalbudget for all activities
-                            $totalBudgetSum = collect($outcome['outcome']['activities'])->sum('totalbudget');
+                            $totalBudgetSum = collect($outcome['outcome']['activities'])->sum('total_budget');
+                            dd($totalBudgetSum);
                             @endphp
                             $ {{$totalBudgetSum}}
                         </td>
