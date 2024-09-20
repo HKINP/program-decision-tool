@@ -124,7 +124,10 @@
                             <td class="border border-gray-300 p-2 text-center text-xs"></td>
                     </tr>
                     @endforeach
-
+                    @php
+    // Initialize the overall total budget
+    $overallTotalBudget = 0;
+@endphp
                     <!-- Iterate over Outcomes -->
                     @foreach ($irOutcomes as $irId => $irOutcomes)
                     <!-- Display IR Header -->
@@ -145,6 +148,7 @@
                         </td>
                     </tr>
                     @foreach ($irOutcomes as $outcomeGroup)
+                  
                     @foreach ($outcomeGroup as $outcome)
                     <tr class="bg-gray-200 ">
                         <td colspan="21" class="border border-gray-300 p-2 font-bold  text-black text-left text-xs" style="background:#e5e7eb;font-weight:bold">
@@ -156,6 +160,7 @@
                             $totalBudgetSum = collect($outcome['outcome']['activities'])->sum(function ($activity) {
                             return is_numeric($activity['total_budget']) ? $activity['total_budget'] : 0;
                             });
+                            $overallTotalBudget += $totalBudgetSum;
                             @endphp
                             $ {{$totalBudgetSum}}
                         </td>
@@ -386,7 +391,8 @@
                             Total Budget
                         </td>
                         <td colspan="2" class="border border-gray-300  text-black text-xs p-2 text-left">
-                            $ {{ $totalbudget }}
+                        
+                            $ {{ number_format($overallTotalBudget + $totalbudget, 2) }}
                         </td>
                     </tr>
 
