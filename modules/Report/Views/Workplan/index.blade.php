@@ -154,7 +154,7 @@
                             @php
                             // Calculate the sum of totalbudget for all activities
                             $totalBudgetSum = collect($outcome['outcome']['activities'])->sum('total_budget');
-                            dd($totalBudgetSum);
+                            
                             @endphp
                             $ {{$totalBudgetSum}}
                         </td>
