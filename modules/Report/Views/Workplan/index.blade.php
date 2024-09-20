@@ -42,7 +42,7 @@
             <!-- Header Section -->
             <thead>
                 <tr class="bg-purple-800 text-white">
-                    <th class="text-xs border border-gray-300 p-2 text-center w-12">#</th>
+                    <th class="text-xs border border-gray-300 p-2 text-center w-24">#</th>
                     {{-- <th class="text-xs border border-gray-300 p-2 text-center w-12">Order</th> --}}
                     <th class="text-xs border border-gray-300 p-2 text-center">Activities</th>
                     <th class="text-xs border border-gray-300 p-2 text-center">Administrative Level</th>
