@@ -68,10 +68,10 @@
                             <label for="targeted_for" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Targeted For *</label>
                             <select id="targeted_for" name="targeted_for" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                                 <option value="">Select Targeted For</option>
-                                <option value="All Municipalities" {{ old('targeted_for') == 'All Municipalities' ? 'selected' : '' }}>All Municipalities</option>
-                                <option value="Vulnerable Muncipalities" {{ old('targeted_for') == 'Vulnerable Muncipalities' ? 'selected' : '' }}>Vulnerable Muncipalities</option>
-                                <option value="Selected Municipalities" {{ old('targeted_for') == 'Selected Municipalities' ? 'Selected Municipalities' : '' }}>Selected Municipalities</option>
-                                <option value="Not Applicable" {{ old('Not Applicable') == 'Not Applicable' ? 'Not Applicable' : '' }}>Not Applicable</option>
+                                <option value="All" {{ old('targeted_for') == 'All' ? 'selected' : '' }}>All</option>
+                                <option value="Vulnerable" {{ old('targeted_for') == 'Vulnerable' ? 'selected' : '' }}>Vulnerable</option>
+                                <option value="Selected" {{ old('targeted_for') == 'Selected' ? 'Selected' : '' }}>Selected</option>
+                                <option value="NA" {{ old('NA') == 'NA' ? 'NA' : '' }}>NA</option>
                             </select>
                         </div>
                         <!-- Implemented By -->

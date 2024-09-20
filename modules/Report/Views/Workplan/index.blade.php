@@ -189,10 +189,10 @@
                     <tr class="text-black">
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1}}</td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $activity['activities'] ?? '' }}</td>
-                        <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['targeted_for'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $activity['implemented_by'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['province_count'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['district_count'] ?? '-'}}</td>
+                        <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['targeted_for'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-xs">{{ $activity['partner'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['unit'] ?? '-'}}</td>
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $activity['total_target'] ?? '-'}}</td>

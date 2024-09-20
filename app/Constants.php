@@ -21,9 +21,9 @@ class Constants
         '7' => 'PNGO'
     ];
     public const IMPLEMENTOR = [
-        '1' => 'Federal Level',
-        '2' => 'Province Level',
-        '3' => 'District Level',        
+        '1' => 'Federal',
+        '2' => 'Province',
+        '3' => 'Local',        
     ];
     public const Year = [
         '1' => 'Year 1',
@@ -41,9 +41,9 @@ class Constants
         '8' => 'SBC',        
     ];
     public const TARGETEDFOR = [
-        '1' => 'All Municipalities',
-        '2' => 'Vulnerable Muncipalities',
-        '3' => 'Selected Municipalities',        
+        '1' => 'All',
+        '2' => 'Vulnerable',
+        '3' => 'Selected',        
         '4' => 'Other',
     ];
     
