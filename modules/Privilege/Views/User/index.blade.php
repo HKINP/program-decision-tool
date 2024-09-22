@@ -1,12 +1,13 @@
 <x-app-layout>
     <x-table-listing
-        :headers="['S.N', 'User Name', 'User Email', 'Actions']"
+        :headers="['S.N', 'User Name', 'User Email','Roles', 'Actions']"
         :title="'Users'"
         :useAddModal="false"
         :name="'user'"
         :addRoute="route('user.create')">
 
         @forelse ($users as $index => $user)
+        
         <tr>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $index + 1 }}</td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -14,6 +15,9 @@
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">{{ $user->email }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">{{ $user->roles->pluck('role')->implode(', ') }}</div>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="flex space-x-4">

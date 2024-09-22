@@ -149,8 +149,8 @@ class UserController extends Controller
      */
     public function index()
     {
-
-        return view('Privilege::User.index')->withUsers($this->users->get());
+$user=$this->users->with(['roles'])->get();
+        return view('Privilege::User.index')->withUsers($user);
     }
 
     /**
