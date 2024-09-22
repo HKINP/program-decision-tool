@@ -75,7 +75,7 @@
                                 $sourcedistrict = $question->indicator->districtProfiles[0]->source ?? '';
                                 $color = '';
 
-                                $excludedIndicators = [7, 8, 25]; 
+                                $excludedIndicators = [7, 8, 25, 26]; 
 
                                 if (!in_array($question->indicator->id, $excludedIndicators)) {
                                     if ($valueprovince < 50 && $valueprovince != '-' && $valueprovince > 0) {
