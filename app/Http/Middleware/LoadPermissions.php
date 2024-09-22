@@ -45,6 +45,9 @@ class LoadPermissions
         Gate::define('manage-system-configuration', function ($user) use ($permissions) {
             return in_array('manage-system-configuration', $permissions);
         });
+        Gate::define('set-activities-order', function ($user) use ($permissions) {
+            return in_array('set-activities-order', $permissions);
+        });
 
         Gate::define('manage-target-groups', function ($user) use ($permissions) {
             return in_array('manage-target-groups', $permissions);

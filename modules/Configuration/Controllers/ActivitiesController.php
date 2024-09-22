@@ -100,7 +100,8 @@ class ActivitiesController extends Controller
         // Process Outcomes
 
         $outcomes = $this->outcomes->with(['activities' => function ($query) {
-            $query->where('activity_type', 3);
+            $query->where('activity_type', 3)
+            ->orderBy('order', 'asc');
         }])->get();
 
         $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
@@ -146,7 +147,7 @@ class ActivitiesController extends Controller
         });
 
 
-        $totalBudget = $budgetPA+$budgetFAO+$budgetGid+$budgetMERl+$budgetEPRR+ $budgetdiverse+$budgetsbcc;
+        $totalBudget = $budgetPA + $budgetFAO + $budgetGid + $budgetMERl + $budgetEPRR + $budgetdiverse + $budgetsbcc;
         return view('Report::Workplan.index')
             ->withIr($ir)
             ->withProvinces($provinces)
@@ -176,7 +177,7 @@ class ActivitiesController extends Controller
      */
     private function getTransformedActivities($activityType, $partners, $implementor, $provinces)
     {
-        $activities = $this->activities->where('activity_type', '=', $activityType)->orderby('id', 'asc')->get();
+        $activities = $this->activities->where('activity_type', '=', $activityType)->orderby('order', 'asc')->get();
 
         $activities = $this->transformActivities($activities, $partners, $implementor, $provinces);
 
@@ -294,6 +295,27 @@ class ActivitiesController extends Controller
             return redirect()->back()->with('error', 'Failed to add Activities: ' . $e->getMessage());
         }
     }
+    public function orderSet(Request $request)
+{
+    $data = $request->all();
+
+    // Loop through the activity_id and order arrays
+    foreach ($data['activity_id'] as $index => $activityId) {
+        // Find the activity by ID
+        $activity = $this->activities->find($activityId);
+
+        // If the activity is found, update it with the new order value
+        if ($activity) {
+            $input['order']=$data['order'][$index];
+            $activity->update($input);
+        } else {
+            // Handle case when activity is not found (optional)
+            return redirect()->back()->with('error', "Activity with ID {$activityId} not found.");
+        }
+    }
+
+    return redirect()->back()->with('success', 'Activities order updated successfully.');
+}
 
 
     /**
@@ -403,7 +425,7 @@ class ActivitiesController extends Controller
             case 2:
                 $route = 'activities.finance';
                 break;
-                
+
             case 3:
                 $route = 'activities.ir';
                 break;
@@ -715,37 +737,37 @@ class ActivitiesController extends Controller
      */
     public function view($id)
     {
-         // Fetch the necessary data
-         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
-         $ir = Constants::IR;
-         $partners = Constants::PARTNERS;
-         $activitytype = Constants::ACTIVITIESTYPE;
-         $implementor = Constants::IMPLEMENTOR;
-         $year = Constants::Year;
-         $months = Constants::MONTHS;
-         $activity = $this->activities->find($id);
- 
-         // Convert CSV strings to arrays with fallback for null values
-         $activity->partner = explode(',', $activity->partner ?? '');
-         $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
-         $activity->months = explode(',', $activity->months ?? '');
-         $activity->province_ids = explode(',', $activity->province_ids ?? '');
-         $activity->district_ids = explode(',', $activity->district_ids ?? '');
- 
-         $districts = $this->districts->all();
-         $provinces = $this->provinces->all();
- 
-         return view('Configuration::Activities.view')
-             ->withActivity($activity)
-             ->withActivitytype($activitytype)
-             ->withIr($ir)
-             ->withYear($year)
-             ->withDistricts($districts)
-             ->withProvinces($provinces)
-             ->withPartners($partners)
-             ->withImplementor($implementor)
-             ->withMonths($months)
-             ->withOutcomes($outcomes);
+        // Fetch the necessary data
+        $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $implementor = Constants::IMPLEMENTOR;
+        $year = Constants::Year;
+        $months = Constants::MONTHS;
+        $activity = $this->activities->find($id);
+
+        // Convert CSV strings to arrays with fallback for null values
+        $activity->partner = explode(',', $activity->partner ?? '');
+        $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
+        $activity->months = explode(',', $activity->months ?? '');
+        $activity->province_ids = explode(',', $activity->province_ids ?? '');
+        $activity->district_ids = explode(',', $activity->district_ids ?? '');
+
+        $districts = $this->districts->all();
+        $provinces = $this->provinces->all();
+
+        return view('Configuration::Activities.view')
+            ->withActivity($activity)
+            ->withActivitytype($activitytype)
+            ->withIr($ir)
+            ->withYear($year)
+            ->withDistricts($districts)
+            ->withProvinces($provinces)
+            ->withPartners($partners)
+            ->withImplementor($implementor)
+            ->withMonths($months)
+            ->withOutcomes($outcomes);
     }
 
 
@@ -760,7 +782,7 @@ class ActivitiesController extends Controller
     {
         // $this->authorize('manage-account-code');
         $activities = $this->activities->find($id);
-        $message="Activities is successfully deleted.";
+        $message = "Activities is successfully deleted.";
         $flag = $this->activities->destroy($id);
         if ($flag) {
             return $this->redirectBasedOnActivityType($activities, $message);
