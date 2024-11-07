@@ -5,7 +5,7 @@
                 <div class="bg-gray bg-opacity-70 p-4 rounded-lg text-xl">
                     <em>Using this Decision Tool for the first time or need to refer back to guide?</em>
                     <br>
-                    <em><a class="underline" href="{{ asset('manual.pdf') }}">Access tutorial/manual here.</a></em>
+                    <em><a target="_blank" class="underline" href="{{ asset('manual.pdf') }}">Access tutorial/manual here.</a></em>
                 </div>
             </div>
         <div class="bg-white mx-auto px-4 py-8 rounded-lg ">
