@@ -73,14 +73,14 @@
                         </a>
                     </li>
                     @can('manage-data-entry')
-                       <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['district','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] @if(in_array(Request::segment(1), ['district','role','permission'])){{ 'from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]' }}@endif" x-data="{ open: {{ in_array(Request::segment(1), ['user','role','permission']) ? 1 : 0 }} }">
                         <a class="block text-white dark:text-gray-100 truncate transition @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hover:text-[#f87c56] dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    
-                                <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['steplist'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                    <path d="M12 0c-.553 0-1 .448-1 1v10h-10c-.552 0-1 .448-1 1s.448 1 1 1h10v10c0 .552.447 1 1 1s1-.448 1-1v-10h10c.552 0 1-.448 1-1s-.448-1-1-1h-10v-10c0-.552-.447-1-1-1z" />
-                                </svg>
+
+                                    <svg class="shrink-0 fill-current @if(in_array(Request::segment(1), ['steplist'])){{ 'text-white' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                        <path d="M12 0c-.553 0-1 .448-1 1v10h-10c-.552 0-1 .448-1 1s.448 1 1 1h10v10c0 .552.447 1 1 1s1-.448 1-1v-10h10c.552 0 1-.448 1-1s-.448-1-1-1h-10v-10c0-.552-.447-1-1-1z" />
+                                    </svg>
                                     <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Activity Entry</span>
                                 </div>
                                 <!-- Icon -->
@@ -90,17 +90,17 @@
                                     </svg>
                                 </div>
                             </div>
-                        </a>                
-                    <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                        </a>
+                        <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-8 mt-1 @if(!in_array(Request::segment(1), ['user','role','permission'])){{ 'hidden' }}@endif" :class="open ? '!block' : 'hidden'">
-                            @can('manage-data-entry')
+                                @can('manage-data-entry')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('steplist.create')){{ '!text-[#f87c56]' }}@endif" href="{{ route('steplist.create') }}">
                                         <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data Entry</span>
                                     </a>
                                 </li>
-                                @endif   
-                            
+                                @endif
+
                                 @can('can-map-activities')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.ir')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.ir') }}">
@@ -163,7 +163,7 @@
 
                             </ul>
                         </div>
-                        </li>
+                    </li>
                     @endif
                     @can('manage-user-configuration')
                     <!-- User Configuration -->
@@ -327,11 +327,13 @@
                     @endif
 
                 </ul>
+
             </div>
         </div>
-
+      
         <!-- Expand / collapse button -->
         <div class="pt-3 hidden lg:inline-flex justify-end mt-auto">
+            
             <div class="w-12 pl-4 pr-3 py-2">
                 <button class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors" @click="sidebarExpanded = !sidebarExpanded">
                     <span class="sr-only">Expand / collapse sidebar</span>

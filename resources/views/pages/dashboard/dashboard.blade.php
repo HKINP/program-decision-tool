@@ -1,5 +1,13 @@
 <x-app-layout>
+
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+    <div class=" bottom-0 left-0 w-full h-200 flex items-center justify-center bg-gray-800 bg-opacity-75 text-white p-4 text-center transition-opacity duration-500">
+                <div class="bg-gray bg-opacity-70 p-4 rounded-lg text-xl">
+                    <em>Using this Decision Tool for the first time or need to refer back to guide?</em>
+                    <br>
+                    <em><a class="underline" href="{{ asset('manual.pdf') }}">Access tutorial/manual here.</a></em>
+                </div>
+            </div>
         <div class="bg-white mx-auto px-4 py-8 rounded-lg ">
             <div class=" px-4 py-5">
                 <div class="mt-4">
