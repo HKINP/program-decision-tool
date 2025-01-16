@@ -11,6 +11,7 @@ use Modules\Configuration\Requests\Activities\UpdateRequest;
 use App\Constants;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
+use PHPUnit\TextUI\Configuration\Constant;
 
 class ActivitiesController extends Controller
 {
@@ -101,7 +102,7 @@ class ActivitiesController extends Controller
 
         $outcomes = $this->outcomes->with(['activities' => function ($query) {
             $query->where('activity_type', 3)
-            ->orderBy('order', 'asc');
+                ->orderBy('order', 'asc');
         }])->get();
 
         $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
@@ -171,6 +172,138 @@ class ActivitiesController extends Controller
             ->withBudgetDiverse($budgetdiverse)
             ->withBudgetsbcc($budgetsbcc);
     }
+    public function addActivitiesAtttibutes()
+    {
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $attributes = Constants::ATTRIBUTES;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $provinces = $this->provinces->get();
+
+        // Refactor to handle activity transformation and budget calculation
+        list($programActivities, $budgetPA) = $this->getTransformedActivities(1, $partners, $implementor, $provinces);
+        list($financeAndOperation, $budgetFAO) = $this->getTransformedActivities(2, $partners, $implementor, $provinces);
+        list($gid, $budgetGid) = $this->getTransformedActivities(4, $partners, $implementor, $provinces);
+        list($merl, $budgetMERl) = $this->getTransformedActivities(5, $partners, $implementor, $provinces);
+        list($eprr, $budgetEPRR) = $this->getTransformedActivities(6, $partners, $implementor, $provinces);
+        list($diverse, $budgetdiverse) = $this->getTransformedActivities(7, $partners, $implementor, $provinces);
+        list($sbcc, $budgetsbcc) = $this->getTransformedActivities(8, $partners, $implementor, $provinces);
+
+        // Process Outcomes
+
+        $outcomes = $this->outcomes->with(['activities' => function ($query) {
+            $query->where('activity_type', 3)
+                ->orderBy('order', 'asc');
+        }])->get();
+
+        $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
+            return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners, $implementor) {
+                return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
+                    // Assuming activities is a relationship on outcome
+                    $activities = $outcome->activities;
+
+                    // Transform activities within each outcome
+                    $transformedActivities = $activities->map(function ($activity) use ($partners, $implementor) {
+                        // Transform partners
+                        $partnerIds = explode(',', $activity->partner);
+                        $partnerNames = array_map(function ($id) use ($partners) {
+                            return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+                        }, $partnerIds);
+                        $activity->partner = implode(', ', $partnerNames);
+
+                        // Transform implementors
+                        $implementorIds = explode(',', $activity->implemented_by);
+                        $implementorNames = array_map(function ($id) use ($implementor) {
+                            return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+                        }, $implementorIds);
+                        $activity->implemented_by = implode(', ', $implementorNames);
+
+                        // Count provinces
+                        $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
+                        $activity->province_count = count($provinceIds);
+                        // Count districts
+                        $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
+                        $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+                        return $activity;
+                    });
+
+                    // Optionally, if you need to return the transformed outcome
+                    $outcome->activities = $transformedActivities;
+
+                    return [
+                        'outcome' => $outcome->toArray(),
+                    ];
+                });
+            });
+        });
+
+
+        $totalBudget = $budgetPA + $budgetFAO + $budgetGid + $budgetMERl + $budgetEPRR + $budgetdiverse + $budgetsbcc;
+        return view('Configuration::Activities.AttributeData.create')
+            ->withIr($ir)
+            ->withProvinces($provinces)
+            ->withPartners($partners)
+            ->withAttributes($attributes)
+            ->withImplementor($implementor)
+            ->withActivityTypes($activitytype)
+            ->withTotalbudget($totalBudget)
+            ->withProgramactivities($programActivities)
+            ->withFinanceandoperation($financeAndOperation)
+            ->withIrOutcomes($irOutcomesact)
+            ->withGid($gid)
+            ->withMerl($merl)
+            ->withEprr($eprr)
+            ->withDiverse($diverse)
+            ->withSbcc($sbcc)
+            ->withBudgetPA($budgetPA)
+            ->withBudgetFAO($budgetFAO)
+            ->withBudgetGid($budgetGid)
+            ->withBudgetMerl($budgetMERl)
+            ->withBudgetEprr($budgetEPRR)
+            ->withBudgetDiverse($budgetdiverse)
+            ->withBudgetsbcc($budgetsbcc);
+    }
+
+    public function createAttributeData($id)
+    {
+         // Fetch the necessary data
+         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+         $ir = Constants::IR;
+         $partners = Constants::PARTNERS;
+         $activitytype = Constants::ACTIVITIESTYPE;
+         $implementor = Constants::IMPLEMENTOR;
+         $year = Constants::Year;
+         $months = Constants::MONTHS;
+         $attributes=Constants::ATTRIBUTES;
+         $activity = $this->activities->find($id);
+
+         // Convert CSV strings to arrays with fallback for null values
+         $activity->partner = explode(',', $activity->partner ?? '');
+         $activity->implemented_by = explode(',', $activity->implemented_by ?? '');
+         $activity->months = explode(',', $activity->months ?? '');
+         $activity->province_ids = explode(',', $activity->province_ids ?? '');
+         $activity->district_ids = explode(',', $activity->district_ids ?? '');
+ 
+         $districts = $this->districts->all();
+         $provinces = $this->provinces->all();
+ 
+         return view('Configuration::Activities.AttributeData.add')
+             ->withActivity($activity)
+             ->withActivitytype($activitytype)
+             ->withIr($ir)
+             ->withYear($year)
+             ->withAttributes($attributes)
+             ->withDistricts($districts)
+             ->withProvinces($provinces)
+             ->withPartners($partners)
+             ->withImplementor($implementor)
+             ->withMonths($months)
+             ->withOutcomes($outcomes);
+       
+    }
+
 
     /**
      * Helper method to get activities by type and transform them
@@ -295,27 +428,147 @@ class ActivitiesController extends Controller
             return redirect()->back()->with('error', 'Failed to add Activities: ' . $e->getMessage());
         }
     }
-    public function orderSet(Request $request)
-{
-    $data = $request->all();
 
-    // Loop through the activity_id and order arrays
-    foreach ($data['activity_id'] as $index => $activityId) {
-        // Find the activity by ID
-        $activity = $this->activities->find($activityId);
+    public function addAttributeData()
+    {        
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $attributes = Constants::ATTRIBUTES;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $provinces = $this->provinces->get();
 
-        // If the activity is found, update it with the new order value
-        if ($activity) {
-            $input['order']=$data['order'][$index];
-            $activity->update($input);
-        } else {
-            // Handle case when activity is not found (optional)
-            return redirect()->back()->with('error', "Activity with ID {$activityId} not found.");
-        }
+        // Refactor to handle activity transformation and budget calculation
+        list($programActivities, $budgetPA) = $this->getTransformedActivities(1, $partners, $implementor, $provinces);
+        list($financeAndOperation, $budgetFAO) = $this->getTransformedActivities(2, $partners, $implementor, $provinces);
+        list($gid, $budgetGid) = $this->getTransformedActivities(4, $partners, $implementor, $provinces);
+        list($merl, $budgetMERl) = $this->getTransformedActivities(5, $partners, $implementor, $provinces);
+        list($eprr, $budgetEPRR) = $this->getTransformedActivities(6, $partners, $implementor, $provinces);
+        list($diverse, $budgetdiverse) = $this->getTransformedActivities(7, $partners, $implementor, $provinces);
+        list($sbcc, $budgetsbcc) = $this->getTransformedActivities(8, $partners, $implementor, $provinces);
+
+        // Process Outcomes
+
+        $outcomes = $this->outcomes->with(['activities' => function ($query) {
+            $query->where('activity_type', 3)
+                ->orderBy('order', 'asc');
+        }])->get();
+
+        $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
+            return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners, $implementor) {
+                return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
+                    // Assuming activities is a relationship on outcome
+                    $activities = $outcome->activities;
+
+                    // Transform activities within each outcome
+                    $transformedActivities = $activities->map(function ($activity) use ($partners, $implementor) {
+                        // Transform partners
+                        $partnerIds = explode(',', $activity->partner);
+                        $partnerNames = array_map(function ($id) use ($partners) {
+                            return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+                        }, $partnerIds);
+                        $activity->partner = implode(', ', $partnerNames);
+
+                        // Transform implementors
+                        $implementorIds = explode(',', $activity->implemented_by);
+                        $implementorNames = array_map(function ($id) use ($implementor) {
+                            return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+                        }, $implementorIds);
+                        $activity->implemented_by = implode(', ', $implementorNames);
+
+                        // Count provinces
+                        $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
+                        $activity->province_count = count($provinceIds);
+                        // Count districts
+                        $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
+                        $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+                        return $activity;
+                    });
+
+                    // Optionally, if you need to return the transformed outcome
+                    $outcome->activities = $transformedActivities;
+
+                    return [
+                        'outcome' => $outcome->toArray(),
+                    ];
+                });
+            });
+        });
+
+
+        $totalBudget = $budgetPA + $budgetFAO + $budgetGid + $budgetMERl + $budgetEPRR + $budgetdiverse + $budgetsbcc;
+        return view('Configuration::Activities.AttributeData.index')
+            ->withIr($ir)
+            ->withProvinces($provinces)
+            ->withPartners($partners)
+            ->withAttributes($attributes)
+            ->withImplementor($implementor)
+            ->withActivityTypes($activitytype)
+            ->withTotalbudget($totalBudget)
+            ->withProgramactivities($programActivities)
+            ->withFinanceandoperation($financeAndOperation)
+            ->withIrOutcomes($irOutcomesact)
+            ->withGid($gid)
+            ->withMerl($merl)
+            ->withEprr($eprr)
+            ->withDiverse($diverse)
+            ->withSbcc($sbcc)
+            ->withBudgetPA($budgetPA)
+            ->withBudgetFAO($budgetFAO)
+            ->withBudgetGid($budgetGid)
+            ->withBudgetMerl($budgetMERl)
+            ->withBudgetEprr($budgetEPRR)
+            ->withBudgetDiverse($budgetdiverse)
+            ->withBudgetsbcc($budgetsbcc);
+        
     }
 
-    return redirect()->back()->with('success', 'Activities order updated successfully.');
-}
+    public function orderSet(Request $request)
+    {
+        $data = $request->all();
+
+        // Loop through the activity_id and order arrays
+        foreach ($data['activity_id'] as $index => $activityId) {
+            // Find the activity by ID
+            $activity = $this->activities->find($activityId);
+
+            // If the activity is found, update it with the new order value
+            if ($activity) {
+                $input['order'] = $data['order'][$index];
+                $activity->update($input);
+            } else {
+                // Handle case when activity is not found (optional)
+                return redirect()->back()->with('error', "Activity with ID {$activityId} not found.");
+            }
+        }
+
+        return redirect()->back()->with('success', 'Activities order updated successfully.');
+    }
+
+    public function storeActivitiesAtttibutes(Request $request)
+    {
+        // Validate request
+        $request->validate([
+            'activity_id' => 'required|exists:activities,id',
+            'attributes' => 'nullable|string',
+        ]);
+
+        $data = $request->all();
+        $id = $data['activity_id'];
+
+        // Find activity
+        $activity = $this->activities->find($id); // Assuming 'Activity' is the correct model class
+        if ($activity) {
+            $input['attributes'] = $data['attributes'] ?? '';
+            $activity->update($input);
+
+            return response()->json(['message' => 'Saved successfully'], 200);
+        }
+
+        return response()->json(['message' => 'Activity not found'], 404);
+    }
+
 
 
     /**

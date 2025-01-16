@@ -44,7 +44,8 @@ class Activities extends Model
          'province_ids',
          'district_ids',
          'targeted_for',
-         'order'
+         'order',
+         'attributes'
         ];
 
     /**
@@ -62,6 +63,7 @@ class Activities extends Model
     {
         return $this->hasMany(PrioritizedActivities::class, 'activity_id');
     }
+    
     
     
    

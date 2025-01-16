@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Configuration\Controllers\ActivitiesAttributeDataController;
 use Modules\Configuration\Controllers\ActivitiesController;
 use Modules\Configuration\Controllers\ActorsController;
 use Modules\Configuration\Controllers\DistrictController;
@@ -134,10 +135,14 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('activities/rsr', [ActivitiesController::class, 'rsrActivities'])->name('activities.rsr');
     Route::get('activities/diverse', [ActivitiesController::class, 'diverseActivities'])->name('activities.diverse');
     Route::get('activities/sbcc', [ActivitiesController::class, 'sbccActivities'])->name('activities.sbcc');
+    Route::get('activities/attributes', [ActivitiesController::class, 'addActivitiesAtttibutes'])->name('activities.attributes');
+    Route::get('activities/data/add', [ActivitiesController::class, 'addAttributeData'])->name('activities.addAttributeData');
+    Route::get('activities/attributedata/{activityid}/create', [ActivitiesController::class, 'createAttributeData'])->name('activities.attributedata.create');
     
     Route::get('workplan', [ActivitiesController::class, 'workPlan'])->name('activities.workPlan');
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
     Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
+    Route::post('activities/attributes/store', [ActivitiesAttributeDataController::class, 'store'])->name('activities.attributes.store');
     Route::post('activities/order', [ActivitiesController::class, 'orderSet'])->name('activities.order');
     Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
     Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');

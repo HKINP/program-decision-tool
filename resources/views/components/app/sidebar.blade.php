@@ -100,6 +100,20 @@
                                     </a>
                                 </li>
                                 @endif
+                                @can('add-activities-attributes')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.attributes')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.attributes') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Add Attributes</span>
+                                    </a>
+                                </li>
+                                @endif
+                                @can('add-activities-attributes-data')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-white dark:text-gray-400 hover:text-[#f87c56] dark:hover:text-gray-200 transition truncate @if(Route::is('activities.attributes')){{ '!text-[#f87c56]' }}@endif" href="{{ route('activities.addAttributeData') }}">
+                                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Add Events Data</span>
+                                    </a>
+                                </li>
+                                @endif
 
                                 @can('can-map-activities')
                                 <li class="mb-1 last:mb-0">

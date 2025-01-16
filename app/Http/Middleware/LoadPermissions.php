@@ -95,6 +95,12 @@ class LoadPermissions
         Gate::define('can-map-activities', function ($user) use ($permissions) {
             return in_array('can-map-activities', $permissions);
         });
+        Gate::define('add-activities-attributes-data', function ($user) use ($permissions) {
+            return in_array('add-activities-attributes-data', $permissions);
+        });
+        Gate::define('add-activities-attributes', function ($user) use ($permissions) {
+            return in_array('add-activities-attributes', $permissions);
+        });
 
         Gate::define('ir-lead', function ($user) use ($permissions) {
             return in_array('ir-lead', $permissions);

@@ -61,4 +61,89 @@ class Constants
         '11' => 'November',
         '12' => 'December',
     ];
+    
+    public const ATTRIBUTES = [
+        1 => [
+            'name' => 'Gender',
+            'subcategories' => [
+                1 => 'Male',
+                2 => 'Female',
+                3 => 'Other',
+            ],
+        ],
+        2 => [
+            'name' => 'Age',
+            'subcategories' => [
+                1 => 'Less than 20 years',
+                2 => '20-29 years',
+                3 => '30 and above years',
+            ],
+        ],
+        3 => [
+            'name' => 'Types of participants',
+            'subcategories' => [
+                1 => 'Health worker',
+                2 => 'FCHV',
+                3 => 'NGO workers',
+                4 => '1000 days mother',
+                5 => 'Adolescent',
+                6 => 'School age children',
+                7 => 'Caregiver and family member',
+                8 => 'Agricultural extension worker',
+                9 => 'WASH extension worker',
+                10 => 'School teacher',
+                11 => 'Private sectors',
+                12 => 'Traditional healer',
+                13 => 'Community Campaign/celebrities',
+                14 => 'Government Officials',
+                15 => 'Elected member',
+                16 => 'Trainer',
+                17 => 'Observer',
+                18 => 'Other',
+            ],
+        ],
+        4 => [
+            'name' => 'Caste/Ethnicity',
+            'subcategories' => [
+                1 => 'Hill Brahmin/Chhetri',
+                2 => 'Madheshi Brahmin/Chhetri',
+                3 => 'Madheshi Other Castes',
+                4 => 'Mountain/Hill Dalit',
+                5 => 'Madheshi Dalit',
+                6 => 'Newar',
+                7 => 'Mountain/Hill Janajati',
+                8 => 'Tarai Janajati',
+                9 => 'Muslim',
+                10 => 'Other',
+            ],
+        ],
+        5 => [
+            'name' => 'Disability',
+            'subcategories' => [
+                1 => 'No disability',
+                2 => 'Person with disability',
+            ],
+        ],
+        6 => [
+            'name' => 'Types of health worker',
+            'subcategories' => [
+                1 => 'Medical Officer',
+                2 => 'Staff Nurse',
+                3 => 'HA',
+                4 => 'ANW/ANM',
+                5 => 'Other',
+            ],
+        ],
+        7 => [
+            'name' => 'Types of Health facility',
+            'subcategories' => [
+                1 => 'Hospital',
+                2 => 'PHCC',
+                3 => 'HP',
+                4 => 'BHCC',
+                5 => 'UHC',
+                6 => 'CHU',
+            ],
+        ],
+    ];
 }
