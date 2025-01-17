@@ -33,7 +33,6 @@
                     @foreach ($programactivities as $index => $programactivity)
                     <tr class="text-black p-4">
 
-
                         <td class="border border-gray-300 p-2 text-center text-xs">{{ $index + 1 }}</td>
 
                         <td class="border border-gray-300 p-2 text-xs">{{ $programactivity->activities }}</td>
@@ -43,10 +42,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -54,8 +50,6 @@
                                 </a>
                             </div>
                         </td>
-
-
                         @endforeach
                     </tr>
 
@@ -76,10 +70,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -138,10 +129,7 @@
                                 <a href="{{ route('activities.attributedata.create', $activity['id']) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $activity['id']) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $activity['id']) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $activity['id']) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -173,10 +161,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -203,10 +188,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -235,10 +217,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -267,10 +246,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">
@@ -299,10 +275,7 @@
                                 <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-green-500 hover:text-green-700" title="Add">
                                     <i class="fas fa-plus"></i>
                                 </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-blue-500 hover:text-blue-700" title="Edit">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </a>
-                                <a href="{{ route('activities.attributedata.create', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
+                                <a href="{{ route('activities.attributes.view', $programactivity->id) }}" class="text-gray-500 hover:text-gray-700" title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <a href="#" class="text-indigo-500 hover:text-indigo-700" title="Attendance">

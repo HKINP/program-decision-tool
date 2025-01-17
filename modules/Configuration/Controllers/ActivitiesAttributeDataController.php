@@ -91,8 +91,8 @@ class ActivitiesAttributeDataController  extends Controller
      */
     public function show($id)
     {
-        $actors = $this->actors->find($id);
-        return response()->json(['status' => 'ok', 'actors' => $actors], 200);
+        dd('here');
+
     }
 
     /**

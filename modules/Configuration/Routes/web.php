@@ -142,7 +142,8 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('workplan', [ActivitiesController::class, 'workPlan'])->name('activities.workPlan');
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
     Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
-    Route::post('activities/attributes/store', [ActivitiesAttributeDataController::class, 'store'])->name('activities.attributes.store');
+    Route::post('activities/attributes/store', [ActivitiesController::class, 'storeActivitiesAtttibutes'])->name('activities.attributes.store');
+    Route::post('activities/{activityid}/attributes/view', [ActivitiesAttributeDataController::class, 'show'])->name('activities.attributes.view');
     Route::post('activities/order', [ActivitiesController::class, 'orderSet'])->name('activities.order');
     Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
     Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');

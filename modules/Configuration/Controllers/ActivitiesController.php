@@ -523,6 +523,103 @@ class ActivitiesController extends Controller
             ->withBudgetsbcc($budgetsbcc);
         
     }
+    public function viewAttributeData()
+    {        
+        $ir = Constants::IR;
+        $partners = Constants::PARTNERS;
+        $attributes = Constants::ATTRIBUTES;
+        $implementor = Constants::IMPLEMENTOR;
+        $activitytype = Constants::ACTIVITIESTYPE;
+        $provinces = $this->provinces->get();
+
+        // Refactor to handle activity transformation and budget calculation
+        list($programActivities, $budgetPA) = $this->getTransformedActivities(1, $partners, $implementor, $provinces);
+        list($financeAndOperation, $budgetFAO) = $this->getTransformedActivities(2, $partners, $implementor, $provinces);
+        list($gid, $budgetGid) = $this->getTransformedActivities(4, $partners, $implementor, $provinces);
+        list($merl, $budgetMERl) = $this->getTransformedActivities(5, $partners, $implementor, $provinces);
+        list($eprr, $budgetEPRR) = $this->getTransformedActivities(6, $partners, $implementor, $provinces);
+        list($diverse, $budgetdiverse) = $this->getTransformedActivities(7, $partners, $implementor, $provinces);
+        list($sbcc, $budgetsbcc) = $this->getTransformedActivities(8, $partners, $implementor, $provinces);
+
+        // Process Outcomes
+
+        $outcomes = $this->outcomes->with(['activities' => function ($query) {
+            $query->where('activity_type', 3)
+                ->orderBy('order', 'asc');
+        }])->get();
+
+        $irOutcomesact = $outcomes->groupBy('ir_id')->map(function ($irOutcomes) use ($partners, $implementor) {
+            return $irOutcomes->groupBy('id')->map(function ($outcomeActivities) use ($partners, $implementor) {
+                return $outcomeActivities->map(function ($outcome) use ($partners, $implementor) {
+                    // Assuming activities is a relationship on outcome
+                    $activities = $outcome->activities;
+
+                    // Transform activities within each outcome
+                    $transformedActivities = $activities->map(function ($activity) use ($partners, $implementor) {
+                        // Transform partners
+                        $partnerIds = explode(',', $activity->partner);
+                        $partnerNames = array_map(function ($id) use ($partners) {
+                            return $partners[$id] ?? $id; // Use the ID if no matching partner name is found
+                        }, $partnerIds);
+                        $activity->partner = implode(', ', $partnerNames);
+
+                        // Transform implementors
+                        $implementorIds = explode(',', $activity->implemented_by);
+                        $implementorNames = array_map(function ($id) use ($implementor) {
+                            return $implementor[$id] ?? $id; // Use the ID if no matching implementor is found
+                        }, $implementorIds);
+                        $activity->implemented_by = implode(', ', $implementorNames);
+
+                        // Count provinces
+                        $provinceIds = $activity->province_ids ? explode(',', $activity->province_ids) : [];
+                        $activity->province_count = count($provinceIds);
+                        // Count districts
+                        $districtIds = $activity->district_ids ? explode(',', $activity->district_ids) : [];
+                        $activity->district_count = count(array_filter($districtIds)); // Filtering out any empty values
+
+                        return $activity;
+                    });
+
+                    // Optionally, if you need to return the transformed outcome
+                    $outcome->activities = $transformedActivities;
+
+                    return [
+                        'outcome' => $outcome->toArray(),
+                    ];
+                });
+            });
+        });
+
+
+        $totalBudget = $budgetPA + $budgetFAO + $budgetGid + $budgetMERl + $budgetEPRR + $budgetdiverse + $budgetsbcc;
+        return view('Configuration::Activities.AttributeData.view')
+            ->withIr($ir)
+            ->withProvinces($provinces)
+            ->withPartners($partners)
+            ->withAttributes($attributes)
+            ->withImplementor($implementor)
+            ->withActivityTypes($activitytype)
+            ->withTotalbudget($totalBudget)
+            ->withProgramactivities($programActivities)
+            ->withFinanceandoperation($financeAndOperation)
+            ->withIrOutcomes($irOutcomesact)
+            ->withGid($gid)
+            ->withMerl($merl)
+            ->withEprr($eprr)
+            ->withDiverse($diverse)
+            ->withSbcc($sbcc)
+            ->withBudgetPA($budgetPA)
+            ->withBudgetFAO($budgetFAO)
+            ->withBudgetGid($budgetGid)
+            ->withBudgetMerl($budgetMERl)
+            ->withBudgetEprr($budgetEPRR)
+            ->withBudgetDiverse($budgetdiverse)
+            ->withBudgetsbcc($budgetsbcc);
+        
+    }
+
+
+
 
     public function orderSet(Request $request)
     {
