@@ -280,7 +280,7 @@ class ActivitiesController extends Controller
          $year = Constants::Year;
          $months = Constants::MONTHS;
          $attributes=Constants::ATTRIBUTES;
-         $activity = $this->activities->filterByPermissionAndDistrict()->find($id);
+         $activity = $this->activities->find($id);
 
          // Convert CSV strings to arrays with fallback for null values
          $activity->partner = explode(',', $activity->partner ?? '');
