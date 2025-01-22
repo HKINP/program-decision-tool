@@ -145,5 +145,12 @@ class Constants
                 6 => 'CHU',
             ],
         ],
+        8 => [
+            'name' => 'Total Number',
+            'subcategories' => [
+                1 => 'Total Number'
+                
+            ],
+        ],
     ];
 }
