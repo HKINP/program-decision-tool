@@ -9,6 +9,7 @@ use Modules\Configuration\Repositories\OutcomesRepository;
 use Modules\Configuration\Requests\Activities\StoreRequest;
 use Modules\Configuration\Requests\Activities\UpdateRequest;
 use App\Constants;
+use Modules\Configuration\Repositories\ActivitiesAttributeDataRepository;
 use Modules\Configuration\Repositories\DistrictRepository;
 use Modules\Configuration\Repositories\ProvinceRepository;
 use PHPUnit\TextUI\Configuration\Constant;
@@ -21,20 +22,22 @@ class ActivitiesController extends Controller
      * @param  PlatformsRepository $districts
      * @return void
      */
-    protected $activities, $outcomes, $provinces, $districts;
+    protected $activities, $outcomes, $provinces, $districts,$activitiesAttributedata;
 
 
     public function __construct(
         ActivitiesRepository $activities,
         OutcomesRepository $outcomes,
         ProvinceRepository $provinces,
-        DistrictRepository $districts
+        DistrictRepository $districts,
+        ActivitiesAttributeDataRepository $activitiesAttributedata
 
     ) {
         $this->activities = $activities;
         $this->outcomes = $outcomes;
         $this->districts = $districts;
         $this->provinces = $provinces;
+        $this->activitiesAttributedata = $activitiesAttributedata;
     }
 
     /**
@@ -277,7 +280,7 @@ class ActivitiesController extends Controller
          $year = Constants::Year;
          $months = Constants::MONTHS;
          $attributes=Constants::ATTRIBUTES;
-         $activity = $this->activities->find($id);
+         $activity = $this->activities->filterByPermissionAndDistrict()->find($id);
 
          // Convert CSV strings to arrays with fallback for null values
          $activity->partner = explode(',', $activity->partner ?? '');
@@ -300,6 +303,24 @@ class ActivitiesController extends Controller
              ->withPartners($partners)
              ->withImplementor($implementor)
              ->withMonths($months)
+             ->withOutcomes($outcomes);
+       
+    }
+    public function editAttributeData($id)
+    {
+         // Fetch the necessary data
+         $outcomes = $this->outcomes->all()->pluck('outcome', 'id')->toArray();
+         $ir = Constants::IR;
+         $attributes=Constants::ATTRIBUTES;
+        $attributedata=$this->activitiesAttributedata->with(['activity'])->find($id);        
+         $districts = $this->districts->all();
+         $provinces = $this->provinces->all();
+         return view('Configuration::Activities.AttributeData.edit')
+             ->withIr($ir)
+             ->withAttributedata($attributedata)
+             ->withAttributes($attributes)
+             ->withDistricts($districts)
+             ->withProvinces($provinces)
              ->withOutcomes($outcomes);
        
     }
@@ -645,6 +666,8 @@ class ActivitiesController extends Controller
 
     public function storeActivitiesAtttibutes(Request $request)
     {
+        
+    
         // Validate request
         $request->validate([
             'activity_id' => 'required|exists:activities,id',

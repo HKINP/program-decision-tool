@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Modules\Configuration\Repositories\ActivitiesAttributeDataRepository;
 use Modules\Configuration\Requests\ActivitiesAttributeData\StoreRequest;
 use Modules\Configuration\Requests\ActivitiesAttributeData\UpdateRequest;
+use App\Constants;
 
 class ActivitiesAttributeDataController  extends Controller
 {
@@ -62,11 +63,11 @@ class ActivitiesAttributeDataController  extends Controller
      */
     public function store(StoreRequest $request)
     {
-       $data=$request->all();
-     
+        $data = $request->all();
+
         // Prepare the attributes data as a JSON object
         $attributesData = json_encode($data['attributes']); // Convert the attributes array to JSON
-       
+
         // Create the main activity attribute data record
         $activitiesAttributeData = $this->activitiesAttributeData->create([
             'activity_id' => $data['activity_id'],
@@ -79,7 +80,7 @@ class ActivitiesAttributeDataController  extends Controller
 
         // Check if the record was created successfully
         if ($activitiesAttributeData) {
-            return redirect()->route('indicators.index')->with('success', 'Indicator added successfully!');
+            return redirect()->route('activities.attributes.view',$data['activity_id'])->with('success', 'Activities attributes added successfully!');
         }
     }
 
@@ -91,8 +92,23 @@ class ActivitiesAttributeDataController  extends Controller
      */
     public function show($id)
     {
-        dd('here');
+        $attributedata = $this->activitiesAttributeData->with([
+            'province',
+            'district',
+            'activity',
+            'activity.outcomes',
+            'activity.outcomes'
+        ])
+            ->where("activity_id", '=', $id)->get();
+        $attributes = Constants::ATTRIBUTES;
+        // return response()->json([
+        //     'data' => $attributedata,
+        //     'message' => 'Actors can not be updated.'
+        // ], 422);
 
+        return view('Configuration::Activities.AttributeData.view')
+            ->withAttributes($attributes)
+            ->withAttributedata($attributedata);
     }
 
     /**
@@ -121,18 +137,33 @@ class ActivitiesAttributeDataController  extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        // $this->authorize('manage-account-code');
+        $data=$request->all();
+        // Prepare the attributes data as a JSON object
+        $attributesData = json_encode($data['attributes']); // Convert the attributes array to JSON
 
+        // Find the existing record to update
+        $activitiesAttributeData = $this->activitiesAttributeData->find($id); // Use the record ID from $data
 
-        $activitiesAttributeData = $this->actors->update($id, $request->except('id'));
+        if ($activitiesAttributeData) {
+            // Update the record with new data
+            $updated = $activitiesAttributeData->update([
+                'activity_id' => $data['activity_id'],
+                'event_date' => $data['event_date'],
+                'event_location' => $data['event_location'],
+                'province_id' => $data['province_id'],
+                'district_id' => $data['district_id'],
+                'attributes_data' => $attributesData, // Update the attributes as JSON
+            ]);
 
-        if ($actors) {
-            return redirect()->route('actors.index')->with('success', 'Actors Updated successfully!');
+            // Check if the update was successful
+            if ($updated) {
+                return redirect()->route('activities.attributes.view',$data['activity_id'])->with('success', 'Activities Attributes updated successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to update attributes: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->route('indicators.index')->with('error', 'Record not found.');
         }
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Actors can not be updated.'
-        ], 422);
     }
 
     /**

@@ -141,8 +141,15 @@ class LoadPermissions
         Gate::define('sbcc-plan', function ($user) use ($permissions) {
             return in_array('sbcc-plan', $permissions);
         });
-
-
+        Gate::define('add-federal-events-data', function ($user) use ($permissions) {
+            return in_array('add-federal-events-data', $permissions);
+        });
+        Gate::define('add-province-events-data', function ($user) use ($permissions) {
+            return in_array('add-province-events-data', $permissions);
+        });
+        Gate::define('add-districts-events-data', function ($user) use ($permissions) {
+            return in_array('add-districts-events-data', $permissions);
+        });
 
         return $next($request);
     }

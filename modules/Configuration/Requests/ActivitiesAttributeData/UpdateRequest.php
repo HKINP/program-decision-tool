@@ -30,7 +30,6 @@ class UpdateRequest extends FormRequest
             'province_id' => 'nullable|exists:provinces,id',
             'event_date' => 'required|date',
             'event_location' => 'required|string',
-            'value' => 'required|string',
         ];
     }
   

@@ -137,13 +137,16 @@ Route::middleware(['web', 'auth', 'logger'])->group(function () {
     Route::get('activities/sbcc', [ActivitiesController::class, 'sbccActivities'])->name('activities.sbcc');
     Route::get('activities/attributes', [ActivitiesController::class, 'addActivitiesAtttibutes'])->name('activities.attributes');
     Route::get('activities/data/add', [ActivitiesController::class, 'addAttributeData'])->name('activities.addAttributeData');
+    Route::post('activities/attributedata/store', [ActivitiesAttributeDataController::class, 'store'])->name('activities.attributedata.store');
     Route::get('activities/attributedata/{activityid}/create', [ActivitiesController::class, 'createAttributeData'])->name('activities.attributedata.create');
-    
+    Route::get('activities/attributedata/{activityid}/edit', [ActivitiesController::class, 'editAttributeData'])->name('activities.attributedata.edit');
+    Route::put('activities/attributedata/{activityid}/update', [ActivitiesAttributeDataController::class, 'update'])->name('activities.attributedata.update');
+
     Route::get('workplan', [ActivitiesController::class, 'workPlan'])->name('activities.workPlan');
     Route::get('activities/create', [ActivitiesController::class, 'create'])->name('activities.create');
     Route::post('activities', [ActivitiesController::class, 'store'])->name('activities.store');
     Route::post('activities/attributes/store', [ActivitiesController::class, 'storeActivitiesAtttibutes'])->name('activities.attributes.store');
-    Route::post('activities/{activityid}/attributes/view', [ActivitiesAttributeDataController::class, 'show'])->name('activities.attributes.view');
+    Route::get('activities/{activityid}/attributes/view', [ActivitiesAttributeDataController::class, 'show'])->name('activities.attributes.view');
     Route::post('activities/order', [ActivitiesController::class, 'orderSet'])->name('activities.order');
     Route::get('activities/{actors}/edit', [ActivitiesController::class, 'edit'])->name('activities.edit');
     Route::get('activities/{actors}/view', [ActivitiesController::class, 'view'])->name('activities.view');

@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Traits\ModelEventLogger;
 use App\Traits\UpdatedBy;
+use App\Traits\FiltersActivities;
 use Modules\Report\Models\PrioritizedActivities;
 
 class Activities extends Model
 {
-    use ModelEventLogger, UpdatedBy,SoftDeletes;
+    use ModelEventLogger, UpdatedBy,SoftDeletes,FiltersActivities;
     
     /**
      * The database table used by the model.
